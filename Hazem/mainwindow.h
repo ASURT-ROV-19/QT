@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include<joystick_handler.h>
 #include <countdown.h>
+#include <tcpserver.h>
 
 #undef main
 
@@ -22,6 +23,8 @@ public:
 private:
     Ui::MainWindow *ui;
     Countdown *countd;
+    TCPServer *server;
+    Joystick_Handler *joyS;
 
 
 };
