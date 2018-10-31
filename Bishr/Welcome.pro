@@ -43,9 +43,9 @@ HEADERS += \
     tcpsocket.h \
     udpsocket.h \
     gstream.h \
-    jsinterface.h \
     countdown.h \
-    gui.h
+    gui.h \
+    JS_PI_Interface.h
 
 FORMS += \
         mainwindow.ui

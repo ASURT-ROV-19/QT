@@ -4,33 +4,85 @@
 gstream::gstream(QWidget *parent)
 {
     verLay=new QVBoxLayout ();
-    window=parent;
+//    window=parent;
+    window=new QWidget(parent);
+    window->show();
+    window->setGeometry(50,300,800,700);
+    window2=new QWidget(parent);
+    window2->show();
+    window2->setGeometry(950,300,800,700);
 //    window=new QWidget(parent);
 //    window->setGeometry(50,50,800,600);
 //    window->show();
 //    window->setLayout(verLay);
 //    button=new QPushButton("USELESSSSS",parent);
 //    verLay->addWidget(button);
-    action(parent);
+//    action(parent);
 }
 
 
-int gstream::action(QWidget * renderingWindow)
+gstream::gstream( QVBoxLayout *layout,QWidget *parent)
+{
+//    window=parent;
+    window=new QWidget();
+    layout->addWidget(window);
+    window->show();
+    window->setGeometry(300,300,800,600);
+ //   window->setSizePolicy(QSizePolicy::Fixed);
+//    window=new QWidget(parent);
+//    window->setGeometry(50,50,800,600);
+//    window->show();
+//    window->setLayout(verLay);
+//    button=new QPushButton("USELESSSSS",parent);
+//    verLay->addWidget(button);
+//    action(parent);
+}
+
+
+gstream::gstream(QWidget *parent, QVBoxLayout *layout)
+{
+    motherWidget=new QWidget(parent);
+    verLay=layout;
+    window=new QWidget();
+    window->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    window2=new QWidget();
+    window2->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+
+    //    window=parent;
+    horLay=new QHBoxLayout();
+    horLay->addWidget(window);
+    motherWidget->setLayout(horLay);
+//    window->setGeometry(0,0,500,500);
+//    layout->addWidget(window);
+    layout->addWidget(motherWidget);
+    vSpacer=new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::Expanding);
+    button=new QPushButton("USELESSSSS",parent);
+    button->setGeometry(0,0,50,500);
+    horLay->addWidget(button);
+    horLay->addWidget(window2);
+    horLay->addSpacerItem(vSpacer);
+    layout->addSpacerItem(vSpacer);
+    action(parent,layout);
+}
+
+
+
+int gstream::action(QWidget * renderingWindow, QVBoxLayout * layout)
 {
 
     if (!g_thread_supported ())
       g_thread_init (NULL);
 
     gst_init (0, 0);
-    int x=0;
+    int x =0;
     char * y= NULL;
     QApplication app(x, &y);
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit ()));
 
     // prepare the pipeline
 
-    pipeline = gst_pipeline_new ("xvoverlay");
-//    pipeline = gst_parse_launch ("udpsrc port=5022 ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink", NULL);
+//    pipeline2 = gst_parse_launch ("playbin uri=https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm", NULL);
+    //    pipeline = gst_parse_launch ("udpsrc port=5022 ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink", NULL);
 /*
       line 38 alone can do for splitting streaming into two directions , just uncomment it , uncomment line 126 &
       comment every thing else between the two lines , if you do so , you can remove most GstElements in the header file
@@ -40,11 +92,12 @@ int gstream::action(QWidget * renderingWindow)
 //    pipeline = gst_parse_launch ("udpsrc port=5000 ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink", NULL);
 //    pipeline = gst_parse_launch ("v4l2src device='/dev/video0' ! video/x-raw,width=320,height=240 ! videoconvert ! x264enc tune=zerolatency ! rtph264pay ! udpsink host='bta3 el computer' port=5022"
 //                                 ,NULL);
+//    pipeline2 = gst_parse_launch ("udpsrc port=10000 ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer latency=0 ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink", NULL);
     // prepare the ui
-//    window->resize(800 , 600);
-//    window->show();
 
+    /* Start playing */
 
+    pipeline = gst_pipeline_new ("xvoverlay");
     source= gst_element_factory_make("udpsrc","source");
     buffer=gst_element_factory_make("rtpjitterbuffer","buffer");
     depay=gst_element_factory_make("rtph264depay","depay");
@@ -56,19 +109,45 @@ int gstream::action(QWidget * renderingWindow)
     queue2=gst_element_factory_make("queue","queue2");
     sink2=gst_element_factory_make("udpsink","sink2");
 
+
+    pipeline2 = gst_pipeline_new ("xvoverlay");
+    source2=gst_element_factory_make("udpsrc","source2");
+    buffer2=gst_element_factory_make("rtpjitterbuffer","buffer2");
+    depay2=gst_element_factory_make("rtph264depay","depay2");
+    decompressor2=gst_element_factory_make("avdec_h264","deco2");
+    convert2=gst_element_factory_make("videoconvert","converter2");;
+    sinkForWindow2=gst_element_factory_make("ximagesink","sinkForWindow2");
+
+
+
+
     if (!pipeline || !source || !tee || !queue1 || !queue2 || !sink || !depay || !buffer || !convert || !decompressor) {
        g_printerr ("Not all elements could be created.\n");
        return -1;
      }
+
+
+    if (!pipeline2 || !source2 || !sinkForWindow2 || !depay2 || !buffer2 || !convert2 || !decompressor2) {
+       g_printerr ("Not all elements could be created.\n");
+       return -1;
+     }
+
+
     caps= gst_caps_new_simple("application/x-rtp","media", G_TYPE_STRING, "video","encoding-name", G_TYPE_STRING,"H264",NULL);
     g_object_set(source,"port",5022,nullptr);
     g_object_set(source,"caps",caps, nullptr);
     g_object_set(buffer,"latency",0, nullptr);
     g_object_set(sink2,"port",10000,NULL);
+//    gst_caps_unref(caps);
+
+    g_object_set(source2,"port",10000,nullptr);
+    g_object_set(source2,"caps",caps, nullptr);
+    g_object_set(buffer,"latency",0, nullptr);
     gst_caps_unref(caps);
 
-
     gst_bin_add_many (GST_BIN (pipeline), source, tee, queue1 , queue2, sink2, buffer,depay,decompressor,convert , sink, NULL);
+
+    gst_bin_add_many (GST_BIN (pipeline2), source2, buffer2,depay2,decompressor2,convert2 , sinkForWindow2, NULL);
 
 
 
@@ -126,21 +205,56 @@ int gstream::action(QWidget * renderingWindow)
           gst_object_unref (source);
           return -1;
       }
-//    WId xwinid = window->winId();
+
+
+      if (!gst_element_link(source2,buffer2)){
+          g_printerr("Error at linking source and buffer2");
+          return 25;
+      }
+      if (!gst_element_link(buffer2,depay2)){
+          g_printerr("Error at linking buffer and depay2");
+          return 25;
+      }
+      if (!gst_element_link(depay2,decompressor2)){
+          g_printerr("Error at linking depay and decompressore2");
+          return 25;
+      }
+
+      if (!gst_element_link(decompressor2,convert2)){
+          g_printerr("Error at linking decompressor and convert2");
+          return 25;
+      }
+
+      if (!gst_element_link(convert2,sinkForWindow2)){
+          g_printerr("Error at linking convert2 and sinkForWindow2");
+          return 25;
+      }
+
+
       WId xwinid = window->winId();
 //    sink=gst_bin_get_by_name(GST_BIN(pipeline),"sink");
     gst_video_overlay_set_window_handle (GST_VIDEO_OVERLAY (sink), xwinid);
-
+//        layout->addWidget(window);
     /**********************************************************************************************/
-//    renderingWindow->resize(800 , 600);
-//    renderingWindow->show();
-//    WId xwinid = renderingWindow->winId();
-//    sink=gst_bin_get_by_name(GST_BIN(pipeline),"sink");
-//    gst_video_overlay_set_window_handle (GST_VIDEO_OVERLAY (sink), xwinid);
+    /*________________________________________*_*_*_*_*_*_*__*_*_*_*_*_*____________________________*/
+
+
+    WId xwinid2 = window2->winId();
+//    sinkForWindow2=gst_bin_get_by_name(GST_BIN(pipeline2),"ximagesink0");
+    if (!sinkForWindow2){
+        g_printerr("affafsdsgfs");
+        return 15;
+    }
+    else
+        g_printerr("AAAAAAAAAAAAAA");
+    gst_video_overlay_set_window_handle (GST_VIDEO_OVERLAY (sinkForWindow2), xwinid2);
+    window2->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    /*________________________________________*_*_*_*_*_*_*__*_*_*_*_*_*____________________________*/
 
     /**********************************************************************************************/
     // run the pipeline
 
+    gst_element_set_state (pipeline2, GST_STATE_PLAYING);
     GstStateChangeReturn sret = gst_element_set_state (pipeline,
         GST_STATE_PLAYING);
 
@@ -177,6 +291,8 @@ int gstream::action(QWidget * renderingWindow)
     gst_object_unref (convert);
     gst_object_unref (source);
 
+//    gst_element_set_state (pipeline2, GST_STATE_NULL);
+//    gst_object_unref (pipeline2);
 
     return ret;
 
@@ -191,3 +307,4 @@ QWidget * gstream::getRenderingWindow()
 {
     return window;
 }
+

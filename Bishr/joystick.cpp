@@ -178,6 +178,7 @@ void joystick::JSDataReady(QString messageToConvey){
     change=0;
 //    info= QString::number(x) +"," +QString::number(y) +"," +QString::number(z) +"," +QString::number(r)+";";
     emit streamData(info);
+    qDebug()<<info;
     info="";
 }
 
@@ -185,8 +186,10 @@ void joystick::JSDataReady(){
     change=0;
     info= QString::number(x) +"," +QString::number(y) +"," +QString::number(z) +"," +QString::number(r)+";";
     emit streamData(info);
+    qDebug()<<info;
     info="";
 }
 void joystick::JSOrderRead(){
     emit streamData(info);
+    qDebug()<<info;
 }

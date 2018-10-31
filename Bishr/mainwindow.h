@@ -13,7 +13,7 @@
 #include <QSignalMapper>
 #include <QtDebug>
 #include <QTimer>
-#include "jsinterface.h"
+#include "JS_PI_Interface.h"
 #include "gui.h"
 namespace Ui {
 class MainWindow;
@@ -39,7 +39,7 @@ private:
 //    tcpsocket * ImageProcessingSock;
     gstream * str;
     QWidget * streamingWidget;
-    JSInterface controller;
+    JS_PI_Interface controller;
     gui * GUI;
 };
 

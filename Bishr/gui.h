@@ -29,6 +29,7 @@ private:
     QLabel * timerLabel;
     QLabel * pressureSensorLabel;
     QWidget * dummy;
+
 };
 
 #endif // GUI_H
