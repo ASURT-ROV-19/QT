@@ -14,10 +14,13 @@ gui::gui(QWidget *parent)
      verLay=new QVBoxLayout();
      parent->setLayout(verLay);
      parent->setStyleSheet("background-color: cyan");
+     button=new QPushButton();
+     connect(button,SIGNAL(clicked()),timer,SLOT(pause()));
      connect(updater,SIGNAL(timeout()),this,SLOT(updateTimer()));
-     button=new QPushButton(parent);
      timer->setTimer(1,80);
+     verLay->addWidget(button);
      verLay->addWidget(timerLabel);
+     button->setText("Stop/Start Timer");
      verLay->addWidget(pressureSensorLabel);
      str=new gstream(parent,verLay);
 
@@ -26,6 +29,8 @@ gui::gui(QWidget *parent)
 
 void gui::updateTimer()
 {
-    button->setText(timer->getTimeRemaining());
+//    button->setText(timer->getTimeRemaining());
     timerLabel->setText(timer->getTimeRemaining());
 }
+
+

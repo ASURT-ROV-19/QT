@@ -3,7 +3,7 @@
 CountDown::CountDown()
 {
     timer=new QTimer(this);
-    timer->setInterval(1000);
+    timer->setInterval(5000);
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(changeTime()));
 }
 
@@ -17,6 +17,18 @@ void CountDown::setTimer(int minutes,int seconds){
         sec=sec%60;
     }
 
+}
+
+void CountDown::pause()
+{
+    qDebug()<<"Timer pause/resume";
+    timer->isActive() ? timer->stop():timer->start();
+
+}
+
+void CountDown::resume()
+{
+    timer->start();
 }
 
 

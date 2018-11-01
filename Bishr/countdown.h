@@ -10,8 +10,11 @@ class CountDown : public QObject
 public:
     CountDown();
     void setTimer(int minutes,int seconds);
+
     QString getTimeRemaining();
 public slots:
+    void pause();
+    void resume();
     void changeTime();
 private:
     QTimer * timer;

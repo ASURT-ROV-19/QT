@@ -18,6 +18,7 @@ public:
 private slots:
     void updateTimer();
 
+
 private:
     gstream * str;
     QWidget * streamingWidget;
