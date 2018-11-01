@@ -25,7 +25,7 @@ gui::gui(QWidget *parent)
 //     str=new gstream(parent);
 //     verLay->addWidget(str->getRenderingWindow());
 
-     str->action(parent,verLay);
+//     str->action(parent,verLay);
 
 }
 

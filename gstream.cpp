@@ -60,8 +60,9 @@ gstream::gstream(QWidget *parent, QVBoxLayout *layout)
     button->setGeometry(0,0,50,500);
     horLay->addWidget(button);
     horLay->addWidget(window2);
-//    horLay->addSpacerItem(vSpacer);
-//    layout->addSpacerItem(vSpacer);
+    horLay->addSpacerItem(vSpacer);
+    layout->addSpacerItem(vSpacer);
+    action(parent,layout);
 }
 
 
@@ -116,6 +117,8 @@ int gstream::action(QWidget * renderingWindow, QVBoxLayout * layout)
     decompressor2=gst_element_factory_make("avdec_h264","deco2");
     convert2=gst_element_factory_make("videoconvert","converter2");;
     sinkForWindow2=gst_element_factory_make("ximagesink","sinkForWindow2");
+
+
 
 
     if (!pipeline || !source || !tee || !queue1 || !queue2 || !sink || !depay || !buffer || !convert || !decompressor) {
