@@ -269,10 +269,6 @@ int gstream::action()
 
 }
 
-QWidget *gstream::getStream()
-{
-    return window;
-}
 
 QWidget * gstream::getRenderingWindow(int windowNumber)
 {

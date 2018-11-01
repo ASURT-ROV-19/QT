@@ -1,6 +1,5 @@
 #ifndef GSTREAM_H
 #define GSTREAM_H
-#include <QVBoxLayout>
 #include <QObject>
 #include <glib.h>
 #include <gst/gst.h>
@@ -8,8 +7,6 @@
 #include <QApplication>
 #include <QTimer>
 #include <QWidget>
-#include <QPushButton>
-#include <QVBoxLayout>
 #include <QSpacerItem>
 #include <QHBoxLayout>
 class gstream : public QObject
@@ -18,7 +15,6 @@ class gstream : public QObject
 public:
     gstream(QWidget * parent,QVBoxLayout * layout);
     int action();
-    QWidget * getStream();
     QWidget * window2 ,* window;
     QWidget * getRenderingWindow(int windowNumber);
 

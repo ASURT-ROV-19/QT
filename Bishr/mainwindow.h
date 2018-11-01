@@ -1,18 +1,8 @@
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QSpacerItem>
 #include <QMainWindow>
-#include "streamer.h"
 #include <QWidget>
-#include <QPushButton>
-#include "udpsocket.h"
-#include "gstream.h"
-#include <QSignalMapper>
-#include <QtDebug>
-#include <QTimer>
 #include "JS_PI_Interface.h"
 #include "gui.h"
 namespace Ui {
@@ -29,16 +19,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-//    streamer * stream;
-    QVBoxLayout * verLay;
-    QHBoxLayout * horLay;
-    QSpacerItem * vSpacer;
-    QPushButton * bttn1;
     QWidget * centralWidget;
-    QPushButton * bttnPrint;
-//    tcpsocket * ImageProcessingSock;
-    gstream * str;
-    QWidget * streamingWidget;
     JS_PI_Interface controller;
     gui * GUI;
 };

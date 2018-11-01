@@ -25,18 +25,6 @@ joystick::joystick()
 
 
 
-//void joystick::getMapped()
-//{
-//    QString info= QString::number(x) +"," +QString::number(y) +"," +QString::number(z) +"," +QString::number(r);
-//    char * data = info.toLatin1().data();
-//    qDebug()<<"Data is to be sent ";
-//    return  data;
-//}
-
-//void joystick::ProcImgSend()
-//{
-//    qDebug()<<"Image shall be sent from her for processing";
-//}
 
 void joystick::JSLoop()
 {

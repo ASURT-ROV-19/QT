@@ -21,15 +21,12 @@ private slots:
 
 private:
     gstream * str;
-    QWidget * streamingWidget;
     QVBoxLayout * verLay;
     QPushButton * button;
-    QSpacerItem * vSpacer;
     CountDown * timer;
     QTimer * updater;
     QLabel * timerLabel;
     QLabel * pressureSensorLabel;
-    QWidget * dummy;
 
 };
 
