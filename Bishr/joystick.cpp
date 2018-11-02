@@ -9,11 +9,6 @@ joystick::joystick()
 //    bttnPrint=new QPushButton(this);
 //    bttnPrint->setText("Print Variables");
     connect(timerJS,SIGNAL(timeout()),this,SLOT(JSLoop()));
-//    connect(timerJS,SIGNAL(timeout()),this,SLOT(JSDataReady()));
-
-    //    signalMapper->setMapping(getMapped(char * data),data);
-//    connect(bttnPrint,SIGNAL(clicked(bool)),this,SLOT(print()));
-    qDebug()<<"dsgggggggggggdssssssssssssssssssssssss";
     SDL_Init(SDL_INIT_JOYSTICK);
     if (SDL_INIT_JOYSTICK<0){
         qDebug()<<"failed to intialize";}
