@@ -40,6 +40,11 @@ void Joystick_Handler::action()
         break;
     case SDL_JOYDEVICEREMOVED:
         js->remove();
+        break;
+    case SDL_JOYBUTTONDOWN:
+        msg=QString::number(event.jbutton.button).toStdString();
+        emit msgsent(msg);
+        break;
     default:
         break;
                        }

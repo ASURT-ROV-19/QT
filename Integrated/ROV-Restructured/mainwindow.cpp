@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     joyS=new Joystick_Handler();
     server=new TCPServer("127.0.0.1",5000);
     ui->setupUi(this);
-
+    connect(joyS,SIGNAL(msgsent(string)),this,SLOT(sendToGUI(string)));
     connect(joyS,SIGNAL(msgsent(string)),server,SLOT(sendmsg(string)));
     connect(joyS,SIGNAL(msgsent(string)),server,SLOT(sendmsg(string)));
     centralWidget=new QWidget();
@@ -22,5 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::sendToGUI(string message)
+{
+    if (message=="1")
+        GUI->pause_play_Timer();
 }
 

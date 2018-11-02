@@ -18,8 +18,10 @@ public:
     gui(QWidget * parent=0);
 private slots:
     void updateTimer();
-
-
+public slots:
+    void pause_play_Timer();
+signals:
+    void pause_play();
 private:
     gstream * str;
     QVBoxLayout * verLay;

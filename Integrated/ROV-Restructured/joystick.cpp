@@ -56,3 +56,10 @@ void Joystick::remove()
     SDL_JoystickClose(js);
     qDebug()<<"JS removed";
 }
+
+void Joystick::message(QString msg)
+{
+    if (msg=="1"){
+
+    }
+}

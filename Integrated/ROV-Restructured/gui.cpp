@@ -15,9 +15,10 @@ gui::gui(QWidget *parent)
      timer=new CountDown();
      verLay=new QVBoxLayout();
      parent->setLayout(verLay);
-     parent->setStyleSheet("background-color: cyan");
+     parent->setStyleSheet("background-color: lime");
      button=new QPushButton();
      connect(button,SIGNAL(clicked()),timer,SLOT(pause()));
+     connect(this,SIGNAL(pause_play()),timer,SLOT(pause()));
      timerLabel->setText(timer->getTimeRemaining());
      connect(updater,SIGNAL(timeout()),this,SLOT(updateTimer()));
      timer->setTimer(1,80);
@@ -43,5 +44,10 @@ gui::gui(QWidget *parent)
 void gui::updateTimer()
 {
     timerLabel->setText(timer->getTimeRemaining());
+}
+
+void gui::pause_play_Timer()
+{
+    emit pause_play();
 }
 

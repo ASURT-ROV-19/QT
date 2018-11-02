@@ -5,6 +5,7 @@
 #include<joystick_handler.h>
 #include <tcpserver.h>
 #include "gui.h"
+#include "string.h"
 
 #undef main
 
@@ -19,7 +20,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+private slots:
+    void sendToGUI(string message);
 private:
     Ui::MainWindow *ui;
     TCPServer *server;
