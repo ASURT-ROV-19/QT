@@ -9,22 +9,31 @@ gui::gui(QWidget *parent)
      updater=new QTimer();
      updater->setInterval(1000);
      updater->start();
+     QFont font1=timerLabel->font();
+     font1.setPointSize(18);
+     timerLabel->setFont(font1);
      timer=new CountDown();
      verLay=new QVBoxLayout();
      parent->setLayout(verLay);
      parent->setStyleSheet("background-color: cyan");
      button=new QPushButton();
      connect(button,SIGNAL(clicked()),timer,SLOT(pause()));
-     timerLabel->setText("timer->getTimeRemaining()");
-//     connect(updater,SIGNAL(timeout()),this,SLOT(updateTimer()));
+     timerLabel->setText(timer->getTimeRemaining());
+     connect(updater,SIGNAL(timeout()),this,SLOT(updateTimer()));
      timer->setTimer(1,80);
      verLay->addWidget(button);
 //     verLay->addWidget(timerLabel);
      button->setText("Stop/Start Timer");
      verLay->addWidget(pressureSensorLabel);
-     str=new gstream(parent,verLay);
-//     timerLabel->setParent(str->getRenderingWindow(1));
+     dummy=new QWidget();
 
+     str=new gstream(parent,verLay);
+     timerLabel->setParent(dummy);
+//     dummy->setAttribute(Qt::WA_TranslucentBackground);
+//     dummy->setStyleSheet("background:transparent;");
+     dummy->setParent(str->getRenderingWindow(1));
+//     str->getRenderingWindow(1)->setAttribute(Qt::WA_TranslucentBackground);
+//     str->getRenderingWindow(1)->setStyleSheet("background:transparent;");
      str->action(timerLabel);
 
 
@@ -35,5 +44,4 @@ void gui::updateTimer()
 {
     timerLabel->setText(timer->getTimeRemaining());
 }
-
 

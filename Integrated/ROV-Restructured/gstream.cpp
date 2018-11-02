@@ -1,3 +1,4 @@
+
 #include "gstream.h"
 
 
@@ -191,7 +192,7 @@ int gstream::action(QLabel *timerLAbel)
       WId xwinid = window->winId();
 //    sink=gst_bin_get_by_name(GST_BIN(pipeline),"sink");
     gst_video_overlay_set_window_handle (GST_VIDEO_OVERLAY (sink), xwinid);
-    timerLAbel->setParent(window);
+//    timerLAbel->setParent(window);
 //        layout->addWidget(window);
     /**********************************************************************************************/
     /*________________________________________*_*_*_*_*_*_*__*_*_*_*_*_*____________________________*/

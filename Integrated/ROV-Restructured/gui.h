@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QLabel>
 #include <QWidget>
+#include <QFont>
 class gui : public QObject
 {
     Q_OBJECT
@@ -27,6 +28,7 @@ private:
     QTimer * updater;
     QLabel * timerLabel;
     QLabel * pressureSensorLabel;
+    QWidget * dummy;
 
 };
 
