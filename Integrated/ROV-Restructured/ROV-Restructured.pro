@@ -30,20 +30,21 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     countdown.cpp \
-    gstream.cpp \
     gui.cpp \
     joystick.cpp \
     joystick_handler.cpp \
-    tcpserver.cpp
+    tcpserver.cpp \
+    gstreamer.cpp
+
 
 HEADERS += \
         mainwindow.h \
     countdown.h \
-    gstream.h \
     gui.h \
     joystick.h \
     joystick_handler.h \
-    tcpserver.h
+    tcpserver.h \
+    gstreamer.h
 
 FORMS += \
         mainwindow.ui

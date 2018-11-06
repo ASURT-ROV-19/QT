@@ -26,6 +26,8 @@ private:
 
 signals:
     void msgsent(string);
+    void timerPause_Play(QString);
+
 };
 
 #endif // JOYSTICK_HANDLER_H

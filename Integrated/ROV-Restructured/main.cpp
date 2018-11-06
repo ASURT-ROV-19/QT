@@ -3,9 +3,10 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
+    QApplication * a =new QApplication(argc, argv);
+    MainWindow w(a);
+//    w.getApp(a);
 //    w.show();
 
-    return a.exec();
+//    return a->exec();
 }

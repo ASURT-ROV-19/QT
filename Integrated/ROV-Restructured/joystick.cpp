@@ -59,7 +59,8 @@ void Joystick::remove()
 
 void Joystick::message(QString msg)
 {
-    if (msg=="1"){
+    if (msg=="20"){
+        qDebug()<<"Button1";
 
     }
 }

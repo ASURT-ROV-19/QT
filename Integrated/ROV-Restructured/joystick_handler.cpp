@@ -43,6 +43,9 @@ void Joystick_Handler::action()
         break;
     case SDL_JOYBUTTONDOWN:
         msg=QString::number(event.jbutton.button).toStdString();
+        if (msg=="1"){
+            emit timerPause_Play(QString::fromStdString(msg));
+        }
         emit msgsent(msg);
         break;
     default:

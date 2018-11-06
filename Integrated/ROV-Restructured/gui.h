@@ -1,7 +1,6 @@
 #ifndef GUI_H
 #define GUI_H
 #include <QObject>
-#include "gstream.h"
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QSpacerItem>
@@ -11,19 +10,25 @@
 #include <QLabel>
 #include <QWidget>
 #include <QFont>
+#include <QGridLayout>
+#include "gstreamer.h"
+#include <QApplication>
+#include <QString>
 class gui : public QObject
 {
     Q_OBJECT
 public:
     gui(QWidget * parent=0);
+    void startListening(QApplication * myApp);
 private slots:
     void updateTimer();
 public slots:
-    void pause_play_Timer();
+    void changeInGUI(QString button);
 signals:
     void pause_play();
 private:
-    gstream * str;
+//    gstream * str;
+    gstreamer * streamer;
     QVBoxLayout * verLay;
     QPushButton * button;
     CountDown * timer;
@@ -31,6 +36,9 @@ private:
     QLabel * timerLabel;
     QLabel * pressureSensorLabel;
     QWidget * dummy;
+
+    // Temporary layout to try for displaying timer on rendering window
+    QGridLayout * tempLay;
 
 };
 

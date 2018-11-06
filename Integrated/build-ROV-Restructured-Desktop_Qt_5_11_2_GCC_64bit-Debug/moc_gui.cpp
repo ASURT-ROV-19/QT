@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_gui_t {
-    QByteArrayData data[5];
-    char stringdata0[45];
+    QByteArrayData data[6];
+    char stringdata0[47];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,11 +35,12 @@ QT_MOC_LITERAL(0, 0, 3), // "gui"
 QT_MOC_LITERAL(1, 4, 10), // "pause_play"
 QT_MOC_LITERAL(2, 15, 0), // ""
 QT_MOC_LITERAL(3, 16, 11), // "updateTimer"
-QT_MOC_LITERAL(4, 28, 16) // "pause_play_Timer"
+QT_MOC_LITERAL(4, 28, 11), // "changeInGUI"
+QT_MOC_LITERAL(5, 40, 6) // "button"
 
     },
-    "gui\0pause_play\0\0updateTimer\0"
-    "pause_play_Timer"
+    "gui\0pause_play\0\0updateTimer\0changeInGUI\0"
+    "button"
 };
 #undef QT_MOC_LITERAL
 
@@ -61,14 +62,14 @@ static const uint qt_meta_data_gui[] = {
 
  // slots: name, argc, parameters, tag, flags
        3,    0,   30,    2, 0x08 /* Private */,
-       4,    0,   31,    2, 0x0a /* Public */,
+       4,    1,   31,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    5,
 
        0        // eod
 };
@@ -81,7 +82,7 @@ void gui::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **
         switch (_id) {
         case 0: _t->pause_play(); break;
         case 1: _t->updateTimer(); break;
-        case 2: _t->pause_play_Timer(); break;
+        case 2: _t->changeInGUI((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -94,7 +95,6 @@ void gui::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **
             }
         }
     }
-    Q_UNUSED(_a);
 }
 
 QT_INIT_METAOBJECT const QMetaObject gui::staticMetaObject = {
