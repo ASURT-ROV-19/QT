@@ -18,7 +18,7 @@ class gstreamer : public QObject
 public:
     gstreamer(QWidget * parent,QVBoxLayout * layout);
 
-    //    gstream(QWidget * parent,QGridLayout * layout);
+    gstreamer(QWidget * parent,QGridLayout * layout);
     int action(QApplication * myApp);
     QWidget * window2 ,* window;
     QWidget * getRenderingWindow(int windowNumber);
@@ -41,6 +41,7 @@ private:
     QWidget * motherWidget;
     QHBoxLayout * horLay;
     int windowSelector=0;
+    QGridLayout * GUILayOut;
 };
 
 #endif // GSTREAM_H

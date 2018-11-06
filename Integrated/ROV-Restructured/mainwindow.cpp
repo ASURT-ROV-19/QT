@@ -28,16 +28,14 @@ MainWindow::MainWindow(QApplication * myApp) :
     joyS=new Joystick_Handler();
     server=new TCPServer("127.0.0.1",5000);
     ui->setupUi(this);
-    connect(joyS,SIGNAL(msgsent(string)),this,SLOT(sendToGUI(string)));
-    connect(joyS,SIGNAL(msgsent(string)),server,SLOT(sendmsg(string)));
-    connect(joyS,SIGNAL(msgsent(string)),server,SLOT(sendmsg(string)));
+    connect(joyS,SIGNAL(sendToServer(QString)),server,SLOT(sendmsg(QString)));
     centralWidget=new QWidget();
     centralWidget->setGeometry(0,0,1280,960);
     centralWidget->show();
     centralWidget->setWindowTitle("Stream");
 //    centralWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     GUI=new gui(centralWidget);
-    connect(joyS,SIGNAL(timerPause_Play()),GUI,SLOT(pause_play_Timer()));
+    connect(joyS,SIGNAL(sendToGUI(QString)),GUI,SLOT(changeInGUI(QString)));
     GUI->startListening(myApp);
 }
 
@@ -47,9 +45,4 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::sendToGUI(string message)
-{
-    if (message=="1")
-        GUI->changeInGUI(QString::fromStdString(message));
-}
 

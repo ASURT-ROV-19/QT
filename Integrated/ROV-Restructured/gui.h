@@ -14,6 +14,7 @@
 #include "gstreamer.h"
 #include <QApplication>
 #include <QString>
+#include <string.h>
 class gui : public QObject
 {
     Q_OBJECT

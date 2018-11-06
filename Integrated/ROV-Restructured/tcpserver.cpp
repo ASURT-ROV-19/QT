@@ -40,10 +40,12 @@ void TCPServer::connected()
     qDebug()<<"Connected";
 }
 
-void TCPServer::sendmsg(string s)
+void TCPServer::sendmsg(QString message)
 {
-        qDebug()<<s.c_str();
-        socket->write(s.c_str());
+
+        qDebug()<<message;
+
+        socket->write(message.toStdString().c_str());
 }
 
 void TCPServer::read()

@@ -6,7 +6,7 @@
     */
 gstreamer::gstreamer(QWidget *parent, QVBoxLayout *layout)
 {
-    motherWidget=new QWidget(parent);
+    motherWidget=new QWidget();
 
     window=new QWidget();
     window->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -26,7 +26,58 @@ gstreamer::gstreamer(QWidget *parent, QVBoxLayout *layout)
     vSpacer=new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::Expanding);
     horLay->addWidget(window2);
 //    horLay->addSpacerItem(vSpacer);
-//    layout->addSpacerItem(vSpacer);
+        layout->addSpacerItem(vSpacer);
+}
+
+gstreamer::gstreamer(QWidget *parent, QGridLayout *layout)
+{
+    motherWidget=new QWidget();
+
+    window=new QWidget();
+    window->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    window2=new QWidget();
+    window2->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    window->setStyleSheet("background-color: white");
+//    window->setAttribute(Qt::WA_TranslucentBackground);
+//    window->setStyleSheet("background:transparent;");
+//    window2->setAttribute(Qt::WA_TranslucentBackground);
+//    window2->setStyleSheet("background:transparent;");
+    window2->setStyleSheet("background-color: red");
+    layout->addWidget(window,1,0);
+    layout->addWidget(window2,1,1);
+    GUILayOut=layout;
+
+}
+
+void gstreamer::setWindowsSize()
+{
+    if (windowSelector==0){
+        GUILayOut->removeWidget(window);
+        GUILayOut->removeWidget(window2);
+        GUILayOut->addWidget(window,1,0);
+        GUILayOut->addWidget(window2,1,1);
+        windowSelector++;
+        g_print("Size 0\n");
+    }
+    else if (windowSelector==1){
+        // Window 1 becomes the main camera window
+        GUILayOut->removeWidget(window);
+        GUILayOut->removeWidget(window2);
+        GUILayOut->addWidget(window,1,0,1,5);
+        GUILayOut->addWidget(window2,1,5,1,3);
+        windowSelector++;
+        g_print("Size 1\n");
+    }
+    else if (windowSelector==2){
+//        Window 2 becomes the main camera window
+        GUILayOut->removeWidget(window);
+        GUILayOut->removeWidget(window2);
+        GUILayOut->addWidget(window,1,0,1,3);
+        GUILayOut->addWidget(window2,1,3,1,5);
+        windowSelector-=2;
+        g_print("Size 2\n");
+    }
+
 }
 
 int gstreamer::action(QApplication * myApp)
@@ -285,29 +336,6 @@ QWidget * gstreamer::getRenderingWindow(int windowNumber)
         return window;
 }
 
-void gstreamer::setWindowsSize()
-{
-    if (windowSelector==0){
-
-        window->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-        window2->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        windowSelector++;
-        g_print("Size 0");
-    }
-    else if (windowSelector==1){
-        window2->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-        window->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        windowSelector++;
-        g_print("Size 1");
-    }
-    else if (windowSelector==2){
-        window2->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        window->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        windowSelector-=2;
-        g_print("Size 2");
-    }
-
-}
     /*
     The following large comment is to be uncommented and used instead of the one function "action()" above , to make
     the stream more controllable . I have just copied and pasted and thus commented it , but it will need refactoring and

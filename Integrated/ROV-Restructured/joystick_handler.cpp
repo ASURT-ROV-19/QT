@@ -28,11 +28,11 @@ void Joystick_Handler::action()
     case SDL_JOYAXISMOTION:
         if (abs(X-prev_x)>SGNFCNT || abs(Y-prev_y)>SGNFCNT || abs(Z-prev_z)>SGNFCNT || abs(R-prev_r)>SGNFCNT){
             msg="";
-            msg+=((abs(X)>DEADZONE)?to_string(X):"0") +" ";
-            msg+=((abs(Y)>DEADZONE)?to_string(Y):"0") +" ";
-            msg+=((abs(Z)>DEADZONE)?to_string(Z):"0") +" ";
-            msg+=(abs(R)>DEADZONE)?to_string(R):"0";
-            emit msgsent(msg);
+            msg+=((abs(X)>DEADZONE)?QString::number(X):"0") +" ";
+            msg+=((abs(Y)>DEADZONE)?QString::number(Y):"0") +" ";
+            msg+=((abs(Z)>DEADZONE)?QString::number(Z):"0") +" ";
+            msg+=(abs(R)>DEADZONE)?QString::number(R):"0";
+            emit sendToServer(msg);
         }
         break;
     case SDL_JOYDEVICEADDED:
@@ -42,11 +42,14 @@ void Joystick_Handler::action()
         js->remove();
         break;
     case SDL_JOYBUTTONDOWN:
-        msg=QString::number(event.jbutton.button).toStdString();
-        if (msg=="1"){
-            emit timerPause_Play(QString::fromStdString(msg));
-        }
-        emit msgsent(msg);
+        msg=QString::number(event.jbutton.button);
+//        if (msg=="1"){
+//            emit timerPause_Play(msg);
+//        }
+        if(js->message(msg))
+            emit sendToGUI(msg);
+        else
+            emit sendToServer(msg);
         break;
     default:
         break;

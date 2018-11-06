@@ -22,8 +22,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     MainWindow(QApplication * myApp);
-private slots:
-    void sendToGUI(string message);
+
 private:
     Ui::MainWindow *ui;
     TCPServer *server;

@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <string.h>
 #include<QDebug>
+#include <QString>
 using namespace std;
 class TCPServer:public QObject
 {
@@ -22,7 +23,7 @@ signals:
  public slots:
     void reconnect();
     void connected();
-    void sendmsg(string);
+    void sendmsg(QString message);
     void read();
 
 

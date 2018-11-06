@@ -57,10 +57,14 @@ void Joystick::remove()
     qDebug()<<"JS removed";
 }
 
-void Joystick::message(QString msg)
+bool Joystick::message(QString msg)
 {
-    if (msg=="20"){
-        qDebug()<<"Button1";
-
+    if (msg=="1"){
+        return true;
     }
+    else if (msg=="2"){
+        return true;
+        }
+
+    return false;
 }

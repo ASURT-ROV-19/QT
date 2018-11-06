@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Joystick_Handler_t {
-    QByteArrayData data[6];
-    char stringdata0[56];
+    QByteArrayData data[5];
+    char stringdata0[48];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,15 +32,14 @@ struct qt_meta_stringdata_Joystick_Handler_t {
 static const qt_meta_stringdata_Joystick_Handler_t qt_meta_stringdata_Joystick_Handler = {
     {
 QT_MOC_LITERAL(0, 0, 16), // "Joystick_Handler"
-QT_MOC_LITERAL(1, 17, 7), // "msgsent"
-QT_MOC_LITERAL(2, 25, 0), // ""
-QT_MOC_LITERAL(3, 26, 6), // "string"
-QT_MOC_LITERAL(4, 33, 15), // "timerPause_Play"
-QT_MOC_LITERAL(5, 49, 6) // "action"
+QT_MOC_LITERAL(1, 17, 12), // "sendToServer"
+QT_MOC_LITERAL(2, 30, 0), // ""
+QT_MOC_LITERAL(3, 31, 9), // "sendToGUI"
+QT_MOC_LITERAL(4, 41, 6) // "action"
 
     },
-    "Joystick_Handler\0msgsent\0\0string\0"
-    "timerPause_Play\0action"
+    "Joystick_Handler\0sendToServer\0\0sendToGUI\0"
+    "action"
 };
 #undef QT_MOC_LITERAL
 
@@ -59,13 +58,13 @@ static const uint qt_meta_data_Joystick_Handler[] = {
 
  // signals: name, argc, parameters, tag, flags
        1,    1,   29,    2, 0x06 /* Public */,
-       4,    1,   32,    2, 0x06 /* Public */,
+       3,    1,   32,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    0,   35,    2, 0x0a /* Public */,
+       4,    0,   35,    2, 0x0a /* Public */,
 
  // signals: parameters
-    QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString,    2,
 
  // slots: parameters
@@ -80,23 +79,23 @@ void Joystick_Handler::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         Joystick_Handler *_t = static_cast<Joystick_Handler *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->msgsent((*reinterpret_cast< string(*)>(_a[1]))); break;
-        case 1: _t->timerPause_Play((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 0: _t->sendToServer((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 1: _t->sendToGUI((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 2: _t->action(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (Joystick_Handler::*)(string );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Joystick_Handler::msgsent)) {
+            using _t = void (Joystick_Handler::*)(QString );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Joystick_Handler::sendToServer)) {
                 *result = 0;
                 return;
             }
         }
         {
             using _t = void (Joystick_Handler::*)(QString );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Joystick_Handler::timerPause_Play)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Joystick_Handler::sendToGUI)) {
                 *result = 1;
                 return;
             }
@@ -141,14 +140,14 @@ int Joystick_Handler::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Joystick_Handler::msgsent(string _t1)
+void Joystick_Handler::sendToServer(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void Joystick_Handler::timerPause_Play(QString _t1)
+void Joystick_Handler::sendToGUI(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);

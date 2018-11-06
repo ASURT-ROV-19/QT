@@ -29,8 +29,8 @@ gui::gui(QWidget *parent)
 //     verLay->addWidget(timerLabel);
     button->setText("Stop/Start Timer");
     verLay->addWidget(pressureSensorLabel);
-//     str=new gstream(parent,verLay);
-    streamer=new gstreamer(parent,verLay);
+    streamer=new gstreamer(parent,gridLay);
+//    streamer=new gstreamer(parent,verLay);
 //     verLay->addWidget(timerLabel);
      timerLabel->setParent(streamer->getRenderingWindow(1));
      timerLabel->setAttribute(Qt::WA_TranslucentBackground);
@@ -58,7 +58,6 @@ void gui::changeInGUI(QString button)
     else if(button=="2")
         //do change in two windows sizes
     {    streamer->setWindowsSize();
-        qDebug()<<"afsdfsd";
 
     }
 }

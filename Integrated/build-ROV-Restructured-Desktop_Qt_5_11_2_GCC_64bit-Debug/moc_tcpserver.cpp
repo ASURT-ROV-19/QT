@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TCPServer_t {
-    QByteArrayData data[8];
-    char stringdata0[63];
+    QByteArrayData data[9];
+    char stringdata0[71];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,11 +38,12 @@ QT_MOC_LITERAL(3, 23, 6), // "string"
 QT_MOC_LITERAL(4, 30, 9), // "reconnect"
 QT_MOC_LITERAL(5, 40, 9), // "connected"
 QT_MOC_LITERAL(6, 50, 7), // "sendmsg"
-QT_MOC_LITERAL(7, 58, 4) // "read"
+QT_MOC_LITERAL(7, 58, 7), // "message"
+QT_MOC_LITERAL(8, 66, 4) // "read"
 
     },
     "TCPServer\0receivedmsg\0\0string\0reconnect\0"
-    "connected\0sendmsg\0read"
+    "connected\0sendmsg\0message\0read"
 };
 #undef QT_MOC_LITERAL
 
@@ -66,7 +67,7 @@ static const uint qt_meta_data_TCPServer[] = {
        4,    0,   42,    2, 0x0a /* Public */,
        5,    0,   43,    2, 0x0a /* Public */,
        6,    1,   44,    2, 0x0a /* Public */,
-       7,    0,   47,    2, 0x0a /* Public */,
+       8,    0,   47,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    2,
@@ -74,7 +75,7 @@ static const uint qt_meta_data_TCPServer[] = {
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void, QMetaType::QString,    7,
     QMetaType::Void,
 
        0        // eod
@@ -89,7 +90,7 @@ void TCPServer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 0: _t->receivedmsg((*reinterpret_cast< string(*)>(_a[1]))); break;
         case 1: _t->reconnect(); break;
         case 2: _t->connected(); break;
-        case 3: _t->sendmsg((*reinterpret_cast< string(*)>(_a[1]))); break;
+        case 3: _t->sendmsg((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 4: _t->read(); break;
         default: ;
         }

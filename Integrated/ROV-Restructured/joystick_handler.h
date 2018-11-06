@@ -3,7 +3,7 @@
 #include "joystick.h"
 #include <QTimer>
 #include <string.h>
-
+#include <QString>
 using namespace std;
 
 class Joystick_Handler: public QObject
@@ -22,11 +22,11 @@ private:
     QTimer *timer;
     SDL_Event  event;
     int prev_x,prev_y,prev_z,prev_r;
-    string msg;
+    QString msg;
 
 signals:
-    void msgsent(string);
-    void timerPause_Play(QString);
+    void sendToServer(QString);
+    void sendToGUI(QString);
 
 };
 

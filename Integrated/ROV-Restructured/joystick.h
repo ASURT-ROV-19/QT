@@ -20,7 +20,7 @@ class Joystick:public QObject
     int get_r();
     void activate();
     void remove();
-    void message(QString msg);
+    bool message(QString msg);
 
    private:
     SDL_Joystick *js;
