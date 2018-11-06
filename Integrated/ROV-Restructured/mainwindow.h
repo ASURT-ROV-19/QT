@@ -22,7 +22,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     MainWindow(QApplication * myApp);
-    void getApp(QApplication * application);
 private slots:
     void sendToGUI(string message);
 private:

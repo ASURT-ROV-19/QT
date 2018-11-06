@@ -46,15 +46,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::getApp(QApplication *application)
-{
-    QApplication * myApp=application;
-}
 
 void MainWindow::sendToGUI(string message)
 {
     if (message=="1")
-        qDebug()<<"In main window and shall send to gui";
         GUI->changeInGUI(QString::fromStdString(message));
 }
 

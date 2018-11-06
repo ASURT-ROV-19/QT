@@ -38,7 +38,7 @@ private:
     QWidget * dummy;
 
     // Temporary layout to try for displaying timer on rendering window
-    QGridLayout * tempLay;
+    QGridLayout * gridLay;
 
 };
 

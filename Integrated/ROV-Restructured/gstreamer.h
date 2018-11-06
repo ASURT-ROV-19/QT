@@ -24,10 +24,10 @@ public:
     QWidget * getRenderingWindow(int windowNumber);
     void setWindowsSize();
     int setPipelines();
-    void setReady();
-    void play();
-    void stop();
-    ~gstreamer();
+//    void setReady();
+//    void play();
+//    void stop();
+//    ~gstreamer();
 private:
     GstElement *pipeline ,*source , *tee ,* queue1 ,* queue2,*buffer,*depay,*decompressor,*convert,* sink, *sink2;
     GstElement *source2 ,*buffer2,*depay2,*decompressor2,*convert2,*scalingConvert,*scaler,*capsfilter;

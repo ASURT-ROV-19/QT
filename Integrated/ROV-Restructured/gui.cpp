@@ -9,12 +9,14 @@ gui::gui(QWidget *parent)
     updater=new QTimer();
     updater->setInterval(1000);
     updater->start();
+    gridLay=new QGridLayout;
     QFont font1=timerLabel->font();
     font1.setPointSize(18);
     timerLabel->setFont(font1);
     timer=new CountDown();
     verLay=new QVBoxLayout();
-    parent->setLayout(verLay);
+//    parent->setLayout(verLay);
+    parent->setLayout(gridLay);
     parent->setStyleSheet("background-color: lime");
     timerLabel->setStyleSheet("background-color: red");
     button=new QPushButton();

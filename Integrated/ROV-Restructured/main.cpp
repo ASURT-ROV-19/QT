@@ -10,3 +10,8 @@ int main(int argc, char *argv[])
 
 //    return a->exec();
 }
+
+
+/*
+    Next to do is to use grid layout instead of two layouts for the GUI
+*/
