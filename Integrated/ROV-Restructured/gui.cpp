@@ -4,7 +4,6 @@ gui::gui(QWidget *parent)
 {
     timerLabel=new QLabel();
     timerLabel->setGeometry(0,0,100,100);
-    timerLabel->setStyleSheet("background-color: rgba(255, 255, 255, 10);");
     pressureSensorLabel=new QLabel();
     updater=new QTimer();
     updater->setInterval(1000);
@@ -14,34 +13,38 @@ gui::gui(QWidget *parent)
     font1.setPointSize(18);
     timerLabel->setFont(font1);
     timer=new CountDown();
-    verLay=new QVBoxLayout();
-//    parent->setLayout(verLay);
     parent->setLayout(gridLay);
     parent->setStyleSheet("background-color: lime");
     timerLabel->setStyleSheet("background-color: red");
     button=new QPushButton();
+    play_pause_button=new QPushButton("Play/Pause");
+    endButton=new QPushButton("Quit program");
     connect(button,SIGNAL(clicked()),timer,SLOT(pause()));
     connect(this,SIGNAL(pause_play()),timer,SLOT(pause()));
     timerLabel->setText(timer->getTimeRemaining());
     connect(updater,SIGNAL(timeout()),this,SLOT(updateTimer()));
-    timer->setTimer(15,0);
-    verLay->addWidget(button);
-//     verLay->addWidget(timerLabel);
+    timer->setTimer(0,15);
     button->setText("Stop/Start Timer");
-    verLay->addWidget(pressureSensorLabel);
     streamer=new gstreamer(parent,gridLay);
-//    streamer=new gstreamer(parent,verLay);
-//     verLay->addWidget(timerLabel);
-     timerLabel->setParent(streamer->getRenderingWindow(1));
-     timerLabel->setAttribute(Qt::WA_TranslucentBackground);
-     timerLabel->setStyleSheet("background:transparent;");
-//     verLay->insertWidget(1,timerLabel);
-
+    connect(play_pause_button,SIGNAL(clicked()),streamer,SLOT(play_pause()));
+    connect(endButton,SIGNAL(clicked()),streamer,SLOT(quitProgram()));
+    gridLay->addWidget(button);
+    gridLay->addWidget(play_pause_button);
+    gridLay->addWidget(endButton);
+    timerLabel->setAttribute(Qt::WA_TranslucentBackground);
+    timerLabel->setStyleSheet("background:transparent;");
+    timerLabel->setParent(streamer->getRenderingWindow(1));
 }
 
 void gui::startListening(QApplication * myApp)
 {
     streamer->action(myApp);
+
+}
+
+QPushButton *gui::getChangingButton()
+{
+    return button;
 }
 
 
@@ -60,6 +63,11 @@ void gui::changeInGUI(QString button)
     {    streamer->setWindowsSize();
 
     }
+}
+
+void gui::changeInGUI()
+{
+    streamer->setWindowsSize();
 }
 
 

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <gstreamer.h>
 
 int main(int argc, char *argv[])
 {
@@ -7,8 +8,8 @@ int main(int argc, char *argv[])
     MainWindow w(a);
 //    w.getApp(a);
 //    w.show();
-
-//    return a->exec();
+    gst_init(&argc,&argv);
+    return a->exec();
 }
 
 

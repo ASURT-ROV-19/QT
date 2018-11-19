@@ -21,17 +21,19 @@ class gui : public QObject
 public:
     gui(QWidget * parent=0);
     void startListening(QApplication * myApp);
+    QPushButton * getChangingButton();    //temporary to use the button instead of the joystick as i ddon't have the joystick now;
 private slots:
     void updateTimer();
 public slots:
     void changeInGUI(QString button);
+    void changeInGUI();
 signals:
     void pause_play();
 private:
 //    gstream * str;
     gstreamer * streamer;
     QVBoxLayout * verLay;
-    QPushButton * button;
+    QPushButton * button , * play_pause_button, * endButton;
     CountDown * timer;
     QTimer * updater;
     QLabel * timerLabel;

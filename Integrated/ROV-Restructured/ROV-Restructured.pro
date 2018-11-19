@@ -34,7 +34,8 @@ SOURCES += \
     joystick.cpp \
     joystick_handler.cpp \
     tcpserver.cpp \
-    gstreamer.cpp
+    gstreamer.cpp \
+    gstream.cpp
 
 
 HEADERS += \
@@ -44,7 +45,8 @@ HEADERS += \
     joystick.h \
     joystick_handler.h \
     tcpserver.h \
-    gstreamer.h
+    gstreamer.h \
+    gstream.h
 
 FORMS += \
         mainwindow.ui
