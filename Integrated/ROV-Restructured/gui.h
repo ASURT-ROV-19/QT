@@ -26,7 +26,6 @@ private slots:
     void updateTimer();
 public slots:
     void changeInGUI(QString button);
-    void changeInGUI();
 signals:
     void pause_play();
 private:

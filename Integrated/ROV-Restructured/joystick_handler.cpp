@@ -28,10 +28,10 @@ void Joystick_Handler::action()
     case SDL_JOYAXISMOTION:
         if (abs(X-prev_x)>SGNFCNT || abs(Y-prev_y)>SGNFCNT || abs(Z-prev_z)>SGNFCNT || abs(R-prev_r)>SGNFCNT){
             msg="";
-            msg+=((abs(X)>DEADZONE)?QString::number(X):"0") +" ";
-            msg+=((abs(Y)>DEADZONE)?QString::number(Y):"0") +" ";
-            msg+=((abs(Z)>DEADZONE)?QString::number(Z):"0") +" ";
-            msg+=(abs(R)>DEADZONE)?QString::number(R):"0";
+            msg+="X="+((abs(X)>DEADZONE)?QString::number(X):"0") +" ";
+            msg+="Y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +" ";
+            msg+="Z="+((abs(Z)>DEADZONE)?QString::number(Z):"0") +" ";
+            msg+="R="+(abs(R)>DEADZONE)?QString::number(R):"0";
             emit sendToServer(msg);
         }
         break;
@@ -46,6 +46,7 @@ void Joystick_Handler::action()
 //        if (msg=="1"){
 //            emit timerPause_Play(msg);
 //        }
+        //the next if case decides whether we are sending to server or making a change in GUI
         if(js->message(msg))
             emit sendToGUI(msg);
         else

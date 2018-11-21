@@ -65,12 +65,13 @@ void gstreamer::setWindowsSize()
 void gstreamer::autoSetPipelines()
 {
     pipeline=gst_pipeline_new("xvoverlay");
-    pipeline=gst_parse_launch("udpsrc port=5022 ! application/x-rtp,encoding-name=H264 ! tee name='t1' ! queue ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink .t1 ! queue ! udpsink port=10000",NULL);
-//    pipeline=gst_parse_launch("udpsrc port=5022 ! application/x-rtp,encoding-name=JPEG,payload=26 ! tee name='t1' ! queue ! rtpjpegdepay ! jpegdec idct-method=2 ! videoconvert ! ximagesink name=sink .t1 ! queue ! udpsink port=10000",NULL);
-
+//    pipeline=gst_parse_launch("udpsrc port=5022 ! application/x-rtp,encoding-name=H264 ! tee name='t1' ! queue ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink .t1 ! queue ! udpsink port=10000",NULL);
+    pipeline=gst_parse_launch("udpsrc port=5022 ! application/x-rtp,encoding-name=JPEG,payload=26 ! tee name='t1' ! queue ! udpsink port=10000 t1. ! queue ! rtpjpegdepay ! jpegdec idct-method=2 ! videoconvert ! ximagesink name=sink",NULL);
+//the JPEG pipeline now works on an external terminal , don't currently know exactly what its problem here is , but probably it's a rendenring issue
+    //as am also facing a rendering unsolved issue in the auto H264 Pipeline
     pipeline2=gst_pipeline_new("xvoverlay");
-    pipeline2=gst_parse_launch("udpsrc port=10000 ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! videoscale ! video/x-raw,width=100 ! ximagesink name=sink",NULL);
-//    pipeline2=gst_parse_launch("udpsrc port=10000 ! application/x-rtp,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec idct-method=2 ! videoconvert ! ximagesink name=sink",NULL);
+//    pipeline2=gst_parse_launch("udpsrc port=10000 ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! videoscale ! video/x-raw,width=100 ! ximagesink name=sink",NULL);
+    pipeline2=gst_parse_launch("udpsrc port=10000 ! application/x-rtp,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec idct-method=2 ! videoconvert ! ximagesink name=sink",NULL);
 }
 
 

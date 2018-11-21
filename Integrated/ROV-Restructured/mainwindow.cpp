@@ -36,7 +36,6 @@ MainWindow::MainWindow(QApplication * myApp) :
 //    centralWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     GUI=new gui(centralWidget);
     connect(joyS,SIGNAL(sendToGUI(QString)),GUI,SLOT(changeInGUI(QString)));
-    connect(GUI->getChangingButton(),SIGNAL(clicked()),GUI,SLOT(changeInGUI()));
     GUI->startListening(myApp);
 }
 

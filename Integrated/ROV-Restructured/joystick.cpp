@@ -65,6 +65,11 @@ bool Joystick::message(QString msg)
     else if (msg=="2"){
         return true;
         }
-
+    else if (msg=="3"){
+        return true;
+        }
+    else if (msg=="0"){
+        return true;
+        }
     return false;
 }

@@ -23,7 +23,7 @@ gui::gui(QWidget *parent)
     connect(this,SIGNAL(pause_play()),timer,SLOT(pause()));
     timerLabel->setText(timer->getTimeRemaining());
     connect(updater,SIGNAL(timeout()),this,SLOT(updateTimer()));
-    timer->setTimer(0,15);
+    timer->setTimer(1,15);
     button->setText("Stop/Start Timer");
     streamer=new gstreamer(parent,gridLay);
     connect(play_pause_button,SIGNAL(clicked()),streamer,SLOT(play_pause()));
@@ -63,12 +63,21 @@ void gui::changeInGUI(QString button)
     {    streamer->setWindowsSize();
 
     }
+    else if(button=="3")
+        //quit
+    {
+        qDebug()<<"shall quit";
+        streamer->quitProgram();
+    }
+    else if(button=="0")
+        //play or pause
+    {
+        qDebug()<<"shall quit";
+        streamer->play_pause();
+    }
+
 }
 
-void gui::changeInGUI()
-{
-    streamer->setWindowsSize();
-}
 
 
 
