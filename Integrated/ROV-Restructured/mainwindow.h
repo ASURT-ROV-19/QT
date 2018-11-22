@@ -20,8 +20,9 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    QGridLayout * getLayout();
+    void addRedneringWindow(QWidget * window,uint8_t row , uint8_t col ,uint8_t  wid , uint8_t hei , uint8_t windowNum);
     ~MainWindow();
-    MainWindow(QApplication * myApp);
 
 private:
     Ui::MainWindow *ui;

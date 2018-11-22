@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_CountDown_t {
     QByteArrayData data[5];
-    char stringdata0[35];
+    char stringdata0[44];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,13 +32,14 @@ struct qt_meta_stringdata_CountDown_t {
 static const qt_meta_stringdata_CountDown_t qt_meta_stringdata_CountDown = {
     {
 QT_MOC_LITERAL(0, 0, 9), // "CountDown"
-QT_MOC_LITERAL(1, 10, 5), // "pause"
-QT_MOC_LITERAL(2, 16, 0), // ""
-QT_MOC_LITERAL(3, 17, 6), // "resume"
-QT_MOC_LITERAL(4, 24, 10) // "changeTime"
+QT_MOC_LITERAL(1, 10, 10), // "pause_Play"
+QT_MOC_LITERAL(2, 21, 0), // ""
+QT_MOC_LITERAL(3, 22, 10), // "changeTime"
+QT_MOC_LITERAL(4, 33, 10) // "resetDelay"
 
     },
-    "CountDown\0pause\0\0resume\0changeTime"
+    "CountDown\0pause_Play\0\0changeTime\0"
+    "resetDelay"
 };
 #undef QT_MOC_LITERAL
 
@@ -74,9 +75,9 @@ void CountDown::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         CountDown *_t = static_cast<CountDown *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->pause(); break;
-        case 1: _t->resume(); break;
-        case 2: _t->changeTime(); break;
+        case 0: _t->pause_Play(); break;
+        case 1: _t->changeTime(); break;
+        case 2: _t->resetDelay(); break;
         default: ;
         }
     }

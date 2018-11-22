@@ -17,23 +17,29 @@ class gstream : public QObject
     Q_OBJECT
 public:
     gstream(QWidget * parent,QGridLayout * layout);
-    int setPipelines();
+    gstream(int port);
+    gstream(int port,QGridLayout * layout,uint r,uint c,uint w,uint h);
+    ~gstream();
+    int setPipeline();
+    void autoSetPipeline();
     void setRenderingWindows();
+    QWidget * getRenderingWindow();
+
 
 
 public slots:
     void play_pause();
     void quitProgram();
+    int linkElements();
 
 private:
-    GstElement *pipeline ,*source , *tee ,* queue1 ,* queue2,*buffer,*depay,*decompressor,*convert,* sink, *sink2;
-    GstElement *source2 ,*buffer2,*depay2,*decompressor2,*convert2,*scalingConvert,*scaler,*capsfilter;
+    GstElement *pipeline ,*source  ,*buffer,*depay,*decompressor,*convert,* sink;
+    GstElement *capsfilter;
     GMainLoop *mainLoop;
-    QWidget * window2 ,* window;
-    GstElement * sinkForWindow2,*pipeline2 ;
+    QWidget * window;
     uint8_t state=0;
-    GstCaps * caps,*scalingCaps;
-    int windowSelector=0;
+    GstCaps * caps;
+    uint8_t windowSelector=0;
     QGridLayout * GUILayOut;
 
 };

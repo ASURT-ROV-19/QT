@@ -12,36 +12,35 @@
 #include <QFont>
 #include <QGridLayout>
 #include "gstreamer.h"
+//#include "gstream.h"
 #include <QApplication>
 #include <QString>
 #include <string.h>
+#include "buttonsconfiguration.h"
+
 class gui : public QObject
 {
     Q_OBJECT
 public:
     gui(QWidget * parent=0);
-    void startListening(QApplication * myApp);
     QPushButton * getChangingButton();    //temporary to use the button instead of the joystick as i ddon't have the joystick now;
-private slots:
-    void updateTimer();
+    QGridLayout * getLayout();
+    void addWidgetToLayout (QWidget * window,uint8_t row, uint8_t col , uint8_t width , uint8_t height,uint8_t windowNumber);
+
 public slots:
     void changeInGUI(QString button);
+    void changeButtonsConfiguration(QString newConfig);
+
 signals:
     void pause_play();
+
 private:
-//    gstream * str;
-    gstreamer * streamer;
-    QVBoxLayout * verLay;
     QPushButton * button , * play_pause_button, * endButton;
     CountDown * timer;
-    QTimer * updater;
-    QLabel * timerLabel;
-    QLabel * pressureSensorLabel;
-    QWidget * dummy;
-
-    // Temporary layout to try for displaying timer on rendering window
+    buttonsConfiguration * butConfig;
     QGridLayout * gridLay;
-
+    QString cameraButton="2",timerButton="1";
+    QWidget * window1,*window2,*window3;
 };
 
 #endif // GUI_H

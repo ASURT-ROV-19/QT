@@ -2,9 +2,14 @@
 
 CountDown::CountDown()
 {
+    TIME=new QTime();
+//    currentTime=TIME->second();
     timer=new QTimer(this);
     timer->setInterval(1000);
+    setTimerLabel();
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(changeTime()));
+    QObject::connect(timer,SIGNAL(timeout()),this,SLOT(resetDelay()));
+
 }
 
 
@@ -21,14 +26,23 @@ void CountDown::setTimer(int minutes,int seconds){
 
 void CountDown::pause()
 {
-    qDebug()<<"Timer pause/resume";
-    timer->isActive() ? timer->stop():timer->start();
-
+//    currentTime=std::tan();
+    TIME->setHMS(0,0,0,0);
+    timer->stop();
+    TIME->start();
 }
 
 void CountDown::resume()
 {
+//    currentTime
+//    timer->setInterval(1000-currentTime);
     timer->start();
+
+}
+
+void CountDown::pause_Play()
+{
+    timer->isActive() ? pause():resume();
 }
 
 
@@ -62,4 +76,38 @@ void CountDown::changeTime()
         time+=QString::number(sec);
     }
 
+    timerLabel->setText(time);
+}
+
+void CountDown::resetDelay()
+{
+    timer->setInterval(1000);
+}
+
+
+void CountDown::setTimerLabel(){
+    timerLabel=new QLabel(time);
+    timerLabel->setGeometry(0,0,100,100);
+    timerLabel->show();
+    setTimerFont();
+    timerLabel->setAttribute(Qt::WA_TranslucentBackground);
+    timerLabel->setStyleSheet("background:transparent;");
+}
+
+void CountDown::setTimerFont()
+{
+    QFont font1=timerLabel->font();
+    font1.setPointSize(18);
+    timerLabel->setFont(font1);
+
+}
+
+void CountDown::setParent(QWidget *parent)
+{
+    timerLabel->setParent(parent);
+}
+
+QLabel *CountDown::getTimerLabel()
+{
+    return timerLabel;
 }

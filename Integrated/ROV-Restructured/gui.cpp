@@ -2,43 +2,26 @@
 
 gui::gui(QWidget *parent)
 {
-    timerLabel=new QLabel();
-    timerLabel->setGeometry(0,0,100,100);
-    pressureSensorLabel=new QLabel();
-    updater=new QTimer();
-    updater->setInterval(1000);
-    updater->start();
     gridLay=new QGridLayout;
-    QFont font1=timerLabel->font();
-    font1.setPointSize(18);
-    timerLabel->setFont(font1);
-    timer=new CountDown();
     parent->setLayout(gridLay);
     parent->setStyleSheet("background-color: lime");
-    timerLabel->setStyleSheet("background-color: red");
-    button=new QPushButton();
-    play_pause_button=new QPushButton("Play/Pause");
-    endButton=new QPushButton("Quit program");
-    connect(button,SIGNAL(clicked()),timer,SLOT(pause()));
-    connect(this,SIGNAL(pause_play()),timer,SLOT(pause()));
-    timerLabel->setText(timer->getTimeRemaining());
-    connect(updater,SIGNAL(timeout()),this,SLOT(updateTimer()));
-    timer->setTimer(1,15);
-    button->setText("Stop/Start Timer");
-    streamer=new gstreamer(parent,gridLay);
-    connect(play_pause_button,SIGNAL(clicked()),streamer,SLOT(play_pause()));
-    connect(endButton,SIGNAL(clicked()),streamer,SLOT(quitProgram()));
-    gridLay->addWidget(button);
-    gridLay->addWidget(play_pause_button);
-    gridLay->addWidget(endButton);
-    timerLabel->setAttribute(Qt::WA_TranslucentBackground);
-    timerLabel->setStyleSheet("background:transparent;");
-    timerLabel->setParent(streamer->getRenderingWindow(1));
-}
 
-void gui::startListening(QApplication * myApp)
-{
-    streamer->action(myApp);
+    butConfig =new buttonsConfiguration;
+    connect(butConfig,SIGNAL(newSettings(QString)),this,SLOT(changeButtonsConfiguration(QString)));
+    button=new QPushButton();
+    button->setText("Stop/Start Timer");
+    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
+
+    endButton=new QPushButton("Quit program");
+    timer=new CountDown();
+    timer->setTimer(15,0);
+    connect(button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
+    connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
+    gridLay->addWidget(timer->getTimerLabel(),0,0);
+
+//    play_pause_button=new QPushButton("Play/Pause");
+
+    gridLay->addWidget(button);
 
 }
 
@@ -47,35 +30,70 @@ QPushButton *gui::getChangingButton()
     return button;
 }
 
-
-void gui::updateTimer()
+QGridLayout *gui::getLayout()
 {
-    timerLabel->setText(timer->getTimeRemaining());
+    return gridLay;
+}
+
+void gui::addWidgetToLayout(QWidget *window, uint8_t row, uint8_t col, uint8_t width, uint8_t height,uint8_t windowNumber)
+{
+    switch (windowNumber) {
+    case 1:
+        window1=window;
+        gridLay->addWidget(window1,row,col,width,height);
+        break;
+    case 2:
+        window2=window;
+        gridLay->addWidget(window2,row,col,width,height);
+        break;
+    case 3:
+        window3=window;
+        gridLay->addWidget(window3,row,col,width,height);
+        break;
+    default:
+        window1=window;
+        gridLay->addWidget(window1,row,col,width,height);
+        break;
+    }
 }
 
 void gui::changeInGUI(QString button)
 {
-    if (button=="1")
+    if (button==timerButton)
         emit pause_play();
 //
-    else if(button=="2")
+    else if(button==cameraButton)
         //do change in two windows sizes
-    {    streamer->setWindowsSize();
+    {
 
     }
     else if(button=="3")
         //quit
     {
         qDebug()<<"shall quit";
-        streamer->quitProgram();
+
     }
     else if(button=="0")
         //play or pause
     {
         qDebug()<<"shall quit";
-        streamer->play_pause();
+
     }
 
+}
+
+void gui::changeButtonsConfiguration(QString newConfig)
+{
+
+    QString check=newConfig;
+    check.chop(2);
+    if (check=="camera button"){
+        cameraButton=newConfig[newConfig.length()-1];
+    }
+    else if (check=="timer button"){
+        timerButton=newConfig[newConfig.length()-1];
+    }
+    qDebug()<<newConfig<<"::"<<check<<"::"<<newConfig[newConfig.length()-1];
 }
 
 

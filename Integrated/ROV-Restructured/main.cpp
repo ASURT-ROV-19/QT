@@ -1,15 +1,20 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <gstreamer.h>
+#include <gstream.h>
 
 int main(int argc, char *argv[])
 {
     QApplication * a =new QApplication(argc, argv);
-    MainWindow w(a);
-//    w.getApp(a);
-//    w.show();
-    gst_init(&argc,&argv);
-//    return a->exec();
+    MainWindow w;
+
+    gstream camera(5022,w.getLayout(),0,0,1,1);
+//    gstream camera(5022);
+//    camera.setPipeline();
+    camera.autoSetPipeline();
+    camera.play_pause();
+
+//    w.addRedneringWindow(camera.getRenderingWindow(),0,0,6,6,1);
+    return a->exec();
 }
 
 
