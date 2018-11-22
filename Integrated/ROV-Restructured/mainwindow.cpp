@@ -23,10 +23,11 @@ QGridLayout *MainWindow::getLayout()
     return GUI->getLayout();
 }
 
-void MainWindow::addRedneringWindow(QWidget *window, uint8_t row, uint8_t col, uint8_t wid,uint8_t  hei, uint8_t windowNum)
+void MainWindow::getCam(gstream *camera,uint8_t cameraNum)
 {
-    GUI->addWidgetToLayout(window,row,col,wid,hei,windowNum);
+    GUI->getCam(camera,cameraNum);
 }
+
 
 
 MainWindow::~MainWindow()

@@ -7,18 +7,15 @@
 #include <QApplication>
 #include <QTimer>
 #include <QWidget>
-#include <QSpacerItem>
-#include <QHBoxLayout>
-#include <QLabel>
 #include <QGridLayout>
-#include <QApplication>
+
 class gstream : public QObject
 {
     Q_OBJECT
 public:
     gstream(QWidget * parent,QGridLayout * layout);
     gstream(int port);
-    gstream(int port,QGridLayout * layout,uint r,uint c,uint w,uint h);
+    gstream();
     ~gstream();
     int setPipeline();
     void autoSetPipeline();
@@ -41,6 +38,7 @@ private:
     GstCaps * caps;
     uint8_t windowSelector=0;
     QGridLayout * GUILayOut;
+    int PORT;
 
 };
 

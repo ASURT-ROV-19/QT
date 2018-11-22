@@ -1,25 +1,31 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <gstream.h>
 
 int main(int argc, char *argv[])
 {
+
     QApplication * a =new QApplication(argc, argv);
     MainWindow w;
 
-    gstream camera(5022,w.getLayout(),0,0,1,1);
-//    gstream camera(5022);
+    gstream camera2(10000);
+    w.getCam(&camera2,2);
+    gstream camera(5022);
+    w.getCam(&camera,1);
 //    camera.setPipeline();
+
+//    w.addRedneringWindow(camera.getRenderingWindow(),0,0,1,1,1);
     camera.autoSetPipeline();
     camera.play_pause();
+    camera2.autoSetPipeline();
+    camera2.play_pause();
 
-//    w.addRedneringWindow(camera.getRenderingWindow(),0,0,6,6,1);
     return a->exec();
 }
 
 
 /*
-    Next to do is to use grid layout instead of two layouts for the GUI
+  CURRENT PROBLEM IS IN TOGGLING BETWEEN CAMERAS , WHAT HAPPENS IS THAT WE ADD A NULLED WINDOW TO THE LAYOUT SO PROG CRASHES
+  I SHALL FIGURE OUT SOMEHOW TO CHECK WHETHER THE WIDGET IS YET CREATED OR NOT
 */
 
 

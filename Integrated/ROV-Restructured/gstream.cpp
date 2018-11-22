@@ -10,7 +10,6 @@ gstream::gstream(int port)
 {
     //creating elements
     window=new QWidget ();
-//    layout->addWidget(window,r,c,w,h);
     window->setAttribute(Qt::WA_TranslucentBackground);
     window->setStyleSheet("background:transparent;");
     gst_init(0,0);
@@ -22,27 +21,14 @@ gstream::gstream(int port)
     convert=gst_element_factory_make("videoconvert","converter");
     sink=gst_element_factory_make("ximagesink","sink");
     g_object_set(source,"port",port,nullptr);
+    PORT=port;
 
 
 
 }
 
-gstream::gstream(int port, QGridLayout *layout, uint r, uint c, uint w, uint h)
+gstream::gstream()
 {
-    //creating elements
-    window=new QWidget ();
-    layout->addWidget(window,r,c,w,h);
-    window->setAttribute(Qt::WA_TranslucentBackground);
-    window->setStyleSheet("background:transparent;");
-    gst_init(0,0);
-    pipeline = gst_pipeline_new ("xvoverlay");
-    source= gst_element_factory_make("udpsrc","source");
-    buffer=gst_element_factory_make("rtpjitterbuffer","buffer");
-    depay=gst_element_factory_make("rtph264depay","depay");
-    decompressor=gst_element_factory_make("avdec_h264","deco");
-    convert=gst_element_factory_make("videoconvert","converter");
-    sink=gst_element_factory_make("ximagesink","sink");
-    g_object_set(source,"port",port,nullptr);
 
 }
 
@@ -153,6 +139,8 @@ gstream::~gstream()
 
 void gstream::autoSetPipeline()
 {
-    pipeline=gst_parse_launch("udpsrc port=5022 ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer latency=0 ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink",NULL);
+
+    std::string pipeline_description="udpsrc port="+QString::number(PORT).toStdString()+" ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer latency=0 ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink";
+    pipeline=gst_parse_launch(pipeline_description.c_str(),NULL);
     setRenderingWindows();
 }
