@@ -1,0 +1,5 @@
+TODO:
+
+1-replace the buttons in the gui with JS buttons that do the job
+2-complete the JPEG pipelines and make them ready to work
+3-make the stream itself resizable without the need for communicating with PI
