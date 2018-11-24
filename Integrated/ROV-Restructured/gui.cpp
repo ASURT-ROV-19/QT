@@ -75,7 +75,7 @@ void gui::changeButtonsConfiguration(QString newConfig)
 void gui::createWindows()
 {
    window=new QWidget *[3];
-   window[1]==nullptr ? qDebug()<<"null":qDebug()<<"created";
+   window[0]==nullptr ? qDebug()<<"null":qDebug()<<"created";
 }
 
 void gui::toggleCamera()
