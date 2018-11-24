@@ -157,6 +157,16 @@ void gui::prepButtonsConfig()
     emit buttonsConfig(configuration);
 }
 
+void gui::tempSLot()
+{
+    std::string temp=camera[0]->getDescribtion();
+    /*
+    ADD WORK HERE TO DETECT THE PLACE WHERE YOU WANNA ADD A VIDEO SCALE TO SCALE THE STREAM
+    WE SCALE THE STREAM IN ORDER TO HAVE A DYNAMIC LOOKING GUI WHER YOU CAN PUT FOCUS ON ONE CAMERA
+    */
+    camera[0]->manuallySetPipeline("udpsrc port=15000 ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer latency=0 ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink");
+}
+
 void gui::createButtons()
 {
     butConfig =new buttonsConfiguration;
@@ -168,22 +178,10 @@ void gui::createButtons()
 
 }
 
-void gui::handleSignals()
-{
-    //THESE ARE TO SHOW OR HIDE CONF WINDOW USING MOUTH & BUTTONS OR USING JS
-    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
-    connect(this,SIGNAL(pause_play()),butConfig,SLOT(show_hide()));
 
-    //THIS MEANS A NEW CONFIGURATION
-    connect(butConfig,SIGNAL(newSettings(QString)),this,SLOT(changeButtonsConfiguration(QString)));
-    //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
-    connect(button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
-    connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
 
-    connect(play_pause_button,SIGNAL(clicked()),this,SLOT(toggleCamera()));
-
-    connect(this,SIGNAL(buttonsConfig(QString)),butConfig,SLOT(getCurrentButtons(QString)));
-}
+//if you change any button and gave it the function of another ,this shall detect this and switch them , giving the unchanged
+//button the old function of the button you changed
 
 void gui::checkForButtonsSwitch()
 {
@@ -221,3 +219,20 @@ void gui::checkForButtonsSwitch()
 
 
 
+void gui::handleSignals()
+{
+    //THESE ARE TO SHOW OR HIDE CONF WINDOW USING MOUTH & BUTTONS OR USING JS
+    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
+    connect(this,SIGNAL(pause_play()),butConfig,SLOT(show_hide()));
+
+    //THIS MEANS A NEW CONFIGURATION
+    connect(butConfig,SIGNAL(newSettings(QString)),this,SLOT(changeButtonsConfiguration(QString)));
+    //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
+    connect(button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
+    connect(button,SIGNAL(clicked()),this,SLOT(tempSLot()));
+    connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
+
+    connect(play_pause_button,SIGNAL(clicked()),this,SLOT(toggleCamera()));
+
+    connect(this,SIGNAL(buttonsConfig(QString)),butConfig,SLOT(getCurrentButtons(QString)));
+}

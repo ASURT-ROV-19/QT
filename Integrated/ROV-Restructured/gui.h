@@ -29,6 +29,7 @@ public slots:
     void toggleCamera();
     void print();
     void prepButtonsConfig();
+    void tempSLot();
 signals:
     void pause_play();
     void buttonsConfig(QString Configuration);

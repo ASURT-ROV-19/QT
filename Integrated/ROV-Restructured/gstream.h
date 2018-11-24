@@ -21,7 +21,8 @@ public:
     void autoSetPipeline();
     void setRenderingWindows();
     QWidget * getRenderingWindow();
-
+    void manuallySetPipeline(QString describtion);
+    std::string getDescribtion();
 
 
 public slots:
@@ -40,6 +41,7 @@ private:
     QGridLayout * GUILayOut;
     int PORT;
     GstSample * screenshot;
+    std::string pipeline_description;
 
 };
 

@@ -74,6 +74,20 @@ QWidget *gstream::getRenderingWindow()
     return window;
 }
 
+void gstream::manuallySetPipeline(QString describtion)
+{
+    gst_element_set_state(pipeline,GST_STATE_NULL);
+    pipeline=gst_parse_launch(describtion.toStdString().c_str(),NULL);
+    gst_element_set_state(pipeline,GST_STATE_PLAYING);
+    setRenderingWindows();
+
+}
+
+std::string gstream::getDescribtion()
+{
+    return pipeline_description;
+}
+
 
 void gstream::play_pause()
 {
@@ -139,7 +153,7 @@ gstream::~gstream()
 void gstream::autoSetPipeline()
 {
 
-    std::string pipeline_description="udpsrc port="+QString::number(PORT).toStdString()+" ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer latency=0 ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink";
+    pipeline_description="udpsrc port="+QString::number(PORT).toStdString()+" ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer latency=0 ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink";
     pipeline=gst_parse_launch(pipeline_description.c_str(),NULL);
     setRenderingWindows();
 }
