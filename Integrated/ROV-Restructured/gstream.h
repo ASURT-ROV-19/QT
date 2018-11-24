@@ -39,6 +39,7 @@ private:
     uint8_t windowSelector=0;
     QGridLayout * GUILayOut;
     int PORT;
+    GstSample * screenshot;
 
 };
 

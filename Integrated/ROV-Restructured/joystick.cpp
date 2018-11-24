@@ -59,7 +59,10 @@ void Joystick::remove()
 
 bool Joystick::message(QString msg)
 {
-    if (msg=="1"){
+    if (msg=="0"){
+        return true;
+        }
+    else if (msg=="1"){
         return true;
     }
     else if (msg=="2"){
@@ -68,8 +71,12 @@ bool Joystick::message(QString msg)
     else if (msg=="3"){
         return true;
         }
-    else if (msg=="0"){
+    else if (msg=="4"){
         return true;
         }
+    else if (msg=="5"){
+        return true;
+        }
+    else
     return false;
 }

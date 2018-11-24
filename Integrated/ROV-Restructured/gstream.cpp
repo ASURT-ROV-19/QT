@@ -1,6 +1,5 @@
 #include "gstream.h"
 
-
 gstream::gstream(QWidget *parent, QGridLayout *layout)
 {
     layout->addWidget(window,0,0);

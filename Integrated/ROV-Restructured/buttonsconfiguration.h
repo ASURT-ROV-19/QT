@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QLabel>
 class buttonsConfiguration: public QObject
 {
     Q_OBJECT
@@ -16,19 +17,23 @@ public:
     void handleClicking();
 signals:
     void newSettings(QString config);
+public slots:
+    void show_hide();
+    void getCurrentButtons(QString currentConf);
 private slots:
     void timerClicked();
     void cameraClicked();
+    void configClicked();
     void saveSettings();
     void cancelEdit();
-    void show_hide();
 private:
     QWidget * confWidget;
     QGridLayout * gridLay;
-    QPushButton * timerPause_Play,*changeCamersSize;
+    QPushButton * timerPause_Play,*changeCamersSize,*configWindowDisp;
     QPushButton * cancel,*save;
     QRadioButton *JSBttn;
     QString buttonAndRole="";
+    QLabel *textLabel;
 };
 
 #endif // BUTTONSCONFIGURATION_H

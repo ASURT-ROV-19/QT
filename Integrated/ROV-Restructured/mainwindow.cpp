@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    centralWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     GUI=new gui(centralWidget);
     connect(joyS,SIGNAL(sendToGUI(QString)),GUI,SLOT(changeInGUI(QString)));
+
 }
 
 QGridLayout *MainWindow::getLayout()
