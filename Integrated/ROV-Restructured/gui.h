@@ -14,6 +14,7 @@
 #include "buttonsconfiguration.h"
 #include "gstream.h"
 #include <QTimer>
+
 class gui : public QObject
 {
     Q_OBJECT
@@ -29,10 +30,11 @@ public slots:
     void toggleCamera();
     void print();
     void prepButtonsConfig();
-    void tempSLot();
+    void changeCamerasSizes();
 signals:
     void pause_play();
     void buttonsConfig(QString Configuration);
+//    void newSizeDescribtion(int cameraNum,int width,int height);
 private:
     QTimer * tmr;
     QPushButton * button , * play_pause_button, * endButton;
@@ -46,6 +48,8 @@ private:
     void createButtons();
     void handleSignals();
     void checkForButtonsSwitch();
+    int findStringIndex(std::string describtion,std::string subDescribtion);
+    std::string removeExcessPart(std::string describtion,int startIndex,int endIndex);
     gstream ** camera;
     QWidget ** window;
 };

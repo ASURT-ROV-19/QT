@@ -74,11 +74,12 @@ QWidget *gstream::getRenderingWindow()
     return window;
 }
 
-void gstream::manuallySetPipeline(QString describtion)
+void gstream::manuallySetPipeline(std::string describtion)
 {
     gst_element_set_state(pipeline,GST_STATE_NULL);
-    pipeline=gst_parse_launch(describtion.toStdString().c_str(),NULL);
+    pipeline=gst_parse_launch(describtion.c_str(),NULL);
     gst_element_set_state(pipeline,GST_STATE_PLAYING);
+    pipeline_description=describtion;
     setRenderingWindows();
 
 }

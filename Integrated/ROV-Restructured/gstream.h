@@ -21,7 +21,7 @@ public:
     void autoSetPipeline();
     void setRenderingWindows();
     QWidget * getRenderingWindow();
-    void manuallySetPipeline(QString describtion);
+    void manuallySetPipeline(std::string describtion);
     std::string getDescribtion();
 
 

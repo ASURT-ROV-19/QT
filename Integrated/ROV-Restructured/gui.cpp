@@ -10,8 +10,8 @@ gui::gui(QWidget *parent)
     handleSignals();
     createWindows();
     gridLay->addWidget(timer->getTimerLabel(),0,0);
-    gridLay->addWidget(button);
-    gridLay->addWidget(play_pause_button);
+//    gridLay->addWidget(button);
+//    gridLay->addWidget(play_pause_button);
     camera=new gstream *[3];
     for (int i=0; i<3;i++) camera[i]=nullptr;
     tmr=new QTimer;
@@ -21,7 +21,7 @@ gui::gui(QWidget *parent)
 
 QPushButton *gui::getChangingButton()
 {
-    return button;
+//    return button;
 }
 
 QGridLayout *gui::getLayout()
@@ -50,6 +50,7 @@ void gui::changeInGUI(QString button)
         //do change in two windows sizes
     {
         toggleCamera();
+        emit
     }
     else if(button=="3")
         //quit
@@ -97,7 +98,7 @@ void gui::createWindows()
 
 void gui::toggleCamera()
 {
-
+    changeCamerasSizes();
     if (windowSelector==0){
         //two windows of equal size
         if (window[0]!=nullptr){
@@ -157,24 +158,55 @@ void gui::prepButtonsConfig()
     emit buttonsConfig(configuration);
 }
 
-void gui::tempSLot()
+void gui::changeCamerasSizes()
 {
-    std::string temp=camera[0]->getDescribtion();
-    /*
-    ADD WORK HERE TO DETECT THE PLACE WHERE YOU WANNA ADD A VIDEO SCALE TO SCALE THE STREAM
-    WE SCALE THE STREAM IN ORDER TO HAVE A DYNAMIC LOOKING GUI WHER YOU CAN PUT FOCUS ON ONE CAMERA
-    */
-    camera[0]->manuallySetPipeline("udpsrc port=15000 ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer latency=0 ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink");
-}
+    //index1 for index of 'v' of "videoscale" , index2 is index of 'v' of "videoconvert"
+    int index1[3],index2[3];
+
+    std::string describtion[3];
+    std::string temp[3];
+    for (int i=0;i<2;i++){
+    describtion[i]=camera[i]->getDescribtion();
+    index1[i]=findStringIndex(describtion[i],"videoconvert");
+    index2[i]=findStringIndex(describtion[i],"videoscale");
+    describtion[i]=removeExcessPart(describtion[i],index2[i],index1[i]);
+    index1[i]=findStringIndex(describtion[i],"videoconvert");
+    temp[i]="videoscale ! video/x-raw,width=";
+    }
+    if (windowSelector==0){
+        temp[0]+="800,height=600 ! ";
+        temp[1]+="800,height=600 ! ";
+
+    }
+    else if (windowSelector==1){
+        temp[0]+="1200,height=900 ! ";
+        temp[1]+="400,height=300! ";
+
+    }
+    else if (windowSelector==2){
+        temp[0]+="400,height=300 ! ";
+        temp[1]+="1200,height=900 ! ";
+
+    }
+
+    for (int i=0;i<2;i++){
+        if (index1[i]!=NULL){
+            describtion[i]=describtion[i].insert(index1[i],temp[i]);
+            camera[i]->manuallySetPipeline(describtion[i]);
+        }
+    }
+    }
+
+
 
 void gui::createButtons()
 {
     butConfig =new buttonsConfiguration;
-    button=new QPushButton("Stop/Start Timer");
-    endButton=new QPushButton("Quit program");
+//    button=new QPushButton("Stop/Start Timer");
+//    endButton=new QPushButton("Quit program");
     timer=new CountDown();
     timer->setTimer(15,0);
-    play_pause_button=new QPushButton("Play/Pause");
+//    play_pause_button=new QPushButton("Play/Pause");
 
 }
 
@@ -216,23 +248,62 @@ void gui::checkForButtonsSwitch()
     _configurationButton=configurationButton;
 }
 
+int gui::findStringIndex(std::string describtion,std::string subDescribtion)
+{
+    int checkFlag=0;
+    qDebug()<<QString::fromStdString(subDescribtion);
+    for (std::size_t i=0;i<describtion.length();i++){
+            checkFlag=0;
+        for (std::size_t j=0;j<subDescribtion.length();j++){
+                if (describtion[i+j]==subDescribtion[j]){
+                    checkFlag++;
+                    qDebug()<<subDescribtion[j]<<checkFlag;
+                    if (checkFlag==subDescribtion.length()){
+                        return (int)i;
+                    }
+                    continue;
+                }
+                else
+                    break;
+            }
+    }
+    return NULL;
+}
+
+std::string gui::removeExcessPart(std::string describtion,int startIndex,int endIndex)
+{
+    qDebug()<<"Start index is "<<startIndex;
+    qDebug()<<"End index is "<<endIndex;
+
+    if (startIndex!=NULL&&endIndex!=NULL){
+        describtion=describtion.erase(startIndex,endIndex-startIndex);
+        qDebug()<<"Gonna Erase !";
+    }
+    else{
+        qDebug()<<"Am cool with current describtion !";
+    }
+    return describtion;
+
+}
+
 
 
 
 void gui::handleSignals()
 {
     //THESE ARE TO SHOW OR HIDE CONF WINDOW USING MOUTH & BUTTONS OR USING JS
-    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
     connect(this,SIGNAL(pause_play()),butConfig,SLOT(show_hide()));
+//    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
+
 
     //THIS MEANS A NEW CONFIGURATION
     connect(butConfig,SIGNAL(newSettings(QString)),this,SLOT(changeButtonsConfiguration(QString)));
-    //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
-    connect(button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
-    connect(button,SIGNAL(clicked()),this,SLOT(tempSLot()));
-    connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
 
-    connect(play_pause_button,SIGNAL(clicked()),this,SLOT(toggleCamera()));
+    //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
+    connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
+//    connect(button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
+
+//    connect(play_pause_button,SIGNAL(clicked()),this,SLOT(toggleCamera()));
 
     connect(this,SIGNAL(buttonsConfig(QString)),butConfig,SLOT(getCurrentButtons(QString)));
 }
