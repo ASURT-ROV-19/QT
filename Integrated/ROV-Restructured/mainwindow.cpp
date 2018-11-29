@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(joyS,SIGNAL(sendToServer(QString)),server,SLOT(sendmsg(QString)));
     centralWidget=new QWidget();
-    centralWidget->setGeometry(0,0,1280,960);
+//    centralWidget->setGeometry(0,0,1280,960);
+    centralWidget->setWindowState(Qt::WindowFullScreen);
     centralWidget->show();
     centralWidget->setWindowTitle("Stream");
 //    centralWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);

@@ -87,11 +87,13 @@ void CountDown::resetDelay()
 
 void CountDown::setTimerLabel(){
     timerLabel=new QLabel(time);
-    timerLabel->setGeometry(0,0,100,00);
+    timerLabel->setGeometry(0,0,80,80);
     timerLabel->show();
+    timerLabel->setWindowFlags(Qt::WindowStaysOnTopHint);
     setTimerFont();
     timerLabel->setAttribute(Qt::WA_TranslucentBackground);
     timerLabel->setStyleSheet("background:transparent;");
+    timerLabel->setTextInteractionFlags(Qt::TextEditable);
 }
 
 void CountDown::setTimerFont()

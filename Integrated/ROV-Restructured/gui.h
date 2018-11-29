@@ -20,7 +20,7 @@ class gui : public QObject
     Q_OBJECT
 public:
     gui(QWidget * parent=0);
-    QPushButton * getChangingButton();    //temporary to use the button instead of the joystick as i ddon't have the joystick now;
+//    QPushButton * getChangingButton();    //temporary to use the button instead of the joystick as i ddon't have the joystick now;
     QGridLayout * getLayout();
     void getCam(gstream *Camera, uint8_t cameraNum);
 
@@ -30,26 +30,23 @@ public slots:
     void toggleCamera();
     void print();
     void prepButtonsConfig();
-    void changeCamerasSizes();
+//    void changeCamerasSizes();
 signals:
     void pause_play();
     void buttonsConfig(QString Configuration);
-//    void newSizeDescribtion(int cameraNum,int width,int height);
 private:
-    QTimer * tmr;
+    QTimer * tmr,*tmr2;
     QPushButton * button , * play_pause_button, * endButton;
     CountDown * timer;
     buttonsConfiguration * butConfig;
     QGridLayout * gridLay;
     QString cameraButton="2",timerButton="1",configurationButton="0";
     QString _cameraButton="2",_timerButton="1",_configurationButton="0";
-    uint8_t windowSelector=0;
+    uint8_t windowSelector=1;
     void createWindows();
     void createButtons();
     void handleSignals();
     void checkForButtonsSwitch();
-    int findStringIndex(std::string describtion,std::string subDescribtion);
-    std::string removeExcessPart(std::string describtion,int startIndex,int endIndex);
     gstream ** camera;
     QWidget ** window;
 };

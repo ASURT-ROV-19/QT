@@ -28,10 +28,10 @@ void Joystick_Handler::action()
     case SDL_JOYAXISMOTION:
         if (abs(X-prev_x)>SGNFCNT || abs(Y-prev_y)>SGNFCNT || abs(Z-prev_z)>SGNFCNT || abs(R-prev_r)>SGNFCNT){
             msg="";
-            msg+="X="+((abs(X)>DEADZONE)?QString::number(X):"0") +" ";
-            msg+="Y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +" ";
-            msg+="Z="+((abs(Z)>DEADZONE)?QString::number(Z):"0") +" ";
-            msg+="R="+(abs(R)>DEADZONE)?QString::number(R):"0";
+            msg+="X="+((abs(X)>DEADZONE)?QString::number(X):"0") +",";
+            msg+="Y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +",";
+            msg+="Z="+((abs(Z)>DEADZONE)?QString::number(Z):"0") +",";
+            msg+="R="+((abs(R)>DEADZONE)?QString::number(R):"0") +",";
             emit sendToServer(msg);
         }
         break;

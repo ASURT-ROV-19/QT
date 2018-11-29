@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_gui_t {
-    QByteArrayData data[13];
-    char stringdata0[156];
+    QByteArrayData data[12];
+    char stringdata0[137];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,15 +42,13 @@ QT_MOC_LITERAL(7, 63, 26), // "changeButtonsConfiguration"
 QT_MOC_LITERAL(8, 90, 9), // "newConfig"
 QT_MOC_LITERAL(9, 100, 12), // "toggleCamera"
 QT_MOC_LITERAL(10, 113, 5), // "print"
-QT_MOC_LITERAL(11, 119, 17), // "prepButtonsConfig"
-QT_MOC_LITERAL(12, 137, 18) // "changeCamerasSizes"
+QT_MOC_LITERAL(11, 119, 17) // "prepButtonsConfig"
 
     },
     "gui\0pause_play\0\0buttonsConfig\0"
     "Configuration\0changeInGUI\0button\0"
     "changeButtonsConfiguration\0newConfig\0"
-    "toggleCamera\0print\0prepButtonsConfig\0"
-    "changeCamerasSizes"
+    "toggleCamera\0print\0prepButtonsConfig"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,7 +58,7 @@ static const uint qt_meta_data_gui[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -68,16 +66,15 @@ static const uint qt_meta_data_gui[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   54,    2, 0x06 /* Public */,
-       3,    1,   55,    2, 0x06 /* Public */,
+       1,    0,   49,    2, 0x06 /* Public */,
+       3,    1,   50,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    1,   58,    2, 0x0a /* Public */,
-       7,    1,   61,    2, 0x0a /* Public */,
-       9,    0,   64,    2, 0x0a /* Public */,
-      10,    0,   65,    2, 0x0a /* Public */,
-      11,    0,   66,    2, 0x0a /* Public */,
-      12,    0,   67,    2, 0x0a /* Public */,
+       5,    1,   53,    2, 0x0a /* Public */,
+       7,    1,   56,    2, 0x0a /* Public */,
+       9,    0,   59,    2, 0x0a /* Public */,
+      10,    0,   60,    2, 0x0a /* Public */,
+      11,    0,   61,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -86,7 +83,6 @@ static const uint qt_meta_data_gui[] = {
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    6,
     QMetaType::Void, QMetaType::QString,    8,
-    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -107,7 +103,6 @@ void gui::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **
         case 4: _t->toggleCamera(); break;
         case 5: _t->print(); break;
         case 6: _t->prepButtonsConfig(); break;
-        case 7: _t->changeCamerasSizes(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -154,13 +149,13 @@ int gui::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 7)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 8;
+        _id -= 7;
     }
     return _id;
 }

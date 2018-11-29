@@ -48,17 +48,19 @@ int Joystick::get_r()
 void Joystick::activate()
 {
     js= SDL_JoystickOpen(0);
-    qDebug()<< "joystick plugged";
+//    qDebug()<< "joystick plugged";
 }
 
 void Joystick::remove()
 {
     SDL_JoystickClose(js);
-    qDebug()<<"JS removed";
+//    qDebug()<<"JS removed";
 }
 
 bool Joystick::message(QString msg)
 {
+
+    //True sends to GUI , while false sendes to server
     if (msg=="0"){
         return true;
         }

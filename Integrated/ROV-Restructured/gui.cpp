@@ -4,25 +4,18 @@ gui::gui(QWidget *parent)
 {
     gridLay=new QGridLayout;
     parent->setLayout(gridLay);
-    parent->setStyleSheet("background-color: lime");
-
+    parent->setStyleSheet("background-color: grey");
     createButtons();
     handleSignals();
     createWindows();
     gridLay->addWidget(timer->getTimerLabel(),0,0);
 //    gridLay->addWidget(button);
 //    gridLay->addWidget(play_pause_button);
-    camera=new gstream *[3];
-    for (int i=0; i<3;i++) camera[i]=nullptr;
     tmr=new QTimer;
     tmr->setInterval(1000);
-    connect(tmr,SIGNAL(timeout()),this,SLOT(print()));
+
 }
 
-QPushButton *gui::getChangingButton()
-{
-//    return button;
-}
 
 QGridLayout *gui::getLayout()
 {
@@ -33,8 +26,8 @@ QGridLayout *gui::getLayout()
 void gui::getCam(gstream * Camera, uint8_t cameraNum)
 {
     camera[cameraNum-1]=Camera;
-    gridLay->addWidget(camera[cameraNum-1]->getRenderingWindow(),0,cameraNum-1);
     window[cameraNum-1]=camera[cameraNum-1]->getRenderingWindow();
+    gridLay->addWidget(window[cameraNum-1],0,cameraNum-1);
     if (cameraNum==1){
 //    gridLay->removeWidget(timer->getTimerLabel());
 //    timer->getTimerLabel()->setParent(camera[0]->getRenderingWindow());
@@ -50,7 +43,7 @@ void gui::changeInGUI(QString button)
         //do change in two windows sizes
     {
         toggleCamera();
-        emit
+
     }
     else if(button=="3")
         //quit
@@ -91,54 +84,66 @@ void gui::changeButtonsConfiguration(QString newConfig)
 
 void gui::createWindows()
 {
-   window=new QWidget *[3];
-   for (int i=0; i<3;i++) window[i]=nullptr;
-   window[0]==nullptr ? qDebug()<<"null":qDebug()<<"created";
+    camera=new gstream *[3];
+    window=new QWidget *[3];
+
+   for (int i=0; i<3;i++){
+       camera[i]=nullptr;
+       window[i]=nullptr;
+    }
 }
 
 void gui::toggleCamera()
 {
-    changeCamerasSizes();
+//    changeCamerasSizes();
     if (windowSelector==0){
+    timer->getTimerLabel()->setParent(window[0]);
+        window[1]->setParent(nullptr);
         //two windows of equal size
         if (window[0]!=nullptr){
             gridLay->removeWidget(window[0]);
             gridLay->addWidget(window[0],0,0);
-        g_print("Size 00\n");
+//        g_print("Size 00\n");
         }
         if (window[1]!=nullptr){
             gridLay->removeWidget(window[1]);
             gridLay->addWidget(window[1],0,1);
         }
+//        gridLay->addWidget(timer->getTimerLabel(),0,0);
         windowSelector++;
         g_print("Size 00\n");
     }
     else if (windowSelector==1){
         // Window 1 becomes the main camera window
-
+        window[1]->setParent(window[0]);
         if (window[0]!=nullptr){
             gridLay->removeWidget(window[0]);
-            gridLay->addWidget(window[0],0,0,1,8);
+            gridLay->addWidget(window[0],0,0,3,8);
         }
         if (window[1]!=nullptr){
             gridLay->removeWidget(window[1]);
-            gridLay->addWidget(window[1],0,8,1,3);
+            gridLay->addWidget(window[1],0,5,1,3);
         }
         windowSelector++;
+        gridLay->addWidget(timer->getTimerLabel(),0,0);
         g_print("Size 1\n");
     }
     else if (windowSelector==2){
 //        Window 2 becomes the main camera window
-        if (window[0]!=nullptr){
-            gridLay->removeWidget(window[0]);
-            gridLay->addWidget(window[0],0,0,1,3);
-        }
+        timer->getTimerLabel()->setParent(window[1]);
+        window[0]->setParent(window[1]);
+
         if (window[1]!=nullptr){
             gridLay->removeWidget(window[1]);
-            gridLay->addWidget(window[1],0,3,3,8);
+            gridLay->addWidget(window[1],0,0,3,8);
         }
+        if (window[0]!=nullptr){
+            gridLay->removeWidget(window[0]);
+            gridLay->addWidget(window[0],0,5,1,3);
+        }
+                    gridLay->addWidget(timer->getTimerLabel(),0,0);
         windowSelector-=2;
-        g_print("Size 2\n");
+
     }
 
 }
@@ -158,55 +163,65 @@ void gui::prepButtonsConfig()
     emit buttonsConfig(configuration);
 }
 
-void gui::changeCamerasSizes()
-{
-    //index1 for index of 'v' of "videoscale" , index2 is index of 'v' of "videoconvert"
-    int index1[3],index2[3];
+//void gui::changeCamerasSizes()
+//{
+//    //index1 for index of 'v' of "videoscale" , index2 is index of 'v' of "videoconvert"
+//    int index1[3],index2[3];
 
-    std::string describtion[3];
-    std::string temp[3];
-    for (int i=0;i<2;i++){
-    describtion[i]=camera[i]->getDescribtion();
-    index1[i]=findStringIndex(describtion[i],"videoconvert");
-    index2[i]=findStringIndex(describtion[i],"videoscale");
-    describtion[i]=removeExcessPart(describtion[i],index2[i],index1[i]);
-    index1[i]=findStringIndex(describtion[i],"videoconvert");
-    temp[i]="videoscale ! video/x-raw,width=";
-    }
-    if (windowSelector==0){
-        temp[0]+="800,height=600 ! ";
-        temp[1]+="800,height=600 ! ";
+//    std::string describtion[3];
+//    std::string temp[3];
+//    for (int i=0;i<2;i++){
+//    describtion[i]=camera[i]->getDescribtion();
+//    index1[i]=findStringIndex(describtion[i],"videoconvert");
+//    index2[i]=findStringIndex(describtion[i],"videoscale");
+//    describtion[i]=removeExcessPart(describtion[i],index2[i],index1[i]);
+//    index1[i]=findStringIndex(describtion[i],"videoconvert");
+//    temp[i]="videoscale ! video/x-raw,width=";
+//    }
+//    if (windowSelector==0){
+//        temp[0]+="945,height=995 ! ";
+//        temp[1]+="945,height=995 ! ";
+//        qDebug()<<window[0]->width()<<" * "<<window[1]->height();
+//    }
+//    else if (windowSelector==1){
+//        temp[0]+="1378,height=995 ! ";
+//        temp[1]+="100,height=100 ! ";
+//        qDebug()<<window[0]->width()<<" * "<<window[1]->height();
+//        int dummy=findStringIndex(describtion[1],"xvimagesink");
+////        qDebug()<<dummy;
+////        describtion[1]=describtion[1].erase(dummy,1);
 
-    }
-    else if (windowSelector==1){
-        temp[0]+="1200,height=900 ! ";
-        temp[1]+="400,height=300! ";
+//    }
+//    else if (windowSelector==2){
+//        temp[0]+="524,height=500 ! ";
+//        temp[1]+="1200,height=900 ! ";
+//        qDebug()<<window[0]->width()<<" * "<<window[1]->height();
 
-    }
-    else if (windowSelector==2){
-        temp[0]+="400,height=300 ! ";
-        temp[1]+="1200,height=900 ! ";
+//    }
 
-    }
+//    for (int i=0;i<2;i++){
+//        if (index1[i]!=NULL){
+//            describtion[i]=describtion[i].insert(index1[i],temp[i]);
+//            camera[i]->manuallySetPipeline(describtion[i]);
+//        }
+//    }
 
-    for (int i=0;i<2;i++){
-        if (index1[i]!=NULL){
-            describtion[i]=describtion[i].insert(index1[i],temp[i]);
-            camera[i]->manuallySetPipeline(describtion[i]);
-        }
-    }
-    }
+//}
 
 
 
 void gui::createButtons()
 {
+    tmr2=new QTimer(this);
+    tmr2->setInterval(2000);
+    tmr2->start();
     butConfig =new buttonsConfiguration;
-//    button=new QPushButton("Stop/Start Timer");
+    button=new QPushButton("Stop/Start Timer");
 //    endButton=new QPushButton("Quit program");
     timer=new CountDown();
     timer->setTimer(15,0);
-//    play_pause_button=new QPushButton("Play/Pause");
+//    timer->getTimerLabel()->setParent(window[0]);
+    play_pause_button=new QPushButton("Play/Pause");
 
 }
 
@@ -248,52 +263,39 @@ void gui::checkForButtonsSwitch()
     _configurationButton=configurationButton;
 }
 
-int gui::findStringIndex(std::string describtion,std::string subDescribtion)
-{
-    int checkFlag=0;
-    qDebug()<<QString::fromStdString(subDescribtion);
-    for (std::size_t i=0;i<describtion.length();i++){
-            checkFlag=0;
-        for (std::size_t j=0;j<subDescribtion.length();j++){
-                if (describtion[i+j]==subDescribtion[j]){
-                    checkFlag++;
-                    qDebug()<<subDescribtion[j]<<checkFlag;
-                    if (checkFlag==subDescribtion.length()){
-                        return (int)i;
-                    }
-                    continue;
-                }
-                else
-                    break;
-            }
-    }
-    return NULL;
-}
+//int gui::findStringIndex(std::string describtion,std::string subDescribtion)
+//{
+//    int checkFlag=0;
+//       for (std::size_t i=0;i<describtion.length();i++){
+//            checkFlag=0;
+//        for (std::size_t j=0;j<subDescribtion.length();j++){
+//                if (describtion[i+j]==subDescribtion[j]){
+//                    checkFlag++;
+//                    if (checkFlag==subDescribtion.length()){
+//                        return (int)i;
+//                    }
+//                    continue;
+//                }
+//                else
+//                    break;
+//            }
+//    }
+//       return NULL;
+//}
 
-std::string gui::removeExcessPart(std::string describtion,int startIndex,int endIndex)
-{
-    qDebug()<<"Start index is "<<startIndex;
-    qDebug()<<"End index is "<<endIndex;
 
-    if (startIndex!=NULL&&endIndex!=NULL){
-        describtion=describtion.erase(startIndex,endIndex-startIndex);
-        qDebug()<<"Gonna Erase !";
-    }
-    else{
-        qDebug()<<"Am cool with current describtion !";
-    }
-    return describtion;
-
-}
 
 
 
 
 void gui::handleSignals()
 {
+//    connect(tmr,SIGNAL(timeout()),this,SLOT(print()));
+
+
     //THESE ARE TO SHOW OR HIDE CONF WINDOW USING MOUTH & BUTTONS OR USING JS
     connect(this,SIGNAL(pause_play()),butConfig,SLOT(show_hide()));
-//    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
+    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
 
 
     //THIS MEANS A NEW CONFIGURATION
@@ -301,9 +303,9 @@ void gui::handleSignals()
 
     //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
     connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
-//    connect(button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
+    connect(play_pause_button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
 
-//    connect(play_pause_button,SIGNAL(clicked()),this,SLOT(toggleCamera()));
-
+    connect(play_pause_button,SIGNAL(clicked()),this,SLOT(toggleCamera()));
+    connect(tmr2,SIGNAL(timeout()),this,SLOT(toggleCamera()));
     connect(this,SIGNAL(buttonsConfig(QString)),butConfig,SLOT(getCurrentButtons(QString)));
 }

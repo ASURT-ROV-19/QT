@@ -6,9 +6,9 @@ int main(int argc, char *argv[])
     QApplication * a =new QApplication(argc, argv);
     MainWindow w;
     gstream camera2(10000);
-    w.getCam(&camera2,2);
+    w.getCam(&camera2,1);
     gstream camera(5022);
-    w.getCam(&camera,1);
+    w.getCam(&camera,2);
 //    camera.setPipeline();
 
 //    w.addRedneringWindow(camera.getRenderingWindow(),0,0,1,1,1);
@@ -28,9 +28,9 @@ int main(int argc, char *argv[])
 
 
 /*
--message format
+//-message format
 -last year's code for streaming
--buttons different settings
+//-buttons different settings
 -use jpeg
 -
 */
