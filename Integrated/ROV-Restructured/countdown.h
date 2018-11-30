@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QLabel>
 #include <QTime>
+#include <QElapsedTimer>
 
 class CountDown : public QObject
 {
@@ -20,17 +21,22 @@ public:
     QLabel * getTimerLabel();
     void pause();
     void resume();
+    void restart();
+    void setBackgroundColor();
+    void restartTimer(int minutes,int seconds);
 public slots:
     void pause_Play();
     void changeTime();
     void resetDelay();
 private:
-    std::chrono::milliseconds  currentTime;
+//    std::chrono::milliseconds  currentTime;
+    int delay;
     QTime * TIME;
     QLabel * timerLabel;
     QTimer * timer;
     int mins=0,sec=0;
     QString time;
+    QElapsedTimer * elapsed;
 };
 
 #endif // COUNTDOWN_H

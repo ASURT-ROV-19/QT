@@ -1,5 +1,5 @@
 #include "buttonsconfiguration.h"
-
+#include <QDebug>
 
 
 /*
@@ -28,26 +28,31 @@ buttonsConfiguration::buttonsConfiguration()
 {
     confWidget=new QWidget();
     confWidget->setGeometry(200,200,800,600);
-    confWidget->setStyleSheet("background-color: white");
+    confWidget->setStyleSheet("background-color: orange ;");
+    confWidget->setWindowTitle("Joystick Buttons Configuration");
+    confWidget->setAttribute(Qt::WA_TransparentForMouseEvents);
     gridLay=new QGridLayout();
     confWidget->setLayout(gridLay);
     createButtons();
     deployButtons();
     handleClicking();
+    spacer=new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::Expanding);
 
 }
 
 void buttonsConfiguration::createButtons()
 {
+
+    restart_timer=new QPushButton("Restart Timer");
     timerPause_Play=new QPushButton("Play/Pause Timer");
     changeCamersSize=new QPushButton("Change Camera");
     configWindowDisp=new QPushButton("To Display or Hide This Window");
     cancel=new QPushButton("Cancel");
     save=new QPushButton("Save");
-    textLabel=new QLabel("Camera Button is 2\ntimer Button is 1\nconf Button is 0\n");
-    JSBttn=new QRadioButton[6];
-
-    for (int i=0;i<6;i++){
+    textLabel=new QLabel("Camera Switch:         2\nTimer Play-Pause       1\nConfiguration Window  0\nRestart Timer           3");
+    JSBttn=new QRadioButton[12];
+//    save->setStyleSheet(" border: 1px solid white  ; ");
+    for (int i=0;i<12;i++){
         JSBttn[i].setText("Joystick Button "+QString::number(i));
     }
 
@@ -55,16 +60,28 @@ void buttonsConfiguration::createButtons()
 
 void buttonsConfiguration::deployButtons()
 {
-    gridLay->addWidget(textLabel,3,0,1,6);
-    gridLay->addWidget(timerPause_Play,0,0,1,2);
-    gridLay->addWidget(changeCamersSize,0,2,1,2);
-    gridLay->addWidget(configWindowDisp,0,4,1,2);
+    textLabel->setStyleSheet("QLabel{color: black ;  font-size: 20px; background-color: orange ; font:arial,helvetica; }");
+//    textLabel->setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:1,stop:0 white, stop: 0.4 gray, stop:1 green)");
+    gridLay->addWidget(timerPause_Play,1,0,1,2);
+    gridLay->addWidget(changeCamersSize,1,2,1,2);
+    gridLay->addWidget(configWindowDisp,1,4,1,2);
+    gridLay->addWidget(restart_timer,2,0,1,2);
 
-    gridLay->addWidget(cancel,2,4,1,2);
-    gridLay->addWidget(save,2,1,1,3);
-
+    gridLay->addWidget(textLabel,0,2,1,2);
+    textLabel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+    gridLay->addWidget(save,6,4,1,1);
+    gridLay->addWidget(cancel,6,5,1,1);
+    gridLay->setVerticalSpacing(50);
+    gridLay->setMargin(50);
+//    textLabel->setStyleSheet("background-color: grey;");
+    textLabel->setMaximumWidth(300);
+    textLabel->setMaximumHeight(200);
+    int j=-3;
     for (int i=0;i<6;i++){
-        gridLay->addWidget(&JSBttn[i],1,i);
+        i<3 ? gridLay->addWidget(&JSBttn[i],3,2*i,1,2) : gridLay->addWidget(&JSBttn[i],4,2*j,1,2);
+        JSBttn[i].setStyleSheet("color: black ;font-size: 20px; background-color: orange ; font:arial,helvetica;");
+        JSBttn[i].setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+        j++;
     }
 
     initialDisplay();
@@ -73,11 +90,14 @@ void buttonsConfiguration::deployButtons()
 
 void buttonsConfiguration::initialDisplay()
 {
+
+//    confWidget->show();
     cancel->hide();
     save->hide();
     timerPause_Play->show();
     changeCamersSize->show();
     configWindowDisp->show();
+    restart_timer->show();
     for (int i=0;i<6;i++){
         JSBttn[i].hide();
     }
@@ -90,6 +110,8 @@ void buttonsConfiguration::handleClicking()
     connect(configWindowDisp,SIGNAL(clicked()),this,SLOT(configClicked()));
     connect(save,SIGNAL(clicked()),this,SLOT(saveSettings()));
     connect(cancel,SIGNAL(clicked()),this,SLOT(cancelEdit()));
+    connect(restart_timer,SIGNAL(clicked()),this,SLOT(timerRestartClicked()));
+
 }
 
 void buttonsConfiguration::timerClicked()
@@ -97,6 +119,7 @@ void buttonsConfiguration::timerClicked()
     buttonAndRole="timer button=";
     changeCamersSize->hide();
     configWindowDisp->hide();
+    restart_timer->hide();
     cancel->show();
     save->show();
 
@@ -111,6 +134,7 @@ void buttonsConfiguration::cameraClicked()
     buttonAndRole="camera button=";
     timerPause_Play->hide();
     configWindowDisp->hide();
+    restart_timer->hide();
     cancel->show();
     save->show();
     for (int i=0;i<6;i++){
@@ -125,6 +149,20 @@ void buttonsConfiguration::configClicked()
     buttonAndRole="config button=";
     timerPause_Play->hide();
     changeCamersSize->hide();
+    restart_timer->hide();
+    cancel->show();
+    save->show();
+    for (int i=0;i<6;i++){
+        JSBttn[i].show();
+    }
+}
+
+void buttonsConfiguration::timerRestartClicked()
+{
+    buttonAndRole="timerRestart button=";
+    timerPause_Play->hide();
+    changeCamersSize->hide();
+    configWindowDisp->hide();
     cancel->show();
     save->show();
     for (int i=0;i<6;i++){

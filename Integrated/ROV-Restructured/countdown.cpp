@@ -1,20 +1,18 @@
 #include "countdown.h"
-
+#include <QDateTime>
 CountDown::CountDown()
 {
-    TIME=new QTime();
-//    currentTime=TIME->second();
+    elapsed=new QElapsedTimer();
     timer=new QTimer(this);
     timer->setInterval(1000);
     setTimerLabel();
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(changeTime()));
-    QObject::connect(timer,SIGNAL(timeout()),this,SLOT(resetDelay()));
 
 }
 
 
 void CountDown::setTimer(int minutes,int seconds){
-    timer->start();
+//    timer->start();
     mins =abs(minutes);
     sec=abs(seconds);
     if (sec>=60){
@@ -26,25 +24,54 @@ void CountDown::setTimer(int minutes,int seconds){
 
 void CountDown::pause()
 {
-//    currentTime=std::tan();
-    TIME->setHMS(0,0,0,0);
     timer->stop();
-    TIME->start();
 }
 
 void CountDown::resume()
 {
-//    currentTime
-//    timer->setInterval(1000-currentTime);
     timer->start();
-
 }
+
+void CountDown::setBackgroundColor()
+{
+    if (mins < 2){
+        timerLabel->setStyleSheet("QLabel{color: red ;  font-size: 40px; }");
+    }
+    else if (mins < 5){
+//        timerLabel->setStyleSheet("background-color:orange");
+        timerLabel->setStyleSheet("QLabel{color: orange ;  font-size: 40px; }");
+
+    }
+    else if (mins < 10){
+        timerLabel->setStyleSheet("background-color:yellow");
+//        timerLabel->setStyleSheet("QLabel{color: yellow ;  font-size: 40px; }");
+
+    }
+    else {
+        timerLabel->setStyleSheet("QLabel{color: green ;  font-size: 40px; }");
+//        timerLabel->setStyleSheet("background-color:green");
+    }
+}
+
+void CountDown::restartTimer(int minutes,int seconds){
+    mins=minutes;
+    sec=seconds;
+    timer->stop();
+    timer->start();
+};
+
 
 void CountDown::pause_Play()
 {
-    timer->isActive() ? pause():resume();
+    if(timer->isActive()){
+        delay=elapsed->elapsed();
+        pause();
+    }
+    else{
+        resetDelay();
+        resume();
+    }
 }
-
 
 QString CountDown::getTimeRemaining(){
     return time;
@@ -53,6 +80,9 @@ QString CountDown::getTimeRemaining(){
 void CountDown::changeTime()
 {
     sec-=1;
+    elapsed->start();
+    delay=0;
+    resetDelay();
     if (sec<0){
         if (mins>0){
             mins--;
@@ -75,32 +105,36 @@ void CountDown::changeTime()
     else{
         time+=QString::number(sec);
     }
-
+//    time=QString::number(mins,'g',2)+":"+QString::number(sec,'g',2);
+    setBackgroundColor();
     timerLabel->setText(time);
 }
 
 void CountDown::resetDelay()
 {
-    timer->setInterval(1000);
+    timer->setInterval(1000-delay);
 }
 
 
 void CountDown::setTimerLabel(){
     timerLabel=new QLabel(time);
-    timerLabel->setGeometry(0,0,80,80);
-    timerLabel->show();
+    timerLabel->setGeometry(0,0,80,40);
+//    timerLabel->show();
     timerLabel->setWindowFlags(Qt::WindowStaysOnTopHint);
     setTimerFont();
-    timerLabel->setAttribute(Qt::WA_TranslucentBackground);
-    timerLabel->setStyleSheet("background:transparent;");
+//    timerLabel->setAttribute(Qt::WA_TranslucentBackground);
+//    timerLabel->setStyleSheet("background:transparent;");
     timerLabel->setTextInteractionFlags(Qt::TextEditable);
+//    timerLabel->setStyleSheet("background-color:blue");
+
 }
 
 void CountDown::setTimerFont()
 {
     QFont font1=timerLabel->font();
-    font1.setPointSize(18);
+    font1.setPointSize(26);
     timerLabel->setFont(font1);
+     timerLabel->setStyleSheet("QLabel{color: orange ;  font-size: 40px; }");
 
 }
 

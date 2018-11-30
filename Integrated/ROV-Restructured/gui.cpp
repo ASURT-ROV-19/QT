@@ -2,13 +2,13 @@
 
 gui::gui(QWidget *parent)
 {
+    GUIwindow=parent;
     gridLay=new QGridLayout;
     parent->setLayout(gridLay);
-    parent->setStyleSheet("background-color: grey");
+    parent->setStyleSheet("background-color: white");
     createButtons();
     handleSignals();
     createWindows();
-    gridLay->addWidget(timer->getTimerLabel(),0,0);
 //    gridLay->addWidget(button);
 //    gridLay->addWidget(play_pause_button);
     tmr=new QTimer;
@@ -28,10 +28,13 @@ void gui::getCam(gstream * Camera, uint8_t cameraNum)
     camera[cameraNum-1]=Camera;
     window[cameraNum-1]=camera[cameraNum-1]->getRenderingWindow();
     gridLay->addWidget(window[cameraNum-1],0,cameraNum-1);
-    if (cameraNum==1){
-//    gridLay->removeWidget(timer->getTimerLabel());
-//    timer->getTimerLabel()->setParent(camera[0]->getRenderingWindow());
-    }
+//    gridLay->addWidget(timer->getTimerLabel(),0,0);
+//    timer->getTimerLabel()->setParent(window[0]);
+//    timer->getTimerLabel()->setGeometry(0,0,100,40);
+    timer->getTimerLabel()->setParent(window[0]);
+    timer->getTimerLabel()->setGeometry(0,0,100,40);
+    window[0]->setStyleSheet("background-color:white;");
+
 }
 
 void gui::changeInGUI(QString button)
@@ -45,16 +48,14 @@ void gui::changeInGUI(QString button)
         toggleCamera();
 
     }
-    else if(button=="3")
-        //quit
+    else if(button==restart_timer)
+        //restart timer
     {
-        qDebug()<<"shall quit";
-
+        timer->restartTimer(15,0);
     }
     else if(button==configurationButton)
         //play or pause
     {
-        qDebug()<<"config button is "<<configurationButton;
         butConfig->show_hide();
     }
 
@@ -72,11 +73,11 @@ void gui::changeButtonsConfiguration(QString newConfig)
         timerButton=newConfig[newConfig.length()-1];
     }
     else if (check=="config button"){
-        qDebug()<<"config button shall change";
         configurationButton=newConfig[newConfig.length()-1];
     }
-    qDebug()<<newConfig<<"::"<<check<<"::"<<newConfig[newConfig.length()-1];
-    qDebug()<<"configuration BUTTON HAS BECOME "<<configurationButton;
+    else if (check=="timerRestart button"){
+        restart_timer=newConfig[newConfig.length()-1];
+    }
 
     checkForButtonsSwitch();
     prepButtonsConfig();
@@ -97,7 +98,11 @@ void gui::toggleCamera()
 {
 //    changeCamerasSizes();
     if (windowSelector==0){
-    timer->getTimerLabel()->setParent(window[0]);
+
+//        timer->getTimerLabel()->setParent(nullptr);
+        timer->getTimerLabel()->setParent(window[0]);
+        timer->getTimerLabel()->setGeometry(0,0,100,40);
+
         window[1]->setParent(nullptr);
         //two windows of equal size
         if (window[0]!=nullptr){
@@ -109,9 +114,12 @@ void gui::toggleCamera()
             gridLay->removeWidget(window[1]);
             gridLay->addWidget(window[1],0,1);
         }
-//        gridLay->addWidget(timer->getTimerLabel(),0,0);
         windowSelector++;
         g_print("Size 00\n");
+        timer->getTimerLabel()->setParent(window[0]);
+        timer->getTimerLabel()->show();
+//        timer->getTimerLabel()->setGeometry(0,0,100,40);
+
     }
     else if (windowSelector==1){
         // Window 1 becomes the main camera window
@@ -125,12 +133,10 @@ void gui::toggleCamera()
             gridLay->addWidget(window[1],0,5,1,3);
         }
         windowSelector++;
-        gridLay->addWidget(timer->getTimerLabel(),0,0);
         g_print("Size 1\n");
     }
     else if (windowSelector==2){
 //        Window 2 becomes the main camera window
-        timer->getTimerLabel()->setParent(window[1]);
         window[0]->setParent(window[1]);
 
         if (window[1]!=nullptr){
@@ -141,8 +147,11 @@ void gui::toggleCamera()
             gridLay->removeWidget(window[0]);
             gridLay->addWidget(window[0],0,5,1,3);
         }
-                    gridLay->addWidget(timer->getTimerLabel(),0,0);
         windowSelector-=2;
+//        timer->getTimerLabel()->setParent(nullptr);
+        timer->getTimerLabel()->setParent(window[1]);
+        timer->getTimerLabel()->show();
+        timer->getTimerLabel()->setGeometry(0,0,100,40);
 
     }
 
@@ -159,7 +168,8 @@ void gui::print()
 void gui::prepButtonsConfig()
 {
     QString configuration;
-    configuration="Camera Button is "+cameraButton+"\n"+"timer Button is "+timerButton+"\n"+"conf Button is "+configurationButton+"\n";
+    configuration="Camera Switch          "+cameraButton+"\n"+"Timer Play-Pause       "+timerButton+"\n"+"Configuration Window  "+configurationButton+"\n"+
+            "Restart Timer           "+restart_timer;
     emit buttonsConfig(configuration);
 }
 
@@ -213,7 +223,7 @@ void gui::prepButtonsConfig()
 void gui::createButtons()
 {
     tmr2=new QTimer(this);
-    tmr2->setInterval(2000);
+    tmr2->setInterval(3000);
     tmr2->start();
     butConfig =new buttonsConfiguration;
     button=new QPushButton("Stop/Start Timer");
@@ -232,35 +242,37 @@ void gui::createButtons()
 
 void gui::checkForButtonsSwitch()
 {
-    if(timerButton==cameraButton){
-        if (timerButton==_timerButton){
-            timerButton=_cameraButton;
-        }
-        else{
-            cameraButton=_timerButton;
-        }
-    }
-    if(configurationButton==cameraButton){
-        if (configurationButton==_configurationButton){
-            configurationButton=_cameraButton;
-        }
-        else{
-            cameraButton=_configurationButton;
-        }
-    }
-    if(configurationButton==timerButton){
-        if (configurationButton==_configurationButton){
-            configurationButton=_timerButton;
-        }
-        else{
-            timerButton=_configurationButton;
-        }
-    }
 
+    switchButtons(&timerButton,&_timerButton,&cameraButton,&_cameraButton);
+    switchButtons(&timerButton,&_timerButton,&configurationButton,&_configurationButton);
+    switchButtons(&timerButton,&_timerButton,&restart_timer,&_restart_timer);
+    switchButtons(&configurationButton,&_configurationButton,&cameraButton,&_cameraButton);
+    switchButtons(&configurationButton,&_configurationButton,&restart_timer,&_restart_timer);
+    switchButtons(&restart_timer,&_restart_timer,&cameraButton,&_cameraButton);
+    switchButtons(&restart_timer,&_restart_timer,&cameraButton,&_cameraButton);
 
-    _cameraButton=cameraButton;
-    _timerButton=timerButton;
+    _restart_timer=restart_timer;
     _configurationButton=configurationButton;
+    _timerButton=timerButton;
+    _cameraButton=cameraButton;
+}
+
+void gui::switchButtons(QString *button1, QString *old_button1, QString *button2, QString *old_button2)
+{
+    QString temp;
+
+    if (*button1==*button2){
+    qDebug()<<"Button1    "<<*button1<<"Button2    "<<*button2;
+    qDebug()<<"Button1Old "<<*old_button1<<"Button2Old "<<*old_button2;
+        if (*button1==*old_button1){
+            temp=*button1;
+            *button1=*old_button2;
+        }
+        else {
+            *button2=*old_button1;
+        }
+    }
+
 }
 
 //int gui::findStringIndex(std::string describtion,std::string subDescribtion)
@@ -294,8 +306,8 @@ void gui::handleSignals()
 
 
     //THESE ARE TO SHOW OR HIDE CONF WINDOW USING MOUTH & BUTTONS OR USING JS
-    connect(this,SIGNAL(pause_play()),butConfig,SLOT(show_hide()));
-    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
+//    connect(this,SIGNAL(pause_play()),butConfig,SLOT(show_hide()));
+//    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
 
 
     //THIS MEANS A NEW CONFIGURATION
@@ -303,9 +315,9 @@ void gui::handleSignals()
 
     //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
     connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
-    connect(play_pause_button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
+//    connect(play_pause_button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
 
-    connect(play_pause_button,SIGNAL(clicked()),this,SLOT(toggleCamera()));
-    connect(tmr2,SIGNAL(timeout()),this,SLOT(toggleCamera()));
+//    connect(play_pause_button,SIGNAL(clicked()),this,SLOT(toggleCamera()));
+//    connect(tmr2,SIGNAL(timeout()),this,SLOT(toggleCamera()));
     connect(this,SIGNAL(buttonsConfig(QString)),butConfig,SLOT(getCurrentButtons(QString)));
 }
