@@ -36,7 +36,8 @@ SOURCES += \
     joystick_handler.cpp \
     tcpserver.cpp \
     gstream.cpp \
-    buttonsconfiguration.cpp
+    buttonsconfiguration.cpp \
+    joystickbutton.cpp
 
 
 HEADERS += \
@@ -47,7 +48,8 @@ HEADERS += \
     joystick_handler.h \
     tcpserver.h \
     gstream.h \
-    buttonsconfiguration.h
+    buttonsconfiguration.h \
+    joystickbutton.h
 
 FORMS += \
         mainwindow.ui

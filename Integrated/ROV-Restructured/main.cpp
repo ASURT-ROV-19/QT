@@ -5,9 +5,9 @@ int main(int argc, char *argv[])
 
     QApplication * a =new QApplication(argc, argv);
     MainWindow w;
-    gstream camera2(10000);
+    gstream camera2(5022);
     w.getCam(&camera2,1);
-    gstream camera(5022);
+    gstream camera(10000);
     w.getCam(&camera,2);
 //    camera.setPipeline();
 

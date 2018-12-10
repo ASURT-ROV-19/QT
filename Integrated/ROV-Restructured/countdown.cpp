@@ -12,7 +12,7 @@ CountDown::CountDown()
 
 
 void CountDown::setTimer(int minutes,int seconds){
-//    timer->start();
+    timer->start();
     mins =abs(minutes);
     sec=abs(seconds);
     if (sec>=60){
@@ -122,8 +122,8 @@ void CountDown::setTimerLabel(){
 //    timerLabel->show();
     timerLabel->setWindowFlags(Qt::WindowStaysOnTopHint);
     setTimerFont();
-//    timerLabel->setAttribute(Qt::WA_TranslucentBackground);
-//    timerLabel->setStyleSheet("background:transparent;");
+    timerLabel->setAttribute(Qt::WA_TranslucentBackground);
+    timerLabel->setStyleSheet("background:transparent;");
     timerLabel->setTextInteractionFlags(Qt::TextEditable);
 //    timerLabel->setStyleSheet("background-color:blue");
 

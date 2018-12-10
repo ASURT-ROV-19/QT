@@ -6,8 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     joyS=new Joystick_Handler();
-    server=new TCPServer("127.0.0.1",8082);
-    ui->setupUi(this);
+    server=new TCPServer("111.111.111.111",8008);
+    //ui->setupUi(this);
     connect(joyS,SIGNAL(sendToServer(QString)),server,SLOT(sendmsg(QString)));
     centralWidget=new QWidget();
 //    centralWidget->setGeometry(0,0,1280,960);
@@ -34,7 +34,7 @@ void MainWindow::getCam(gstream *camera,uint8_t cameraNum)
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+//    delete ui;
 }
 
 

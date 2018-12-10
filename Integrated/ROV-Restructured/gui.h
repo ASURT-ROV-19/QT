@@ -43,7 +43,7 @@ private:
     QGridLayout * gridLay;
     QString cameraButton="2",timerButton="1",configurationButton="0",restart_timer="3";
     QString _cameraButton="2",_timerButton="1",_configurationButton="0",_restart_timer="3";
-    uint8_t windowSelector=1;
+    uint8_t windowSelector=0;
     void createWindows();
     void createButtons();
     void handleSignals();
@@ -52,6 +52,7 @@ private:
     gstream ** camera;
     QWidget ** window;
     QWidget * GUIwindow;
+    QWidget * dummyWidget;
 };
 
 #endif // GUI_H

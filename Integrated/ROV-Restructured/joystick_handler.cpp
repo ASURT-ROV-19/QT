@@ -4,6 +4,7 @@
 #define Y js->get_y()
 #define Z js->get_z()
 #define R js->get_r()
+#define cam js->get_hat()
 #define DEADZONE 4000
 #define SGNFCNT 300
 
@@ -28,11 +29,13 @@ void Joystick_Handler::action()
     case SDL_JOYAXISMOTION:
         if (abs(X-prev_x)>SGNFCNT || abs(Y-prev_y)>SGNFCNT || abs(Z-prev_z)>SGNFCNT || abs(R-prev_r)>SGNFCNT){
             msg="";
-            msg+="X="+((abs(X)>DEADZONE)?QString::number(X):"0") +",";
-            msg+="Y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +",";
-            msg+="Z="+((abs(Z)>DEADZONE)?QString::number(Z):"0") +",";
-            msg+="R="+((abs(R)>DEADZONE)?QString::number(R):"0") +",";
+            msg+="x="+((abs(X)>DEADZONE)?QString::number(X):"0") +",";
+            msg+="y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +",";
+            msg+="z="+QString::number(mapZ())+",";
+            msg+="r="+((abs(R)>DEADZONE)?QString::number(R):"0") +",";
+            msg+="cam="+QString::number(cam)+",";
             emit sendToServer(msg);
+
         }
         break;
     case SDL_JOYDEVICEADDED:
@@ -47,14 +50,36 @@ void Joystick_Handler::action()
 //            emit timerPause_Play(msg);
 //        }
         //the next if case decides whether we are sending to server or making a change in GUI
-        if(js->message(msg))
+        if(msg=="10"){
+
+            (upZ==1)? (upZ=-1) : (upZ=1);
+        }
+        else if(js->message(msg))
             emit sendToGUI(msg);
         else
             emit sendToServer(msg);
+        break;
+    case SDL_JOYHATMOTION:
+        msg="";
+        msg+="x="+((abs(X)>DEADZONE)?QString::number(X):"0") +",";
+        msg+="y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +",";
+        msg+="z="+QString::number(mapZ())+",";
+        msg+="r="+((abs(R)>DEADZONE)?QString::number(R):"0") +",";
+        msg+="cam="+QString::number(cam)+",";
+//        qDebug()<<msg;
+        emit sendToServer(msg);
         break;
     default:
         break;
                        }
 
-                               }
+    }
+}
+
+int Joystick_Handler::mapZ()
+{
+    if(abs(Z)>DEADZONE)
+        return upZ==1 ? (Z*101/(32768*2)+50) : -1* (100-(Z*101/(32768*2)+50)) ;
+    else
+        return 0;
 }

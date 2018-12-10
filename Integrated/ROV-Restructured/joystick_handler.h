@@ -21,8 +21,9 @@ private:
     Joystick *js;
     QTimer *timer;
     SDL_Event  event;
-    int prev_x,prev_y,prev_z,prev_r;
+    int prev_x,prev_y,prev_z,prev_r,upZ=1;
     QString msg;
+    int mapZ();
 
 signals:
     void sendToServer(QString);

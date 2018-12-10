@@ -43,6 +43,11 @@ buttonsConfiguration::buttonsConfiguration()
 void buttonsConfiguration::createButtons()
 {
 
+//    buttons=new joystickButton * [20];
+//    buttons[0]->setInfo("Configurations","0");
+//    buttons[1]->setInfo("Switch View","2");
+//    buttons[2]->setInfo("Timer Restart","3");
+
     restart_timer=new QPushButton("Restart Timer");
     timerPause_Play=new QPushButton("Play/Pause Timer");
     changeCamersSize=new QPushButton("Change Camera");
@@ -74,8 +79,8 @@ void buttonsConfiguration::deployButtons()
     gridLay->setVerticalSpacing(50);
     gridLay->setMargin(50);
 //    textLabel->setStyleSheet("background-color: grey;");
-    textLabel->setMaximumWidth(300);
-    textLabel->setMaximumHeight(200);
+//    textLabel->setMaximumWidth(300);
+//    textLabel->setMaximumHeight(200);
     int j=-3;
     for (int i=0;i<6;i++){
         i<3 ? gridLay->addWidget(&JSBttn[i],3,2*i,1,2) : gridLay->addWidget(&JSBttn[i],4,2*j,1,2);
@@ -91,7 +96,7 @@ void buttonsConfiguration::deployButtons()
 void buttonsConfiguration::initialDisplay()
 {
 
-//    confWidget->show();
+    confWidget->show();
     cancel->hide();
     save->hide();
     timerPause_Play->show();

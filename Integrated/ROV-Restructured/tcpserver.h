@@ -7,12 +7,19 @@
 #include <string.h>
 #include<QDebug>
 #include <QString>
+#include <QHostAddress>
+#include <exception>
+
 using namespace std;
 class TCPServer:public QObject
 {
     Q_OBJECT
 public:
     TCPServer(string Host,int Port);
+    bool isConnected();
+    bool sendToServer(QString message);
+    void sendMessage(QString message); //Use this one
+    bool connectToServer();
 private:
     QTcpSocket *socket;
     QTimer *reConTimer;
@@ -23,9 +30,7 @@ signals:
  public slots:
     void reconnect();
     void connected();
-    void sendmsg(QString message);
     void read();
-
 
 };
 

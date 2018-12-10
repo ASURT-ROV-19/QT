@@ -18,6 +18,8 @@ class Joystick:public QObject
     int get_y();
     int get_z();
     int get_r();
+    int getMapped_z();
+    int get_hat();
     void activate();
     void remove();
     bool message(QString msg);

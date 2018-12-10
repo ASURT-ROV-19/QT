@@ -3,7 +3,7 @@
 gui::gui(QWidget *parent)
 {
     GUIwindow=parent;
-    gridLay=new QGridLayout;
+    gridLay=new QGridLayout(parent);
     parent->setLayout(gridLay);
     parent->setStyleSheet("background-color: white");
     createButtons();
@@ -13,7 +13,8 @@ gui::gui(QWidget *parent)
 //    gridLay->addWidget(play_pause_button);
     tmr=new QTimer;
     tmr->setInterval(1000);
-
+    dummyWidget=new QWidget();
+//    timer->getTimerLabel()->setParent(parent);
 }
 
 
@@ -29,12 +30,13 @@ void gui::getCam(gstream * Camera, uint8_t cameraNum)
     window[cameraNum-1]=camera[cameraNum-1]->getRenderingWindow();
     gridLay->addWidget(window[cameraNum-1],0,cameraNum-1);
 //    gridLay->addWidget(timer->getTimerLabel(),0,0);
-//    timer->getTimerLabel()->setParent(window[0]);
-//    timer->getTimerLabel()->setGeometry(0,0,100,40);
     timer->getTimerLabel()->setParent(window[0]);
+//    timer->getTimerLabel()->setParent(GUIwindow);
     timer->getTimerLabel()->setGeometry(0,0,100,40);
-    window[0]->setStyleSheet("background-color:white;");
-
+//    timer->getTimerLabel()->setParent(dummyWidget);
+//    dummyWidget->setParent(window[0]);
+//    dummyWidget->setGeometry(0,0,100,40)
+//    window[0]->setStyleSheet("background-color:white;");
 }
 
 void gui::changeInGUI(QString button)
@@ -100,7 +102,7 @@ void gui::toggleCamera()
     if (windowSelector==0){
 
 //        timer->getTimerLabel()->setParent(nullptr);
-        timer->getTimerLabel()->setParent(window[0]);
+//        timer->getTimerLabel()->setParent(window[0]);
         timer->getTimerLabel()->setGeometry(0,0,100,40);
 
         window[1]->setParent(nullptr);
@@ -118,7 +120,7 @@ void gui::toggleCamera()
         g_print("Size 00\n");
         timer->getTimerLabel()->setParent(window[0]);
         timer->getTimerLabel()->show();
-//        timer->getTimerLabel()->setGeometry(0,0,100,40);
+//        timer->getTim9001erLabel()->setGeometry(0,0,100,40);
 
     }
     else if (windowSelector==1){
@@ -130,7 +132,7 @@ void gui::toggleCamera()
         }
         if (window[1]!=nullptr){
             gridLay->removeWidget(window[1]);
-            gridLay->addWidget(window[1],0,5,1,3);
+            gridLay->addWidget(window[1],0,6,1,2);
         }
         windowSelector++;
         g_print("Size 1\n");
@@ -145,7 +147,7 @@ void gui::toggleCamera()
         }
         if (window[0]!=nullptr){
             gridLay->removeWidget(window[0]);
-            gridLay->addWidget(window[0],0,5,1,3);
+            gridLay->addWidget(window[0],0,6,1,2);
         }
         windowSelector-=2;
 //        timer->getTimerLabel()->setParent(nullptr);
@@ -223,7 +225,7 @@ void gui::prepButtonsConfig()
 void gui::createButtons()
 {
     tmr2=new QTimer(this);
-    tmr2->setInterval(3000);
+    tmr2->setInterval(2800);
     tmr2->start();
     butConfig =new buttonsConfiguration;
     button=new QPushButton("Stop/Start Timer");
@@ -318,6 +320,6 @@ void gui::handleSignals()
 //    connect(play_pause_button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
 
 //    connect(play_pause_button,SIGNAL(clicked()),this,SLOT(toggleCamera()));
-//    connect(tmr2,SIGNAL(timeout()),this,SLOT(toggleCamera()));
+    connect(tmr2,SIGNAL(timeout()),this,SLOT(toggleCamera()));
     connect(this,SIGNAL(buttonsConfig(QString)),butConfig,SLOT(getCurrentButtons(QString)));
 }

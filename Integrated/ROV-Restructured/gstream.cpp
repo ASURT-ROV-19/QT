@@ -5,7 +5,9 @@ gstream::gstream(int port)
 {
     //creating elements
     window=new QWidget ();
-    window->setAttribute(Qt::WA_TranslucentBackground);
+//    window->setAttribute(Qt::WA_TranslucentBackground);
+    //    window->setStyleSheet("background:transparent;");
+    window->setStyleSheet("background-color:red;");
     window->setStyleSheet("background:transparent;");
     PORT=port;
     gst_init(0,0);

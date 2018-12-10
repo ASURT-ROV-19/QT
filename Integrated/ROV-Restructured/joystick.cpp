@@ -1,4 +1,10 @@
 #include "joystick.h"
+#define xAxis 0
+#define yAxis 1
+#define zAxis 2
+#define rAxis 3
+#define hat 0
+
 
 Joystick::Joystick()
 {
@@ -29,20 +35,31 @@ Joystick::Joystick()
 
 int Joystick::get_x()
 {
-    return SDL_JoystickGetAxis(js,0);
+    return SDL_JoystickGetAxis(js,xAxis);
 }
 
 int Joystick::get_y()
 {
-    return -SDL_JoystickGetAxis(js,1);
+    return -SDL_JoystickGetAxis(js,yAxis);
 }
 int Joystick::get_z()
 {
-    return SDL_JoystickGetAxis(js,3);
+    return SDL_JoystickGetAxis(js,zAxis);
 }
 int Joystick::get_r()
 {
-    return SDL_JoystickGetAxis(js,2);
+    return SDL_JoystickGetAxis(js,rAxis);
+}
+
+int Joystick::getMapped_z()
+{
+    int Z=SDL_JoystickGetAxis(js,zAxis);
+    return Z;
+}
+
+int Joystick::get_hat()
+{
+    return SDL_JoystickGetHat(js,hat);
 }
 
 void Joystick::activate()
@@ -61,24 +78,10 @@ bool Joystick::message(QString msg)
 {
 
     //True sends to GUI , while false sendes to server
-    if (msg=="0"){
+    if (msg=="0"||msg=="1"||msg=="2"||msg=="3"||msg=="4"||msg=="5"){
         return true;
         }
-    else if (msg=="1"){
-        return true;
-    }
-    else if (msg=="2"){
-        return true;
-        }
-    else if (msg=="3"){
-        return true;
-        }
-    else if (msg=="4"){
-        return true;
-        }
-    else if (msg=="5"){
-        return true;
-        }
+
     else
     return false;
 }

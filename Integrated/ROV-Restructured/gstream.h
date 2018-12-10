@@ -9,6 +9,8 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QDebug>
+
+
 class gstream : public QObject
 {
     Q_OBJECT

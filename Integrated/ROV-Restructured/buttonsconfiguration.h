@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QSpacerItem>
 #include <QTableWidget>
-
+#include <joystickbutton.h>
 class buttonsConfiguration: public QObject
 {
     Q_OBJECT
@@ -24,6 +24,7 @@ public slots:
     void show_hide();
     void getCurrentButtons(QString currentConf);
 private slots:
+//    joystickButton ** buttons;
     void timerClicked();
     void cameraClicked();
     void configClicked();
