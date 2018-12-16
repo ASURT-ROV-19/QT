@@ -15,6 +15,7 @@ void joystickButton::setInfo(QString name, QString buttonNumber)
 {
     this->name=name;
     this->number=number;
+    this->setText(name);
 }
 
 void joystickButton::initialDisplay()
@@ -27,16 +28,8 @@ QString joystickButton::getName()
     return name;
 }
 
-void joystickButton::thisClicked(joystickButton **joyButtons, joystickButton **adminButtons, QRadioButton **selectionButtons)
+
+void joystickButton::buttonClicked()
 {
-    for (int i=0;i<6;i++){
-        if (joyButtons[i]!=this){
-            joyButtons[i]->hide();
-        }
-    }
-
-    for (int i=0;i<6;i++){
-        adminButtons[i]->show();
-    }
-
+    emit thisClicked(this);
 }

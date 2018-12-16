@@ -18,8 +18,9 @@ public:
     TCPServer(string Host,int Port);
     bool isConnected();
     bool sendToServer(QString message);
-    void sendMessage(QString message); //Use this one
     bool connectToServer();
+public slots:
+    void sendMessage(QString message); //Use this one
 private:
     QTcpSocket *socket;
     QTimer *reConTimer;

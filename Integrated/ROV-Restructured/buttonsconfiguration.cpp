@@ -3,6 +3,8 @@
 
 
 /*
+    Out of date ,needs to be modified
+
     PROCEDURE TO ADD A BUTTON TO THE CHANGING BUTTONS:
     1-ADD A RESPRESENTATIVE BUTTON AND SLOT FOR IT HERE
     2-CONNECT THE BUTTON CLICKING AND THE SLOT
@@ -26,6 +28,8 @@
 
 buttonsConfiguration::buttonsConfiguration()
 {
+
+
     confWidget=new QWidget();
     confWidget->setGeometry(200,200,800,600);
     confWidget->setStyleSheet("background-color: orange ;");
@@ -35,6 +39,7 @@ buttonsConfiguration::buttonsConfiguration()
     confWidget->setLayout(gridLay);
     createButtons();
     deployButtons();
+    initialDisplay();
     handleClicking();
     spacer=new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::Expanding);
 
@@ -43,161 +48,130 @@ buttonsConfiguration::buttonsConfiguration()
 void buttonsConfiguration::createButtons()
 {
 
-//    buttons=new joystickButton * [20];
-//    buttons[0]->setInfo("Configurations","0");
-//    buttons[1]->setInfo("Switch View","2");
-//    buttons[2]->setInfo("Timer Restart","3");
 
-    restart_timer=new QPushButton("Restart Timer");
-    timerPause_Play=new QPushButton("Play/Pause Timer");
-    changeCamersSize=new QPushButton("Change Camera");
-    configWindowDisp=new QPushButton("To Display or Hide This Window");
-    cancel=new QPushButton("Cancel");
-    save=new QPushButton("Save");
-    textLabel=new QLabel("Camera Switch:         2\nTimer Play-Pause       1\nConfiguration Window  0\nRestart Timer           3");
-    JSBttn=new QRadioButton[12];
-//    save->setStyleSheet(" border: 1px solid white  ; ");
-    for (int i=0;i<12;i++){
-        JSBttn[i].setText("Joystick Button "+QString::number(i));
+
+    jsButtons=new joystickButton * [10];
+    adminButtons=new joystickButton * [3];
+    selectionButtons=new QRadioButton * [25];
+
+    for (int i=0;i<3;i++){
+        adminButtons[i]=new joystickButton();
     }
+    for (int i=0;i<10;i++){
+        jsButtons[i]=new joystickButton();
+    }
+    for (int i=0;i<25;i++){
+        selectionButtons[i]=new QRadioButton();
+        selectionButtons[i]->setStyleSheet("color: black ;font-size: 20px; background-color: orange ; font:arial,helvetica;");
+        selectionButtons[i]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+        selectionButtons[i]->setText("Button "+QString::number(i));
+    }
+
+    jsButtons[0]->setInfo("Buttons Settings","0");
+    jsButtons[1]->setInfo("Change Camera","1");
+    jsButtons[2]->setInfo("Restart Timer","2");
+    jsButtons[3]->setInfo("Play/Pause Timer","3");
+    adminButtons[1]->setInfo("Cancel","");
+    adminButtons[0]->setInfo("Save","");
+
+    textLabel=new QLabel("Camera Switch:         2\nTimer Play-Pause       1\nConfiguration Window  0\nRestart Timer           3");
 
 }
 
 void buttonsConfiguration::deployButtons()
 {
     textLabel->setStyleSheet("QLabel{color: black ;  font-size: 20px; background-color: orange ; font:arial,helvetica; }");
-//    textLabel->setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:1, y2:1,stop:0 white, stop: 0.4 gray, stop:1 green)");
-    gridLay->addWidget(timerPause_Play,1,0,1,2);
-    gridLay->addWidget(changeCamersSize,1,2,1,2);
-    gridLay->addWidget(configWindowDisp,1,4,1,2);
-    gridLay->addWidget(restart_timer,2,0,1,2);
 
-    gridLay->addWidget(textLabel,0,2,1,2);
+    gridLay->addWidget(textLabel,0,1,1,3);
     textLabel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-    gridLay->addWidget(save,6,4,1,1);
-    gridLay->addWidget(cancel,6,5,1,1);
     gridLay->setVerticalSpacing(50);
     gridLay->setMargin(50);
-//    textLabel->setStyleSheet("background-color: grey;");
-//    textLabel->setMaximumWidth(300);
-//    textLabel->setMaximumHeight(200);
-    int j=-3;
-    for (int i=0;i<6;i++){
-        i<3 ? gridLay->addWidget(&JSBttn[i],3,2*i,1,2) : gridLay->addWidget(&JSBttn[i],4,2*j,1,2);
-        JSBttn[i].setStyleSheet("color: black ;font-size: 20px; background-color: orange ; font:arial,helvetica;");
-        JSBttn[i].setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-        j++;
+
+    for (int i=0;i<10;i++){
+        gridLay->addWidget(jsButtons[i],(i>4 ? 3:2) ,(i<=4 ? i : i-5),1,1);
+    }
+    for (int i=0;i<25;i++){
+        gridLay->addWidget(selectionButtons[i],4+round(i/5) ,i-5*round(i/5),1,1);
+    }
+    for (int i=0;i<3;i++){
+        gridLay->addWidget(adminButtons[i],9,i+2,1,1);
     }
 
-    initialDisplay();
 
 }
 
 void buttonsConfiguration::initialDisplay()
 {
-
-    confWidget->show();
-    cancel->hide();
-    save->hide();
-    timerPause_Play->show();
-    changeCamersSize->show();
-    configWindowDisp->show();
-    restart_timer->show();
-    for (int i=0;i<6;i++){
-        JSBttn[i].hide();
+    for (int i=0;i<3;i++){
+        adminButtons[i]->hide();
     }
+    for (int i=0;i<10;i++){
+        jsButtons[i]->show();
+    }
+    for (int i=0;i<25;i++){
+        selectionButtons[i]->hide();
+    }
+
+//    confWidget->show();
+
 }
 
 void buttonsConfiguration::handleClicking()
 {
-    connect(timerPause_Play,SIGNAL(clicked()),this,SLOT(timerClicked()));
-    connect(changeCamersSize,SIGNAL(clicked()),this,SLOT(cameraClicked()));
-    connect(configWindowDisp,SIGNAL(clicked()),this,SLOT(configClicked()));
-    connect(save,SIGNAL(clicked()),this,SLOT(saveSettings()));
-    connect(cancel,SIGNAL(clicked()),this,SLOT(cancelEdit()));
-    connect(restart_timer,SIGNAL(clicked()),this,SLOT(timerRestartClicked()));
-
-}
-
-void buttonsConfiguration::timerClicked()
-{
-    buttonAndRole="timer button=";
-    changeCamersSize->hide();
-    configWindowDisp->hide();
-    restart_timer->hide();
-    cancel->show();
-    save->show();
-
-    for (int i=0;i<6;i++){
-        JSBttn[i].show();
+    for (int i=0;i<3;i++){
+        connect(adminButtons[i],SIGNAL(clicked()),adminButtons[i],SLOT(buttonClicked()));
+        connect(adminButtons[i],SIGNAL(thisClicked(joystickButton*)),this,SLOT(adminButtonClicked(joystickButton *)));
     }
-}
 
-void buttonsConfiguration::cameraClicked()
-{
-
-    buttonAndRole="camera button=";
-    timerPause_Play->hide();
-    configWindowDisp->hide();
-    restart_timer->hide();
-    cancel->show();
-    save->show();
-    for (int i=0;i<6;i++){
-        JSBttn[i].show();
+    for (int i=0;i<10;i++){
+        connect(jsButtons[i],SIGNAL(clicked()),jsButtons[i],SLOT(buttonClicked()));
+        connect(jsButtons[i],SIGNAL(thisClicked(joystickButton*)),this,SLOT(handleClicking(joystickButton *)));
     }
 
 }
 
-void buttonsConfiguration::configClicked()
+QString buttonsConfiguration::getButtonName(int index)
 {
-
-    buttonAndRole="config button=";
-    timerPause_Play->hide();
-    changeCamersSize->hide();
-    restart_timer->hide();
-    cancel->show();
-    save->show();
-    for (int i=0;i<6;i++){
-        JSBttn[i].show();
-    }
+    return jsButtons[index]->getName();
 }
 
-void buttonsConfiguration::timerRestartClicked()
-{
-    buttonAndRole="timerRestart button=";
-    timerPause_Play->hide();
-    changeCamersSize->hide();
-    configWindowDisp->hide();
-    cancel->show();
-    save->show();
-    for (int i=0;i<6;i++){
-        JSBttn[i].show();
-    }
-}
 
-void buttonsConfiguration::saveSettings()
-{
-    for (int i=0;i<6;i++){
-        if(JSBttn[i].isChecked()){
-            buttonAndRole+=QString::number(i);
-            break;
-        }
-    }
-
-    emit newSettings(buttonAndRole);
-    buttonAndRole="";
-    initialDisplay();
-}
-
-void buttonsConfiguration::cancelEdit()
-{
-    buttonAndRole="";
-    initialDisplay();
-}
 
 void buttonsConfiguration::show_hide()
 {
     confWidget->isHidden() ? confWidget->show() : confWidget->hide();
+}
+
+void buttonsConfiguration::handleClicking(joystickButton * clickedButton)
+{
+    for (int i=0;i<3;i++){
+        adminButtons[i]->show();
+    }
+    for (int i=0;i<10;i++){
+        jsButtons[i]->hide();
+    }
+    for (int i=0;i<25;i++){
+        selectionButtons[i]->show();
+    }
+    clickedButton->show();
+    buttonAndRole=clickedButton->getName()+"=";
+}
+
+
+void buttonsConfiguration::adminButtonClicked(joystickButton * clickedButton)
+{
+    if (clickedButton==adminButtons[0]){
+        for (int i=0;i<25;i++){
+            if(selectionButtons[i]->isChecked()){
+                buttonAndRole+=QString::number(i);
+                emit newSettings(buttonAndRole);
+                break;
+            }
+        }
+    }
+
+    buttonAndRole="";
+    initialDisplay();
 }
 
 void buttonsConfiguration::getCurrentButtons(QString currentConf)

@@ -58,7 +58,8 @@ void CountDown::restartTimer(int minutes,int seconds){
     sec=seconds;
     timer->stop();
     timer->start();
-};
+}
+
 
 
 void CountDown::pause_Play()
@@ -106,13 +107,19 @@ void CountDown::changeTime()
         time+=QString::number(sec);
     }
 //    time=QString::number(mins,'g',2)+":"+QString::number(sec,'g',2);
-    setBackgroundColor();
-    timerLabel->setText(time);
+//    setBackgroundColor();
+    updateText();
 }
 
 void CountDown::resetDelay()
 {
     timer->setInterval(1000-delay);
+}
+
+void CountDown::updateText()
+{
+    timerLabel->setUpdatesEnabled(true);
+    timerLabel->setText(time);
 }
 
 
@@ -124,6 +131,7 @@ void CountDown::setTimerLabel(){
     setTimerFont();
     timerLabel->setAttribute(Qt::WA_TranslucentBackground);
     timerLabel->setStyleSheet("background:transparent;");
+    timerLabel->setStyleSheet("background-color:transparent;");
     timerLabel->setTextInteractionFlags(Qt::TextEditable);
 //    timerLabel->setStyleSheet("background-color:blue");
 

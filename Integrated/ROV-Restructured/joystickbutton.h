@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <QObject>
 #include <QRadioButton>
+#include <QDebug>
 namespace JS {
 class joystickButton;
 }
@@ -17,10 +18,10 @@ public:
     void initialDisplay();
     QString getName();
 signals:
-//    void clicked();
+    void thisClicked(joystickButton * buttons);
     void initialDisplaySign();
 public slots:
-    void thisClicked(joystickButton ** joyButtons , joystickButton ** adminButtons , QRadioButton ** selectionButtons);
+    void buttonClicked();
 private:
     QString name;
     QString number;

@@ -23,12 +23,11 @@ public:
 //    QPushButton * getChangingButton();    //temporary to use the button instead of the joystick as i ddon't have the joystick now;
     QGridLayout * getLayout();
     void getCam(gstream *Camera, uint8_t cameraNum);
+    void positionTimer();
 
 public slots:
     void changeInGUI(QString button);
     void changeButtonsConfiguration(QString newConfig);
-    void toggleCamera();
-    void print();
     void prepButtonsConfig();
 //    void changeCamerasSizes();
 signals:
@@ -36,6 +35,15 @@ signals:
     void restartTimer();
     void buttonsConfig(QString Configuration);
 private:
+
+    void toggleCamera();
+    void createWindows();
+    void createButtons();
+    void handleSignals();
+    void checkForButtonsSwitch();
+    void switchButtons(QString * button1,QString * old_button1,QString * button2,QString * old_button2);
+
+
     QTimer * tmr,*tmr2;
     QPushButton * button , * play_pause_button, * endButton;
     CountDown * timer;
@@ -44,15 +52,12 @@ private:
     QString cameraButton="2",timerButton="1",configurationButton="0",restart_timer="3";
     QString _cameraButton="2",_timerButton="1",_configurationButton="0",_restart_timer="3";
     uint8_t windowSelector=0;
-    void createWindows();
-    void createButtons();
-    void handleSignals();
-    void checkForButtonsSwitch();
-    void switchButtons(QString * button1,QString * old_button1,QString * button2,QString * old_button2);
     gstream ** camera;
-    QWidget ** window;
+//    QWidget ** window;
+    QVideoWidget ** videoWindow;
     QWidget * GUIwindow;
     QWidget * dummyWidget;
+    QGridLayout * layTimer;
 };
 
 #endif // GUI_H

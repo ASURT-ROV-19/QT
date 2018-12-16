@@ -6,15 +6,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     joyS=new Joystick_Handler();
-    server=new TCPServer("111.111.111.111",8008);
+    server=new TCPServer("10.0.1.55",9005);
     //ui->setupUi(this);
-    connect(joyS,SIGNAL(sendToServer(QString)),server,SLOT(sendmsg(QString)));
+    connect(joyS,SIGNAL(sendToServer(QString)),server,SLOT(sendMessage(QString)));
     centralWidget=new QWidget();
-//    centralWidget->setGeometry(0,0,1280,960);
     centralWidget->setWindowState(Qt::WindowFullScreen);
     centralWidget->show();
     centralWidget->setWindowTitle("Stream");
-//    centralWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     GUI=new gui(centralWidget);
     connect(joyS,SIGNAL(sendToGUI(QString)),GUI,SLOT(changeInGUI(QString)));
 

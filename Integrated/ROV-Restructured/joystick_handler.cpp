@@ -31,9 +31,11 @@ void Joystick_Handler::action()
             msg="";
             msg+="x="+((abs(X)>DEADZONE)?QString::number(X):"0") +",";
             msg+="y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +",";
-            msg+="z="+QString::number(mapZ())+",";
+//            msg+="z="+QString::number(mapZ())+",";
+            msg+="z="+((abs(Z)>DEADZONE)?QString::number(Z):"0") +",";
             msg+="r="+((abs(R)>DEADZONE)?QString::number(R):"0") +",";
             msg+="cam="+QString::number(cam)+",";
+            msg+="light=0,";
             emit sendToServer(msg);
 
         }
@@ -63,10 +65,12 @@ void Joystick_Handler::action()
         msg="";
         msg+="x="+((abs(X)>DEADZONE)?QString::number(X):"0") +",";
         msg+="y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +",";
-        msg+="z="+QString::number(mapZ())+",";
+//        msg+="z="+QString::number(mapZ())+",";
+        msg+="z="+((abs(Z)>DEADZONE)?QString::number(Z):"0") +",";
         msg+="r="+((abs(R)>DEADZONE)?QString::number(R):"0") +",";
         msg+="cam="+QString::number(cam)+",";
 //        qDebug()<<msg;
+        msg+="light=0,";
         emit sendToServer(msg);
         break;
     default:

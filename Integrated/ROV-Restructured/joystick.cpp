@@ -1,8 +1,8 @@
 #include "joystick.h"
 #define xAxis 0
 #define yAxis 1
-#define zAxis 2
-#define rAxis 3
+#define zAxis 3
+#define rAxis 2
 #define hat 0
 
 

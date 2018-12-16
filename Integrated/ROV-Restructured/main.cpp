@@ -7,30 +7,16 @@ int main(int argc, char *argv[])
     MainWindow w;
     gstream camera2(5022);
     w.getCam(&camera2,1);
-    gstream camera(10000);
+    gstream camera(8765);
     w.getCam(&camera,2);
-//    camera.setPipeline();
 
-//    w.addRedneringWindow(camera.getRenderingWindow(),0,0,1,1,1);
     camera.autoSetPipeline();
-    camera.play_pause();
     camera2.autoSetPipeline();
+
+    camera.play_pause();
     camera2.play_pause();
 
     return a->exec();
 }
 
 
-/*
-  CURRENT PROBLEM IS IN TOGGLING BETWEEN CAMERAS , WHAT HAPPENS IS THAT WE ADD A NULLED WINDOW TO THE LAYOUT SO PROG CRASHES
-  I SHALL FIGURE OUT SOMEHOW TO CHECK WHETHER THE WIDGET IS YET CREATED OR NOT
-*/
-
-
-/*
-//-message format
--last year's code for streaming
-//-buttons different settings
--use jpeg
--
-*/

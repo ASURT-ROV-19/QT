@@ -6,9 +6,11 @@ TCPServer::TCPServer(string Host,int Port)
     this->host=Host;
     this->port=Port;
     socket=new QTcpSocket;
-    connectToServer();
+    if(connectToServer()){
+        connectionFlag=1;
+        qDebug()<<"Connected";
+    }
     //socket->connectToHost(host.c_str(),port);
-    connectionFlag=1;
     reConTimer=new QTimer;
     reConTimer->setInterval(200);
     connect(socket,SIGNAL(disconnected()),this,SLOT(reconnect()));
@@ -19,25 +21,32 @@ TCPServer::TCPServer(string Host,int Port)
 
 }
 
+bool TCPServer::connectToServer()
+{
+    socket->connectToHost(host.c_str(),port);
+//    qDebug()<<"Connected";
+    return socket->waitForConnected(1000);
+}
+
 void TCPServer::reconnect()
 {
 
-    if(connectionFlag){
+    if(!connectionFlag){
         qDebug()<<"Disconnected";
-        connectionFlag=0;
+//        connectionFlag=0;
         reConTimer->start();
-
+        socket->connectToHost(host.c_str(),port);
     }
     qDebug()<<"Trying to reconnect";
     socket->connectToHost(host.c_str(),port);
-
+    if (socket->waitForConnected(1000))
+        connectionFlag=1;
 }
 
 void TCPServer::connected()
 {
 
-    if(!connectionFlag){
-        connectionFlag=1;
+    if(connectionFlag){
         reConTimer->stop();
     }
     qDebug()<<"Connected";
@@ -94,9 +103,3 @@ void TCPServer::sendMessage(QString message)
     }
 }
 
-bool TCPServer::connectToServer()
-{
-    socket->connectToHost(host.c_str(),port);
-    qDebug()<<"Connected";
-    return socket->waitForConnected(1000);
-}

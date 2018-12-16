@@ -9,6 +9,7 @@
 #include <QSpacerItem>
 #include <QTableWidget>
 #include <joystickbutton.h>
+#include <math.h>
 class buttonsConfiguration: public QObject
 {
     Q_OBJECT
@@ -18,19 +19,18 @@ public:
     void deployButtons();
     void initialDisplay();
     void handleClicking();
+    QString getButtonName(int index);
 signals:
     void newSettings(QString config);
 public slots:
     void show_hide();
     void getCurrentButtons(QString currentConf);
+//    void selectionDisplay(joystickButton * source);
+//    void initialDisplay(joystickButton * source);
 private slots:
 //    joystickButton ** buttons;
-    void timerClicked();
-    void cameraClicked();
-    void configClicked();
-    void timerRestartClicked();
-    void saveSettings();
-    void cancelEdit();
+    void handleClicking(joystickButton * clickedButton);
+    void adminButtonClicked(joystickButton * clickedButton);
 private:
     QWidget * confWidget;
     QGridLayout * gridLay;
@@ -41,6 +41,8 @@ private:
     QLabel *textLabel;
     QSpacerItem * spacer;
     QTableWidget * tableWidget;
+    joystickButton ** adminButtons,**jsButtons;
+    QRadioButton ** selectionButtons;
 };
 
 #endif // BUTTONSCONFIGURATION_H

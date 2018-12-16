@@ -1,5 +1,5 @@
-//#ifndef GSTREAM_H
-//#define GSTREAM_H
+#ifndef GSTREAM_H
+#define GSTREAM_H
 #include <QObject>
 #include <glib.h>
 #include <gst/gst.h>
@@ -9,39 +9,44 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QDebug>
+#include <QVideoWidget>
+#include <Qt5GStreamer/QGst/VideoOverlay>
+#include <QGst/Ui/VideoWidget>
+#include <QGraphicsView>
+#include <QGst/Element>
+#include <QGst/ElementFactory>
+#include <QGst/Pipeline>
 
 
-class gstream : public QObject
+class gstream : public QGst::Ui::VideoWidget
 {
-    Q_OBJECT
+
 public:
     gstream(int port);
     ~gstream();
-//    int setPipeline();
     void autoSetPipeline();
     void setRenderingWindows();
-    QWidget * getRenderingWindow();
-//    std::string getDescribtion();
-
-
+//    QWidget * getRenderingWindow();
+    QVideoWidget * getRenderingVideoWindow();
+//    QGst::VideoOverlay
+    QGraphicsView * getView();
 public slots:
     void play_pause();
-//    void quitProgram();
-//    int linkElements();
 
 private:
-    GstElement *pipeline ,* sink;//,*source  ,*buffer,*depay,*decompressor,*convert;
-//    GMainLoop *mainLoop;
-    QWidget * window;
+
+    QGraphicsView * view;
+//    QGst::Pipeline pipe;
+//    QGst::ElementPtr sink2;
+
+    GstElement *pipeline ,* sink;
+//    QWidget * window;
+    QVideoWidget * videowindow;
     uint8_t state=0;
-//    GstCaps * caps;
-//    GstElement *capsfilter;
-//    GstSample * screenshot;
     uint8_t windowSelector=0;
     QGridLayout * GUILayOut;
     int PORT;
     std::string pipeline_description;
-
 };
 
-//#endif // GSTREAM_H
+#endif

@@ -28,8 +28,8 @@ public slots:
     void pause_Play();
     void changeTime();
     void resetDelay();
+    void updateText();
 private:
-//    std::chrono::milliseconds  currentTime;
     int delay;
     QTime * TIME;
     QLabel * timerLabel;
