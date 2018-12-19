@@ -5,22 +5,22 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    joyS=new Joystick_Handler();
+    joyS=new Joystick();
     server=new TCPServer("10.0.1.55",9005);
+    handler = new Joystick_Handler();
     //ui->setupUi(this);
-    connect(joyS,SIGNAL(sendToServer(QString)),server,SLOT(sendMessage(QString)));
+    connect(handler,SIGNAL(sendToServer(QString)),server,SLOT(sendMessage(QString)));
     centralWidget=new QWidget();
     centralWidget->setWindowState(Qt::WindowFullScreen);
-    centralWidget->show();
     centralWidget->setWindowTitle("Stream");
     GUI=new gui(centralWidget);
-    connect(joyS,SIGNAL(sendToGUI(QString)),GUI,SLOT(changeInGUI(QString)));
+    connect(handler,SIGNAL(sendToGUI(QString)),GUI,SLOT(changeInGUI(QString)));
 
 }
 
 QGridLayout *MainWindow::getLayout()
 {
-    return GUI->getLayout();
+   return GUI->getLayout();
 }
 
 void MainWindow::getCam(gstream *camera,uint8_t cameraNum)

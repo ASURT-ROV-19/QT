@@ -29,6 +29,7 @@ private:
     TCPServer *server;
     Joystick_Handler *joyS;
     QWidget * centralWidget;
+	Joystick_Handler *handler;
     gui * GUI;
 
 };
