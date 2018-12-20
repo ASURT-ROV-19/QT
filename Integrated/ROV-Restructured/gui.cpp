@@ -69,7 +69,6 @@ void gui::changeInGUI(QString button)
         //do change in two windows sizes
     {
         toggleCamera();
-
     }
     else if(button==restart_timer)
         //restart timer
@@ -250,7 +249,7 @@ void gui::handleSignals()
 //    connect(this,SIGNAL(pause_play()),butConfig,SLOT(show_hide()));
 //    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
 
-    connect(tmr2,SIGNAL(timeout()),this,SLOT(toggleCamera()));
+//    connect(tmr2,SIGNAL(timeout()),this,SLOT(toggleCamera()));
 
     //THIS MEANS A NEW CONFIGURATION
     connect(butConfig,SIGNAL(newSettings(QString)),this,SLOT(changeButtonsConfiguration(QString)));
