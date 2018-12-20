@@ -22,6 +22,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     QGridLayout * getLayout();
     void getCam(gstream * camera, uint8_t cameraNum);
+    void getCam(gstreamer * camera, uint8_t cameraNum);
     ~MainWindow();
 
 private:

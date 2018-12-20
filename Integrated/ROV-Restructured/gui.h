@@ -13,6 +13,7 @@
 #include <string.h>
 #include "buttonsconfiguration.h"
 #include "gstream.h"
+#include "gstreamer.h"
 #include <QTimer>
 
 class gui : public QObject
@@ -23,20 +24,21 @@ public:
 //    QPushButton * getChangingButton();    //temporary to use the button instead of the joystick as i ddon't have the joystick now;
     QGridLayout * getLayout();
     void getCam(gstream *Camera, uint8_t cameraNum);
-    void positionTimer();
+    void getCam(gstreamer *Camera, uint8_t cameraNum);
+    void positionItems(QGst::Ui::VideoWidget * parent);
 
 public slots:
     void changeInGUI(QString button);
     void changeButtonsConfiguration(QString newConfig);
     void prepButtonsConfig();
 //    void changeCamerasSizes();
+    void toggleCamera();
 signals:
     void pause_play();
     void restartTimer();
     void buttonsConfig(QString Configuration);
 private:
 
-    void toggleCamera();
     void createWindows();
     void createButtons();
     void handleSignals();
@@ -53,11 +55,14 @@ private:
     QString _cameraButton="2",_timerButton="1",_configurationButton="0",_restart_timer="3";
     uint8_t windowSelector=0;
     gstream ** camera;
+    gstreamer ** cameraZ;
 //    QWidget ** window;
     QVideoWidget ** videoWindow;
     QWidget * GUIwindow;
-    QWidget * dummyWidget;
+    QWidget * dummyWidget,*realDummyDumb;
     QGridLayout * layTimer;
+
+    QGst::Ui::VideoWidget ** videoDisplayer;
 };
 
 #endif // GUI_H

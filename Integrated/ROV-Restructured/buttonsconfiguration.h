@@ -43,6 +43,7 @@ private:
     QTableWidget * tableWidget;
     joystickButton ** adminButtons,**jsButtons;
     QRadioButton ** selectionButtons;
+    const int adminBttns=3 , joyBttns=12 , functionBttns=12;
 };
 
 #endif // BUTTONSCONFIGURATION_H

@@ -41,7 +41,7 @@ buttonsConfiguration::buttonsConfiguration()
     deployButtons();
     initialDisplay();
     handleClicking();
-    spacer=new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::Expanding);
+//    spacer=new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::Expanding);
 
 }
 
@@ -50,17 +50,17 @@ void buttonsConfiguration::createButtons()
 
 
 
-    jsButtons=new joystickButton * [10];
-    adminButtons=new joystickButton * [3];
-    selectionButtons=new QRadioButton * [25];
+    jsButtons=new joystickButton * [functionBttns];
+    adminButtons=new joystickButton * [adminBttns];
+    selectionButtons=new QRadioButton * [joyBttns];
 
-    for (int i=0;i<3;i++){
+    for (int i=0;i<adminBttns;i++){
         adminButtons[i]=new joystickButton();
     }
-    for (int i=0;i<10;i++){
+    for (int i=0;i<functionBttns;i++){
         jsButtons[i]=new joystickButton();
     }
-    for (int i=0;i<25;i++){
+    for (int i=0;i<joyBttns;i++){
         selectionButtons[i]=new QRadioButton();
         selectionButtons[i]->setStyleSheet("color: black ;font-size: 20px; background-color: orange ; font:arial,helvetica;");
         selectionButtons[i]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
@@ -82,19 +82,20 @@ void buttonsConfiguration::deployButtons()
 {
     textLabel->setStyleSheet("QLabel{color: black ;  font-size: 20px; background-color: orange ; font:arial,helvetica; }");
 
-    gridLay->addWidget(textLabel,0,1,1,3);
+    gridLay->addWidget(textLabel,0,2,1,4);
     textLabel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
     gridLay->setVerticalSpacing(50);
     gridLay->setMargin(50);
 
-    for (int i=0;i<10;i++){
-        gridLay->addWidget(jsButtons[i],(i>4 ? 3:2) ,(i<=4 ? i : i-5),1,1);
+
+    for (int i=0;i<functionBttns;i++){
+        gridLay->addWidget(jsButtons[i], 3+floor(i/4)  ,2*i-8*floor(i/4),1,2);
     }
-    for (int i=0;i<25;i++){
-        gridLay->addWidget(selectionButtons[i],4+round(i/5) ,i-5*round(i/5),1,1);
+    for (int i=0;i<joyBttns;i++){
+        gridLay->addWidget(selectionButtons[i],4+floor(i/4)  ,2*i-8*floor(i/4),1,2);
     }
-    for (int i=0;i<3;i++){
-        gridLay->addWidget(adminButtons[i],9,i+2,1,1);
+    for (int i=0;i<adminBttns;i++){
+        gridLay->addWidget(adminButtons[i],8,6+i,1,1);
     }
 
 
@@ -102,13 +103,13 @@ void buttonsConfiguration::deployButtons()
 
 void buttonsConfiguration::initialDisplay()
 {
-    for (int i=0;i<3;i++){
+    for (int i=0;i<adminBttns;i++){
         adminButtons[i]->hide();
     }
-    for (int i=0;i<10;i++){
+    for (int i=0;i<functionBttns;i++){
         jsButtons[i]->show();
     }
-    for (int i=0;i<25;i++){
+    for (int i=0;i<joyBttns;i++){
         selectionButtons[i]->hide();
     }
 
@@ -118,12 +119,12 @@ void buttonsConfiguration::initialDisplay()
 
 void buttonsConfiguration::handleClicking()
 {
-    for (int i=0;i<3;i++){
+    for (int i=0;i<adminBttns;i++){
         connect(adminButtons[i],SIGNAL(clicked()),adminButtons[i],SLOT(buttonClicked()));
         connect(adminButtons[i],SIGNAL(thisClicked(joystickButton*)),this,SLOT(adminButtonClicked(joystickButton *)));
     }
 
-    for (int i=0;i<10;i++){
+    for (int i=0;i<functionBttns;i++){
         connect(jsButtons[i],SIGNAL(clicked()),jsButtons[i],SLOT(buttonClicked()));
         connect(jsButtons[i],SIGNAL(thisClicked(joystickButton*)),this,SLOT(handleClicking(joystickButton *)));
     }
@@ -144,13 +145,13 @@ void buttonsConfiguration::show_hide()
 
 void buttonsConfiguration::handleClicking(joystickButton * clickedButton)
 {
-    for (int i=0;i<3;i++){
+    for (int i=0;i<adminBttns;i++){
         adminButtons[i]->show();
     }
-    for (int i=0;i<10;i++){
+    for (int i=0;i<functionBttns;i++){
         jsButtons[i]->hide();
     }
-    for (int i=0;i<25;i++){
+    for (int i=0;i<joyBttns;i++){
         selectionButtons[i]->show();
     }
     clickedButton->show();
@@ -161,7 +162,7 @@ void buttonsConfiguration::handleClicking(joystickButton * clickedButton)
 void buttonsConfiguration::adminButtonClicked(joystickButton * clickedButton)
 {
     if (clickedButton==adminButtons[0]){
-        for (int i=0;i<25;i++){
+        for (int i=0;i<joyBttns;i++){
             if(selectionButtons[i]->isChecked()){
                 buttonAndRole+=QString::number(i);
                 emit newSettings(buttonAndRole);

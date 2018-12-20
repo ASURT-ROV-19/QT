@@ -13,8 +13,10 @@ class CountDown : public QObject
     Q_OBJECT
 public:
     CountDown();
+    CountDown(QWidget * parent);
     void setTimer(int minutes,int seconds);
     QString getTimeRemaining();
+    void setTimerLabel(QWidget * parent);
     void setTimerLabel();
     void setTimerFont();
     void setParent(QWidget * parent);

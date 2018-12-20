@@ -3,15 +3,15 @@
 
 gstream::gstream(int port)
 {
-//    view=new QGraphicsView();
-//    view->show();
+    view=new QGraphicsView();
+    view->show();
 
 
 //creating elements
     videowindow=new QVideoWidget();
 //    videowindow->setAttribute(Qt::WA_TranslucentBackground);
 //    videowindow->setStyleSheet("background:transparent;");
-    videowindow->setStyleSheet("background-color:red;");
+//    videowindow->setStyleSheet("background-color:red;");
     //    window->setStyleSheet("background:transparent;");
     PORT=port;
     gst_init(0,0);
@@ -22,13 +22,15 @@ gstream::gstream(int port)
 
 void gstream::setRenderingWindows()
 {
-    WId xwinid = videowindow->winId();
-//    WId xwinid = view->winId();
+//    WId xwinid = videowindow->winId();
+    WId xwinid = view->viewport()->effectiveWinId();
     QApplication::sync();
     sink=gst_bin_get_by_name(GST_BIN(pipeline),"sink");
-        videowindow->setUpdatesEnabled(true);
+    videowindow->setUpdatesEnabled(true);
+    qDebug()<<"before xwinid in gstream";
     gst_video_overlay_set_window_handle (GST_VIDEO_OVERLAY (sink), xwinid);
-//    gst_video_overlay_set_property(GST_OBJECT(sink),)
+    qDebug()<<"after xwinid in gstream";
+    //    gst_video_overlay_set_property(GST_OBJECT(sink),)
     //    g_object_set(sink,"autopaint-colorkey",false,NULL);
 }
 

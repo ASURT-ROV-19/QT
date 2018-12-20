@@ -11,6 +11,7 @@ CountDown::CountDown()
 }
 
 
+
 void CountDown::setTimer(int minutes,int seconds){
     timer->start();
     mins =abs(minutes);
@@ -38,18 +39,14 @@ void CountDown::setBackgroundColor()
         timerLabel->setStyleSheet("QLabel{color: red ;  font-size: 40px; }");
     }
     else if (mins < 5){
-//        timerLabel->setStyleSheet("background-color:orange");
         timerLabel->setStyleSheet("QLabel{color: orange ;  font-size: 40px; }");
 
     }
-    else if (mins < 10){
-        timerLabel->setStyleSheet("background-color:yellow");
-//        timerLabel->setStyleSheet("QLabel{color: yellow ;  font-size: 40px; }");
-
+    else if (mins < 14){
+        timerLabel->setStyleSheet("QLabel{color: yellow ;  font-size: 40px; }");
     }
     else {
         timerLabel->setStyleSheet("QLabel{color: green ;  font-size: 40px; }");
-//        timerLabel->setStyleSheet("background-color:green");
     }
 }
 
@@ -107,7 +104,7 @@ void CountDown::changeTime()
         time+=QString::number(sec);
     }
 //    time=QString::number(mins,'g',2)+":"+QString::number(sec,'g',2);
-//    setBackgroundColor();
+    setBackgroundColor();
     updateText();
 }
 
@@ -123,17 +120,13 @@ void CountDown::updateText()
 }
 
 
-void CountDown::setTimerLabel(){
+void CountDown::setTimerLabel()
+{
     timerLabel=new QLabel(time);
-    timerLabel->setGeometry(0,0,80,40);
-//    timerLabel->show();
-    timerLabel->setWindowFlags(Qt::WindowStaysOnTopHint);
+    timerLabel->setGeometry(0,0,115,50);
+    timerLabel->show();
     setTimerFont();
     timerLabel->setAttribute(Qt::WA_TranslucentBackground);
-    timerLabel->setStyleSheet("background:transparent;");
-    timerLabel->setStyleSheet("background-color:transparent;");
-    timerLabel->setTextInteractionFlags(Qt::TextEditable);
-//    timerLabel->setStyleSheet("background-color:blue");
 
 }
 
@@ -148,6 +141,7 @@ void CountDown::setTimerFont()
 
 void CountDown::setParent(QWidget *parent)
 {
+    qDebug()<<&parent<<" IN COUNTDOWN";
     timerLabel->setParent(parent);
 }
 

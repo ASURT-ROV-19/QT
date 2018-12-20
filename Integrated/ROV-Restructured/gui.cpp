@@ -8,16 +8,18 @@ gui::gui(QWidget *parent)
     GUIwindow=parent;
     gridLay=new QGridLayout(parent);
     parent->setLayout(gridLay);
+    dummyWidget=new QWidget();
+    layTimer=new QGridLayout();
+    dummyWidget->setLayout(layTimer);
+    dummyWidget->show();
     parent->setStyleSheet("background-color: white");
     createButtons();
     handleSignals();
     createWindows();
-//    gridLay->addWidget(button);
-//    gridLay->addWidget(play_pause_button);
-    tmr=new QTimer;
-    tmr->setInterval(1000);
-    dummyWidget=new QWidget();
-//    timer->getTimerLabel()->setParent(parent);
+    dummyWidget->setWindowTitle("DUMMY WIDGET");
+    dummyWidget->setAttribute(Qt::WA_TranslucentBackground);
+    dummyWidget->setGeometry(0,0,115,60);
+
 }
 
 
@@ -31,26 +33,31 @@ void gui::getCam(gstream * Camera, uint8_t cameraNum)
 {
     camera[cameraNum-1]=Camera;
     videoWindow[cameraNum-1]=camera[cameraNum-1]->getRenderingVideoWindow();
-    gridLay->addWidget(videoWindow[cameraNum-1],0,cameraNum-1);
+    videoWindow[cameraNum-1]->show();
+    videoWindow[cameraNum-1]->setWindowTitle("Gstream Video window");
     if (cameraNum==1){
-        positionTimer();
+//        positionItems();
     }
 }
 
-void gui::positionTimer()
+void gui::getCam(gstreamer * Camera, uint8_t cameraNum)
 {
-    layTimer=new QGridLayout();
-    videoWindow[0]->setLayout(layTimer);
-    dummyWidget->setAttribute(Qt::WA_TranslucentBackground);
-    dummyWidget->setStyleSheet("background:transparent;");
-    timer->getTimerLabel()->setStyleSheet("background:transparent;");
-//    timer->getTimerLabel()->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint );
-//    dummyWidget->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint );
+    cameraZ=new gstreamer *[3];
+    cameraZ[cameraNum-1]=Camera;
+//    Camera->show();
+    videoDisplayer[cameraNum-1]=cameraZ[cameraNum-1]->getRenderingVideoWindow();
+    gridLay->addWidget(videoDisplayer[cameraNum-1],0,cameraNum-1,1,1);
 
-    timer->getTimerLabel()->setAttribute(Qt::WA_TranslucentBackground);
-    layTimer->addWidget(dummyWidget);
-    timer->getTimerLabel()->setParent(dummyWidget);
+    if (cameraNum==1){
+        positionItems(videoDisplayer[0]);
+    }
+}
 
+
+void gui::positionItems(QGst::Ui::VideoWidget *parent)
+{
+    dummyWidget->setParent(nullptr);
+    dummyWidget->setParent(parent);
 }
 
 void gui::changeInGUI(QString button)
@@ -110,74 +117,58 @@ void gui::createWindows()
 {
     camera=new gstream *[3];
     videoWindow=new QVideoWidget *[3];
+    videoDisplayer=new QGst::Ui::VideoWidget *[3];
 
-   for (int i=0; i<3;i++){
+    for (int i=0; i<3;i++){
        camera[i]=nullptr;
        videoWindow[i]=nullptr;
     }
 }
 
+
+
 void gui::toggleCamera()
 {
-//    changeCamerasSizes();
-    if (windowSelector==0){
-
-//        timer->getTimerLabel()->setParent(nullptr);
-//        timer->getTimerLabel()->setParent(window[0]);
-        timer->getTimerLabel()->setGeometry(0,0,100,40);
-
-        videoWindow[1]->setParent(nullptr);
-        //two windows of equal size
-        if (videoWindow[0]!=nullptr){
-            gridLay->removeWidget(videoWindow[0]);
-            gridLay->addWidget(videoWindow[0],0,0);
-//        g_print("Size 00\n");
+    // EQUAL SIZES
+        if (windowSelector==0){
+            videoDisplayer[0]->setParent(nullptr);
+            videoDisplayer[1]->setParent(nullptr);
+            positionItems(videoDisplayer[0]);
+            gridLay->removeWidget(videoDisplayer[0]);
+            gridLay->removeWidget(videoDisplayer[1]);
+            gridLay->addWidget(videoDisplayer[0],0,0,1,1);
+            gridLay->addWidget(videoDisplayer[1],0,1,1,1);
+            windowSelector++;
         }
-        if (videoWindow[1]!=nullptr){
-            gridLay->removeWidget(videoWindow[1]);
-            gridLay->addWidget(videoWindow[1],0,1);
+    //  CAMERA 1 IS MAIN
+        else if (windowSelector==1){
+            videoDisplayer[0]->setParent(nullptr);
+            videoDisplayer[1]->setParent(nullptr);
+            videoDisplayer[1]->setParent(videoDisplayer[0]);
+            gridLay->removeWidget(videoDisplayer[0]);
+            gridLay->removeWidget(videoDisplayer[1]);
+            videoDisplayer[1]->setWindowFlags(Qt::WindowStaysOnTopHint);
+            videoDisplayer[0]->setWindowFlags(Qt::WindowStaysOnBottomHint);
+            gridLay->addWidget(videoDisplayer[0],0,0,4,8);
+            gridLay->addWidget(videoDisplayer[1],0,6,1,2);
+            windowSelector++;
         }
-        windowSelector++;
-        g_print("Size 00\n");
-        timer->getTimerLabel()->setParent(videoWindow[0]);
-        timer->getTimerLabel()->show();
-//        timer->getTim9001erLabel()->setGeometry(0,0,100,40);
-
-    }
-    else if (windowSelector==1){
-        // Window 1 becomes the main camera window
-        videoWindow[1]->setParent(videoWindow[0]);
-        if (videoWindow[0]!=nullptr){
-            gridLay->removeWidget(videoWindow[0]);
-            gridLay->addWidget(videoWindow[0],0,0,3,8);
+    //  CAMERA 2 IS MAIN
+        else if (windowSelector==2){
+            videoDisplayer[0]->setParent(nullptr);
+            videoDisplayer[1]->setParent(nullptr);
+            videoDisplayer[0]->setParent(videoDisplayer[1]);
+            positionItems(videoDisplayer[1]);
+            gridLay->removeWidget(videoDisplayer[1]);
+            gridLay->removeWidget(videoDisplayer[0]);
+//            videoDisplayer[0]->setWindowFlags(nullptr);
+//            videoDisplayer[0]->setWindowFlags(nullptr);
+            videoDisplayer[0]->setWindowFlags(Qt::WindowStaysOnTopHint| Qt::X11BypassWindowManagerHint | Qt::FramelessWindowHint);
+            videoDisplayer[1]->setWindowFlags(Qt::WindowStaysOnBottomHint | Qt::X11BypassWindowManagerHint | Qt::FramelessWindowHint);
+            gridLay->addWidget(videoDisplayer[1],0,0,4,8);
+            gridLay->addWidget(videoDisplayer[0],0,6,1,2);
+            windowSelector-=2;
         }
-        if (videoWindow[1]!=nullptr){
-            gridLay->removeWidget(videoWindow[1]);
-            gridLay->addWidget(videoWindow[1],0,6,1,2);
-        }
-        windowSelector++;
-        g_print("Size 1\n");
-    }
-    else if (windowSelector==2){
-//        Window 2 becomes the main camera window
-        videoWindow[0]->setParent(videoWindow[1]);
-
-        if (videoWindow[1]!=nullptr){
-            gridLay->removeWidget(videoWindow[1]);
-            gridLay->addWidget(videoWindow[1],0,0,3,8);
-        }
-        if (videoWindow[0]!=nullptr){
-            gridLay->removeWidget(videoWindow[0]);
-            gridLay->addWidget(videoWindow[0],0,6,1,2);
-        }
-        windowSelector-=2;
-//        timer->getTimerLabel()->setParent(nullptr);
-        timer->getTimerLabel()->setParent(videoWindow[1]);
-        timer->getTimerLabel()->show();
-        timer->getTimerLabel()->setGeometry(0,0,100,40);
-
-    }
-
 }
 
 
@@ -195,13 +186,13 @@ void gui::prepButtonsConfig()
 void gui::createButtons()
 {
     tmr2=new QTimer(this);
-    tmr2->setInterval(1);
+    tmr2->setInterval(2000);
     tmr2->start();
     butConfig =new buttonsConfiguration;
     button=new QPushButton("Stop/Start Timer");
-//    endButton=new QPushButton("Quit program");
     timer=new CountDown();
     timer->setTimer(15,0);
+    layTimer->addWidget(timer->getTimerLabel());
 //    timer->getTimerLabel()->setParent(window[0]);
     play_pause_button=new QPushButton("Play/Pause");
 
@@ -259,7 +250,7 @@ void gui::handleSignals()
 //    connect(this,SIGNAL(pause_play()),butConfig,SLOT(show_hide()));
 //    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
 
-//    connect(tmr2,SIGNAL(timeout()),timer,SLOT(updateText()));
+    connect(tmr2,SIGNAL(timeout()),this,SLOT(toggleCamera()));
 
     //THIS MEANS A NEW CONFIGURATION
     connect(butConfig,SIGNAL(newSettings(QString)),this,SLOT(changeButtonsConfiguration(QString)));
