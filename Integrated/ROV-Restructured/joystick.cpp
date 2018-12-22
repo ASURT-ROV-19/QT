@@ -1,14 +1,30 @@
 #include "joystick.h"
 
+#define xAxis 0
+#define yAxis 1
+#define zAxis 3
+#define rAxis 2
+#define hat 0
+
+#define X this->get_x()
+#define Y this->get_y()
+#define Z this->get_z()
+#define R this->get_r()
+#define cam this->get_hat()
+#define DEADZONE 4000
+#define SGNFCNT 300
+
 
 Joystick::Joystick()
 {
+
+    qDebug()<<"JOYSTICK CREATED";
     JoyStickInitialization();
     prev_x=prev_r=prev_y=prev_z=0;
     timer =new QTimer;
     timer->setInterval(50);
     timer->start();
-    handler = new Joystick_Handler();
+//    handler = new Joystick_Handler();
     connect(timer,SIGNAL(timeout()),this,SLOT(action()));
 }
 
@@ -34,6 +50,7 @@ int Joystick::getMapped_z()
 {
     return SDL_JoystickGetAxis(js,zAxis);
 }
+
 
 int Joystick::get_hat()
 {
@@ -61,8 +78,9 @@ bool Joystick::message(QString msg)
         }
 
     else
-    return false;
+        return false;
 }
+
 
 void Joystick::JoyStickInitialization()
 {
@@ -97,16 +115,10 @@ void Joystick::action()
     switch (event.type){
     case SDL_JOYAXISMOTION:
         if (abs(X-prev_x)>SGNFCNT || abs(Y-prev_y)>SGNFCNT || abs(Z-prev_z)>SGNFCNT || abs(R-prev_r)>SGNFCNT){
-            msg="";
-            msg+="x="+((abs(X)>DEADZONE)?QString::number(X):"0") +",";
-            msg+="y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +",";
-//            msg+="z="+QString::number(mapZ())+",";
-            msg+="z="+((abs(Z)>DEADZONE)?QString::number(Z):"0") +",";
-            msg+="r="+((abs(R)>DEADZONE)?QString::number(R):"0") +",";
-            msg+="cam="+QString::number(cam)+",";
-            msg+="light=0,";
 
-            handler->getMessage(msg,1);
+            move();
+//            handler->getMessage(msg,1);
+            emit sendMsg(msg);
         }
         break;
     case SDL_JOYDEVICEADDED:
@@ -117,37 +129,36 @@ void Joystick::action()
         break;
     case SDL_JOYBUTTONDOWN:
         msg=QString::number(event.jbutton.button);
-//        if (msg=="1"){
-//            emit timerPause_Play(msg);
-//        }
-        //the next if case decides whether we are sending to server or making a change in GUI
-        if(msg=="10"){
+        qDebug()<<event.jbutton.button;
 
-            (upZ==1)? (upZ=-1) : (upZ=1);
+
+//the next if case decides whether we are sending to server or making a change in GUI or a joystick change
+        if(msg=="5"){
+            if (abs(mapZ())<=1)
+                (upZ==1)? (upZ=-1) : (upZ=1);
+        }
+
+        else if(msg=="9"){
+
+            light==1 ? light=0 : light=1;
         }
         else if(this->message(msg))
         {
-            handler->getMessage(msg,0);
-            //emit sendToGUI(msg);
+            emit sendMsg(msg);
+//            handler->getMessage(msg,0);
         }
         else
         {
-            handler->getMessage(msg,1);
-            //emit sendToServer(msg);
+            emit sendMsg(msg);
+//            handler->getMessage(msg,1);
         }
         break;
     case SDL_JOYHATMOTION:
-        msg="";
-        msg+="x="+((abs(X)>DEADZONE)?QString::number(X):"0") +",";
-        msg+="y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +",";
-//        msg+="z="+QString::number(mapZ())+",";
-        msg+="z="+((abs(Z)>DEADZONE)?QString::number(Z):"0") +",";
-        msg+="r="+((abs(R)>DEADZONE)?QString::number(R):"0") +",";
-        msg+="cam="+QString::number(cam)+",";
-//        qDebug()<<msg;
-        msg+="light=0,";
-        //emit sendToServer(msg);
-        handler->getMessage(msg,1);
+
+        move();
+
+        emit sendMsg(msg);
+//        handler->getMessage(msg,1);
         break;
     default:
         break;
@@ -156,10 +167,43 @@ void Joystick::action()
     }
 }
 
+
+void Joystick::move()
+{
+
+    msg="";
+
+//no mapping
+//    msg+="x="+((abs(X)>DEADZONE)?QString::number(X):"0") +",";
+//    msg+="y="+((abs(Y)>DEADZONE)?QString::number(Y):"0") +",";
+//    msg+="z="+((abs(Z)>DEADZONE)?QString::number(Z):"0") +",";
+//    msg+="r="+((abs(R)>DEADZONE)?QString::number(R):"0") +",";
+//    msg+="cam="+QString::number(cam)+",";
+//    msg+="light=0,";
+
+//mapped
+
+    msg+="x="+((abs(X)>DEADZONE)? QString::number(map(X)) : +"," );
+    msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : +"," );
+    msg+="z="+QString::number(mapZ())+",";
+    msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : +"," );
+    msg+="cam="+QString::number(cam)+",";
+    msg+="light="+QString::number(light)+",";
+
+
+
+
+}
+
+
 int Joystick::mapZ()
 {
-    if(abs(Z)>DEADZONE)
-        return upZ==1 ? (Z*101/(32768*2)+50) : -1* (100-(Z*101/(32768*2)+50)) ;
-    else
-        return 0;
+        return upZ * (Z*101/(32768*2)+50);
 }
+
+
+int Joystick::map(int x)
+{
+    return  x*100/32768 ;
+}
+

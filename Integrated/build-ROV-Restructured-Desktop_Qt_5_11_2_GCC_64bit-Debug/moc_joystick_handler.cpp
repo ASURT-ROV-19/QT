@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Joystick_Handler_t {
-    QByteArrayData data[5];
-    char stringdata0[48];
+    QByteArrayData data[6];
+    char stringdata0[64];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,11 +35,12 @@ QT_MOC_LITERAL(0, 0, 16), // "Joystick_Handler"
 QT_MOC_LITERAL(1, 17, 12), // "sendToServer"
 QT_MOC_LITERAL(2, 30, 0), // ""
 QT_MOC_LITERAL(3, 31, 9), // "sendToGUI"
-QT_MOC_LITERAL(4, 41, 6) // "action"
+QT_MOC_LITERAL(4, 41, 14), // "messageReceive"
+QT_MOC_LITERAL(5, 56, 7) // "message"
 
     },
     "Joystick_Handler\0sendToServer\0\0sendToGUI\0"
-    "action"
+    "messageReceive\0message"
 };
 #undef QT_MOC_LITERAL
 
@@ -61,14 +62,14 @@ static const uint qt_meta_data_Joystick_Handler[] = {
        3,    1,   32,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   35,    2, 0x0a /* Public */,
+       4,    1,   35,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, QMetaType::QString,    2,
 
  // slots: parameters
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    5,
 
        0        // eod
 };
@@ -81,7 +82,7 @@ void Joystick_Handler::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         switch (_id) {
         case 0: _t->sendToServer((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 1: _t->sendToGUI((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 2: _t->action(); break;
+        case 2: _t->messageReceive((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {

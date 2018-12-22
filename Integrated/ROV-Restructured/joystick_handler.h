@@ -4,6 +4,7 @@
 #include <string.h>
 #include <QString>
 #include <QDebug>
+#include <joystick.h>
 
 using namespace std;
 
@@ -13,12 +14,14 @@ class Joystick_Handler: public QObject
 
 public:
     Joystick_Handler();
-    void getMessage(QString message, int serverOrGui);
+//    void getMessage(QString message, int serverOrGui);
 
 private:
     QString msg;
     int mapZ();
-
+    Joystick * joyS;
+private slots:
+    void messageReceive(QString message);
 signals:
     void sendToServer(QString);
     void sendToGUI(QString);
