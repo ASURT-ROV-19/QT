@@ -21,6 +21,8 @@ public:
     bool connectToServer();
 public slots:
     void sendMessage(QString message); //Use this one
+private slots:
+    void socketDisconnected();
 private:
     QTcpSocket *socket;
     QTimer *reConTimer;

@@ -8,12 +8,15 @@ TCPServer::TCPServer(string Host,int Port)
     socket=new QTcpSocket;
     if(connectToServer()){
         connectionFlag=1;
-        qDebug()<<"Connected";
+//        qDebug()<<"Connected";
     }
+    else
+//        qDebug()<<"NotConnected";
     //socket->connectToHost(host.c_str(),port);
     reConTimer=new QTimer;
     reConTimer->setInterval(200);
-    connect(socket,SIGNAL(disconnected()),this,SLOT(reconnect()));
+    reConTimer->start();
+    connect(socket,SIGNAL(disconnected()),this,SLOT(socketDisconnected()));
     connect(reConTimer,SIGNAL(timeout()),this,SLOT(reconnect()));
     connect(socket,SIGNAL(connected()),this,SLOT(connected()));
     connect(socket,SIGNAL(readyRead()),this,SLOT(read()));
@@ -23,24 +26,31 @@ TCPServer::TCPServer(string Host,int Port)
 
 bool TCPServer::connectToServer()
 {
-    socket->connectToHost(host.c_str(),port);
-//    qDebug()<<"Connected";
-    return socket->waitForConnected(1000);
+    try {
+        socket->connectToHost(host.c_str(),port);
+    } catch (std::exception e) {
+
+    }
+
+    //    qDebug()<<"Connected";
+    return socket->waitForConnected(150);
 }
 
 void TCPServer::reconnect()
 {
 
-    if(!connectionFlag){
-        qDebug()<<"Disconnected";
-//        connectionFlag=0;
-        reConTimer->start();
+    try {
         socket->connectToHost(host.c_str(),port);
+    } catch (std::exception e) {
+
     }
-    qDebug()<<"Trying to reconnect";
-    socket->connectToHost(host.c_str(),port);
-    if (socket->waitForConnected(1000))
-        connectionFlag=1;
+        if (socket->waitForConnected(150)){
+            reConTimer->stop();
+            connectionFlag=1;
+        }
+        else
+            reConTimer->start();
+
 }
 
 void TCPServer::connected()
@@ -49,7 +59,7 @@ void TCPServer::connected()
     if(connectionFlag){
         reConTimer->stop();
     }
-    qDebug()<<"Connected";
+//    qDebug()<<"Connected";
 }
 
 //void TCPServer::sendmsg(QString message)
@@ -101,5 +111,12 @@ void TCPServer::sendMessage(QString message)
     catch(std::exception e){
 
     }
+}
+
+void TCPServer::socketDisconnected()
+{
+    connectionFlag=0;
+//    qDebug()<<"Disconnected";
+    reconnect();
 }
 
