@@ -12,7 +12,7 @@ TCPServer::TCPServer(string Host,int Port)
     reconnect();
     connect(socket,SIGNAL(disconnected()),this,SLOT(socketDisconnected()));
     connect(reConTimer,SIGNAL(timeout()),this,SLOT(reconnect()));
-    connect(socket,SIGNAL(connected()),this,SLOT(connected()));
+//    connect(socket,SIGNAL(connected()),this,SLOT(connected()));
     connect(socket,SIGNAL(readyRead()),this,SLOT(read()));
 
 
@@ -46,14 +46,6 @@ void TCPServer::reconnect()
         else
             reConTimer->start();
 
-}
-
-void TCPServer::connected()
-{
-    if(connectionFlag){
-//        reConTimer->stop();
-    }
-//    qDebug()<<"Connected";
 }
 
 //void TCPServer::sendmsg(QString message)
@@ -110,7 +102,6 @@ void TCPServer::sendMessage(QString message)
 void TCPServer::socketDisconnected()
 {
     connectionFlag=0;
-//    qDebug()<<"Disconnected";
     reconnect();
 }
 
