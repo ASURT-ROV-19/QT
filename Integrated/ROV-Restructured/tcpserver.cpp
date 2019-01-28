@@ -6,16 +6,10 @@ TCPServer::TCPServer(string Host,int Port)
     this->host=Host;
     this->port=Port;
     socket=new QTcpSocket;
-    if(connectToServer()){
-        connectionFlag=1;
-//        qDebug()<<"Connected";
-    }
-    else
-//        qDebug()<<"NotConnected";
-    //socket->connectToHost(host.c_str(),port);
     reConTimer=new QTimer;
     reConTimer->setInterval(200);
-    reConTimer->start();
+//    reConTimer->start();
+    reconnect();
     connect(socket,SIGNAL(disconnected()),this,SLOT(socketDisconnected()));
     connect(reConTimer,SIGNAL(timeout()),this,SLOT(reconnect()));
     connect(socket,SIGNAL(connected()),this,SLOT(connected()));
@@ -38,6 +32,7 @@ bool TCPServer::connectToServer()
 
 void TCPServer::reconnect()
 {
+    qDebug()<<reConTimer->isActive();
 
     try {
         socket->connectToHost(host.c_str(),port);
@@ -55,9 +50,8 @@ void TCPServer::reconnect()
 
 void TCPServer::connected()
 {
-
     if(connectionFlag){
-        reConTimer->stop();
+//        reConTimer->stop();
     }
 //    qDebug()<<"Connected";
 }
