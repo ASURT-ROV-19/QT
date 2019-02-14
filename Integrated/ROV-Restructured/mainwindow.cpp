@@ -5,7 +5,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    server=new TCPServer("10.0.1.55",9005);
+    server=new TCPServer("1.1.1.1",9005);
+//    server=new TCPServer("127.0.0.1",9005);
     handler = new Joystick_Handler();
     //ui->setupUi(this);
     connect(handler,SIGNAL(sendToServer(QString)),server,SLOT(sendMessage(QString)));

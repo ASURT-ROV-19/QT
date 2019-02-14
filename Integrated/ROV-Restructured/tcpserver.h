@@ -32,7 +32,7 @@ signals:
     void receivedmsg(string);
  public slots:
     void reconnect();
-    void connected();
+//    void connected();
     void read();
 
 };

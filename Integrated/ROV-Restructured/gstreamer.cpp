@@ -108,6 +108,7 @@ void gstreamer::autoSetPipeline()
 //    pipeline_description="udpsrc port="+QString::number(PORT).toStdString()+" ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer latency=0 ! rtph264depay ! avdec_h264 ! videoconvert ! xvimagesink name=sink  force-aspect-ratio=false";
 
 // JPEG compressing pipeline (JPEG is frame by frame , requiring larger bandwidth but less delay )
+
     pipeline_description="udpsrc port="+QString::number(PORT).toStdString()+" ! application/x-rtp,media=video,clock-rate=90000,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! vaapipostproc";
     desc=QString::fromStdString(pipeline_description);
     source=QGst::Bin::fromDescription(desc);

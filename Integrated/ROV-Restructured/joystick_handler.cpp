@@ -17,10 +17,12 @@ void Joystick_Handler::messageReceive(QString message)
         emit sendToGUI(message);
     }
 
-    else
+    else{
         emit sendToServer(message);
-}
+        qDebug()<<message;
+        }
 
+}
 
 
 

@@ -183,10 +183,10 @@ void Joystick::move()
 
 //mapped
 
-    msg+="x="+((abs(X)>DEADZONE)? QString::number(map(X)) : +"," );
-    msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : +"," );
+    msg+="x="+((abs(X)>DEADZONE)? QString::number(map(X)) : "0" )+"," ;
+    msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : "0" )+"," ;
     msg+="z="+QString::number(mapZ())+",";
-    msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : +"," );
+    msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : "0" )+"," ;
     msg+="cam="+QString::number(cam)+",";
     msg+="light="+QString::number(light)+",";
 
@@ -198,7 +198,7 @@ void Joystick::move()
 
 int Joystick::mapZ()
 {
-        return upZ * (Z*101/(32768*2)+50);
+        return ( (abs(Y)>DEADZONE)? upZ * (Z*101/(32768*2)+50)  : 0 ) ;
 }
 
 

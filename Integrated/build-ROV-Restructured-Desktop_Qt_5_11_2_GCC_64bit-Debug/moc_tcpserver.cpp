@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TCPServer_t {
     QByteArrayData data[9];
-    char stringdata0[75];
+    char stringdata0[84];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -37,13 +37,14 @@ QT_MOC_LITERAL(2, 22, 0), // ""
 QT_MOC_LITERAL(3, 23, 6), // "string"
 QT_MOC_LITERAL(4, 30, 11), // "sendMessage"
 QT_MOC_LITERAL(5, 42, 7), // "message"
-QT_MOC_LITERAL(6, 50, 9), // "reconnect"
-QT_MOC_LITERAL(7, 60, 9), // "connected"
-QT_MOC_LITERAL(8, 70, 4) // "read"
+QT_MOC_LITERAL(6, 50, 18), // "socketDisconnected"
+QT_MOC_LITERAL(7, 69, 9), // "reconnect"
+QT_MOC_LITERAL(8, 79, 4) // "read"
 
     },
     "TCPServer\0receivedmsg\0\0string\0sendMessage\0"
-    "message\0reconnect\0connected\0read"
+    "message\0socketDisconnected\0reconnect\0"
+    "read"
 };
 #undef QT_MOC_LITERAL
 
@@ -65,7 +66,7 @@ static const uint qt_meta_data_TCPServer[] = {
 
  // slots: name, argc, parameters, tag, flags
        4,    1,   42,    2, 0x0a /* Public */,
-       6,    0,   45,    2, 0x0a /* Public */,
+       6,    0,   45,    2, 0x08 /* Private */,
        7,    0,   46,    2, 0x0a /* Public */,
        8,    0,   47,    2, 0x0a /* Public */,
 
@@ -89,8 +90,8 @@ void TCPServer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         switch (_id) {
         case 0: _t->receivedmsg((*reinterpret_cast< string(*)>(_a[1]))); break;
         case 1: _t->sendMessage((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 2: _t->reconnect(); break;
-        case 3: _t->connected(); break;
+        case 2: _t->socketDisconnected(); break;
+        case 3: _t->reconnect(); break;
         case 4: _t->read(); break;
         default: ;
         }

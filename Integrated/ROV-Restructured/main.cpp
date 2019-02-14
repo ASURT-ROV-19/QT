@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QProcess>
 int main(int argc, char *argv[])
 {
 
@@ -22,7 +23,8 @@ int main(int argc, char *argv[])
     w.getCam(&camera22,1);
     gstreamer camera21(10000);
     w.getCam(&camera21,2);
-
+//    QProcess::execute("gst-launch-1.0 v4l2src ! xvimagesink");
+//    qDebug()<<"executed";
     camera22.autoSetPipeline();
     camera21.autoSetPipeline();
 //    camera22.setWindowTitle("CAmera22");

@@ -32,7 +32,7 @@ bool TCPServer::connectToServer()
 
 void TCPServer::reconnect()
 {
-    qDebug()<<reConTimer->isActive();
+//    qDebug()<<reConTimer->isActive();
 
     try {
         socket->connectToHost(host.c_str(),port);
