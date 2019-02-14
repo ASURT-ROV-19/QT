@@ -198,7 +198,7 @@ void Joystick::move()
 
 int Joystick::mapZ()
 {
-        return ( (abs(Y)>DEADZONE)? upZ * (Z*101/(32768*2)+50)  : 0 ) ;
+        return upZ * (Z*101/(32768*2)+50) ;
 }
 
 
