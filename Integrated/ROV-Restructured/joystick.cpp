@@ -6,13 +6,14 @@
 #define rAxis 2
 #define hat 0
 
+
 #define X this->get_x()
 #define Y this->get_y()
 #define Z this->get_z()
 #define R this->get_r()
 #define cam this->get_hat()
 #define DEADZONE 4000
-#define SGNFCNT 300
+#define SGNFCNT 400
 
 
 Joystick::Joystick()
@@ -22,7 +23,7 @@ Joystick::Joystick()
     JoyStickInitialization();
     prev_x=prev_r=prev_y=prev_z=0;
     timer =new QTimer;
-    timer->setInterval(50);
+    timer->setInterval(10);
     timer->start();
 //    handler = new Joystick_Handler();
     connect(timer,SIGNAL(timeout()),this,SLOT(action()));
@@ -39,11 +40,11 @@ int Joystick::get_y()
 }
 int Joystick::get_z()
 {
-    return SDL_JoystickGetAxis(js,zAxis);
+    return -SDL_JoystickGetAxis(js,zAxis);
 }
 int Joystick::get_r()
 {
-    return SDL_JoystickGetAxis(js,rAxis);
+    return activateR * SDL_JoystickGetAxis(js,rAxis);
 }
 
 int Joystick::getMapped_z()
@@ -66,19 +67,76 @@ void Joystick::activate()
 void Joystick::remove()
 {
     SDL_JoystickClose(js);
-//    qDebug()<<"JS removed";
+    //    qDebug()<<"JS removed";
 }
 
-bool Joystick::message(QString msg)
+bool Joystick::checkIfGuiButton(int button)
 {
 
     //True sends to GUI , while false sendes to server
-    if (msg=="0"||msg=="1"||msg=="2"||msg=="3"||msg=="4"||msg=="5"){
+    if (button==0 ||button==1||button==2||button==3||button==4){
         return true;
         }
 
     else
         return false;
+}
+
+void Joystick::buttonDown(int button)
+{
+    msg=QString::number(button);
+    qDebug()<<button;
+//the next if case decides whether we are sending to server or making a change in GUI or a joystick change
+    if(button==upZButton){
+        qDebug()<<"will we reverse Z direction ???????\n";
+        if (abs(mapZ())<=2){
+            (upZ==1)? (upZ=-1) : (upZ=1);
+            qDebug()<<"shall reverse Z direction\n";
+        }
+    }
+    else if(button==lightButton){
+        light==1 ? light=0 : light=1;
+        move();
+    }
+    else if(button==activateRButton)
+    {
+        activateR=1;
+    }
+    else if(this->checkIfGuiButton(button))
+    {
+        emit sendMsg(msg);
+    }
+
+    else
+    {
+        emit sendMsg(msg);
+    }
+
+}
+
+void Joystick::buttonUp(int button)
+{
+    qDebug()<<"button up is button "<<button;
+    if(button==activateRButton)
+        {
+            activateR=0;
+        }
+}
+
+void Joystick::change_prev()
+{
+    if(abs(X-prev_x)>SGNFCNT ){
+
+    }
+    else if (abs(Y-prev_y)>SGNFCNT){
+
+    }
+    else if (abs(Z-prev_z)>SGNFCNT ){
+
+    }
+    else if (abs(R-prev_r)>SGNFCNT){
+
+    }
 }
 
 
@@ -115,9 +173,8 @@ void Joystick::action()
     switch (event.type){
     case SDL_JOYAXISMOTION:
         if (abs(X-prev_x)>SGNFCNT || abs(Y-prev_y)>SGNFCNT || abs(Z-prev_z)>SGNFCNT || abs(R-prev_r)>SGNFCNT){
-
+//            qDebug()<<"yeah , greater than SGNFCNT";
             move();
-//            handler->getMessage(msg,1);
             emit sendMsg(msg);
         }
         break;
@@ -128,37 +185,15 @@ void Joystick::action()
         this->remove();
         break;
     case SDL_JOYBUTTONDOWN:
-        msg=QString::number(event.jbutton.button);
-        qDebug()<<event.jbutton.button;
-
-
-//the next if case decides whether we are sending to server or making a change in GUI or a joystick change
-        if(msg=="5"){
-            if (abs(mapZ())<=1)
-                (upZ==1)? (upZ=-1) : (upZ=1);
-        }
-
-        else if(msg=="9"){
-
-            light==1 ? light=0 : light=1;
-        }
-        else if(this->message(msg))
-        {
-            emit sendMsg(msg);
-//            handler->getMessage(msg,0);
-        }
-        else
-        {
-            emit sendMsg(msg);
-//            handler->getMessage(msg,1);
-        }
+        buttonDown(event.jbutton.button);
+        break;
+    case SDL_JOYBUTTONUP:
+        buttonUp(event.jbutton.button);
         break;
     case SDL_JOYHATMOTION:
 
         move();
-
         emit sendMsg(msg);
-//        handler->getMessage(msg,1);
         break;
     default:
         break;
@@ -167,11 +202,21 @@ void Joystick::action()
     }
 }
 
+// to be done to handle changes in buttons associated with pi
+void Joystick::newButtonsConfig(QString newConfig)
+{
+
+}
+
 
 void Joystick::move()
 {
 
     msg="";
+    prev_x=X;
+    prev_y=Y;
+    prev_z=Z;
+    prev_r=R;
 
 //no mapping
 //    msg+="x="+((abs(X)>DEADZONE)?QString::number(X):"0") +",";
@@ -182,7 +227,6 @@ void Joystick::move()
 //    msg+="light=0,";
 
 //mapped
-
     msg+="x="+((abs(X)>DEADZONE)? QString::number(map(X)) : "0" )+"," ;
     msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : "0" )+"," ;
     msg+="z="+QString::number(mapZ())+",";
@@ -190,15 +234,12 @@ void Joystick::move()
     msg+="cam="+QString::number(cam)+",";
     msg+="light="+QString::number(light)+",";
 
-
-
-
 }
 
 
 int Joystick::mapZ()
 {
-        return upZ * (Z*101/(32768*2)+50) ;
+        return upZ * (Z*101/(32768*2)+50);
 }
 
 

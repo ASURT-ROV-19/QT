@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QRadioButton>
 #include <QDebug>
+#include <QTableWidgetItem>
 namespace JS {
 class joystickButton;
 }
@@ -17,6 +18,9 @@ public:
     void setInfo(QString name,QString buttonNumber);
     void initialDisplay();
     QString getName();
+    QString getNumber();
+    void updateNumber(QString newNumber);
+    QTableWidgetItem *getItem();
 signals:
     void thisClicked(joystickButton * buttons);
     void initialDisplaySign();
@@ -25,6 +29,7 @@ public slots:
 private:
     QString name;
     QString number;
+    QTableWidgetItem *item;
 };
 
 #endif // JOYSTICKBUTTON_H

@@ -9,13 +9,14 @@ MainWindow::MainWindow(QWidget *parent) :
 //    server=new TCPServer("127.0.0.1",9005);
     handler = new Joystick_Handler();
     //ui->setupUi(this);
-    connect(handler,SIGNAL(sendToServer(QString)),server,SLOT(sendMessage(QString)));
+    connect(handler,SIGNAL(sendToPi(QString)),server,SLOT(sendMessage(QString)));
     centralWidget=new QWidget();
     centralWidget->setWindowState(Qt::WindowFullScreen);
     centralWidget->show();
     centralWidget->setWindowTitle("Stream");
     GUI=new gui(centralWidget);
     connect(handler,SIGNAL(sendToGUI(QString)),GUI,SLOT(changeInGUI(QString)));
+    connect(server,SIGNAL(receivedmsg(QString)),GUI,SLOT(updateSensorLabel(QString)));
 
 }
 QGridLayout *MainWindow::getLayout()
@@ -37,7 +38,14 @@ void MainWindow::getCam(gstreamer *camera,uint8_t cameraNum)
 
 MainWindow::~MainWindow()
 {
-//    delete ui;
+    //    delete ui;
+}
+
+void MainWindow::createButtonsConfigurationWindow()
+{
+    butConfig=new buttonsConfiguration;
+
+    connect(butConfig,SIGNAL(newSettings(QString)),GUI,SLOT(changeButtonsConfiguration(QString)));
 }
 
 

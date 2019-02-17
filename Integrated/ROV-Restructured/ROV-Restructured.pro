@@ -38,7 +38,9 @@ SOURCES += \
     gstream.cpp \
     gstreamer.cpp \
     buttonsconfiguration.cpp \
-    joystickbutton.cpp
+    joystickbutton.cpp \
+    tablemodel.cpp \
+    sensorlabel.cpp
 
 
 HEADERS += \
@@ -51,7 +53,9 @@ HEADERS += \
     gstream.h \
     gstreamer.h \
     buttonsconfiguration.h \
-    joystickbutton.h
+    joystickbutton.h \
+    tablemodel.h \
+    sensorlabel.h
 
 FORMS += \
         mainwindow.ui

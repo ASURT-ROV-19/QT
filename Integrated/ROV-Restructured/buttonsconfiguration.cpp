@@ -24,6 +24,14 @@
 
 */
 
+//    adminButtons::        push buttons for save , cancel
+//       jsButtons::        buttons that describe a job (like toggleCamera , toggleZ , pauseTimer )
+//selectionButtons::        visible radio buttons on which pilot mouse clicks to select button number (number that represent a real physical joystick button )
+
+/*
+    So pilot presses a physical joystick button with their hand , selection window appears on screen , pilot clicks on an "jsButtons"
+      (say pilot wants to change how they turn light on or off) , and then mouse selects a "selectionButtons" and save , save belongs to "adminButtons".
+*/
 
 
 buttonsConfiguration::buttonsConfiguration()
@@ -67,22 +75,30 @@ void buttonsConfiguration::createButtons()
         selectionButtons[i]->setText("Button "+QString::number(i));
     }
 
-    jsButtons[0]->setInfo("Buttons Settings","0");
-    jsButtons[1]->setInfo("Change Camera","1");
+    jsButtons[0]->setInfo("Z axis direction","0");
+    jsButtons[1]->setInfo("R active","1");
     jsButtons[2]->setInfo("Restart Timer","2");
     jsButtons[3]->setInfo("Play/Pause Timer","3");
+    jsButtons[4]->setInfo("Buttons Settings","4");
+    jsButtons[5]->setInfo("Change Camera","5");
+    jsButtons[6]->setInfo("light on/off","6");
     adminButtons[1]->setInfo("Cancel","");
     adminButtons[0]->setInfo("Save","");
 
-    textLabel=new QLabel("Camera Switch:         2\nTimer Play-Pause       1\nConfiguration Window  0\nRestart Timer           3");
+    QString text="";
+    for (int i=0;i<functionBttns;i++){
+        if (jsButtons[i]->getName()!="")
+        text+=jsButtons[i]->getName()+"     "+jsButtons[i]->getNumber()+"\n";
+    }
+    textLabel=new QLabel(text);
 
 }
 
 void buttonsConfiguration::deployButtons()
 {
     textLabel->setStyleSheet("QLabel{color: black ;  font-size: 20px; background-color: orange ; font:arial,helvetica; }");
-
     gridLay->addWidget(textLabel,0,2,1,4);
+
     textLabel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
     gridLay->setVerticalSpacing(50);
     gridLay->setMargin(50);
@@ -113,7 +129,7 @@ void buttonsConfiguration::initialDisplay()
         selectionButtons[i]->hide();
     }
 
-//    confWidget->show();
+    confWidget->show();
 
 }
 
@@ -128,12 +144,38 @@ void buttonsConfiguration::handleClicking()
         connect(jsButtons[i],SIGNAL(clicked()),jsButtons[i],SLOT(buttonClicked()));
         connect(jsButtons[i],SIGNAL(thisClicked(joystickButton*)),this,SLOT(handleClicking(joystickButton *)));
     }
-
 }
 
 QString buttonsConfiguration::getButtonName(int index)
 {
     return jsButtons[index]->getName();
+}
+
+void buttonsConfiguration::updateJSButtonNumber(int indexOfButton, QString newNumber)
+{
+    jsButtons[indexOfButton]->updateNumber(newNumber);
+}
+
+void buttonsConfiguration::updateJSButtonNumber(QString oldNumber, QString newNumber)
+{
+    for (int i=0;i<functionBttns;i++){
+        if (jsButtons[i]->getNumber()==oldNumber){
+            jsButtons[i]->updateNumber(newNumber);
+        }
+    }
+
+}
+
+void buttonsConfiguration::updateJSButtonNumber(QString oldNumber1, QString newNumber1, QString oldNumber2, QString newNumber2)
+{
+    for (int i=0;i<functionBttns;i++){
+        if (jsButtons[i]->getNumber()==oldNumber1 or jsButtons[i]->getNumber()==oldNumber2 ){
+            if (jsButtons[i]->getNumber()==oldNumber1 ){
+                jsButtons[i]->updateNumber(newNumber1);
+            }else
+                jsButtons[i]->updateNumber(newNumber2);
+        }
+    }
 }
 
 
@@ -142,6 +184,7 @@ void buttonsConfiguration::show_hide()
 {
     confWidget->isHidden() ? confWidget->show() : confWidget->hide();
 }
+
 
 void buttonsConfiguration::handleClicking(joystickButton * clickedButton)
 {

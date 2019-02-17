@@ -59,7 +59,7 @@ void TCPServer::reconnect()
 void TCPServer::read()
 {
     string s=socket->readAll().toStdString();
-    emit receivedmsg(s);
+    emit receivedmsg(QString::fromStdString(s));
 
 }
 

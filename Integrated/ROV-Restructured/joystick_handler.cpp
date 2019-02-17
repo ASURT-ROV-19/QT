@@ -18,9 +18,16 @@ void Joystick_Handler::messageReceive(QString message)
     }
 
     else{
-        emit sendToServer(message);
+        emit sendToPi(message);
         qDebug()<<message;
         }
+
+}
+
+// to be done to handle changes in buttons associated with pi
+
+void Joystick_Handler::newButtonsConfig(QString newConfig)
+{
 
 }
 

@@ -29,7 +29,7 @@ private:
     int connectionFlag,port;
     string host;
 signals:
-    void receivedmsg(string);
+    void receivedmsg(QString);
  public slots:
     void reconnect();
 //    void connected();

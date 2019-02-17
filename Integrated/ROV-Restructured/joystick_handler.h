@@ -22,8 +22,9 @@ private:
     Joystick * joyS;
 private slots:
     void messageReceive(QString message);
+    void newButtonsConfig(QString newConfig);
 signals:
-    void sendToServer(QString);
+    void sendToPi(QString);
     void sendToGUI(QString);
 
 };

@@ -15,6 +15,7 @@
 #include "gstream.h"
 #include "gstreamer.h"
 #include <QTimer>
+#include "sensorlabel.h"
 
 class gui : public QObject
 {
@@ -33,6 +34,7 @@ public slots:
     void prepButtonsConfig();
 //    void changeCamerasSizes();
     void toggleCamera();
+    void updateSensorLabel(QString depth);
 signals:
     void pause_play();
     void restartTimer();
@@ -41,18 +43,18 @@ private:
 
     void createWindows();
     void createButtons();
+    void assignButtons();
     void handleSignals();
-    void checkForButtonsSwitch();
-    void switchButtons(QString * button1,QString * old_button1,QString * button2,QString * old_button2);
+    void checkForButtonsSwitch(int buttonIndex,QString newNumber);
+    bool switchButtons(QString * button1,QString * old_button1,QString * button2,QString * old_button2);
 
-
+    sensorLabel * sensor_label;
+    QString configuration;
     QTimer * tmr,*tmr2;
     QPushButton * button , * play_pause_button, * endButton;
     CountDown * timer;
     buttonsConfiguration * butConfig;
     QGridLayout * gridLay;
-    QString cameraButton="2",timerButton="1",configurationButton="0",restart_timer="3";
-    QString _cameraButton="2",_timerButton="1",_configurationButton="0",_restart_timer="3";
     uint8_t windowSelector=0;
     gstream ** camera;
     gstreamer ** cameraZ;
@@ -61,8 +63,15 @@ private:
     QWidget * GUIwindow;
     QWidget * dummyWidget,*realDummyDumb;
     QGridLayout * layTimer;
-
     QGst::Ui::VideoWidget ** videoDisplayer;
+
+
+    QString cameraButton="2",timerButton="11",configurationButton="0",restart_timer="3",upZButton="4",rActive="5",light="6";
+    QString _cameraButton="2",_timerButton="11",_configurationButton="0",_restart_timer="3",_upZButton="4",_rActive="5",_light="6";
+
+    QString ** buttons;
+    QString ** _buttons;
+
 };
 
 #endif // GUI_H

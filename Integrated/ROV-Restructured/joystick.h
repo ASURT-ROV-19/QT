@@ -26,26 +26,29 @@ public:
     int get_hat();
     void activate();
     void remove();
-    bool message(QString msg);
+    bool checkIfGuiButton(int button);
+    void buttonDown(int button);
+    void buttonUp(int button);
 
 private:
     QTimer *timer;
     SDL_Event  event;
-    int prev_x,prev_y,prev_z,prev_r,upZ=1,light=0;
+    int prev_x,prev_y,prev_z,prev_r,upZ=1,light=0,axisChangeFlag=0,activateR=0;
+    int x,y,z,r;
+    int upZButton=0,activateRButton=1,lightButton=6
+            ;
     QString msg;
+    void change_prev();
     void move();
     int mapZ();
     int map(int x);
     SDL_Joystick *js;
-//    Joystick_Handler *handler;
 
 public slots:
     void action();
-
+    void newButtonsConfig(QString newConfig);
 signals:
     void sendMsg(QString);
-//    void sendToServer(QString);
-//    void sendToGUI(QString);
 
 };
 
