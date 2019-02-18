@@ -73,8 +73,8 @@ void gui::changeInGUI(QString button)
 {
 
 
-    qDebug()<<"\nbutton is "<<button;
-//    const int upZButtonID=0,activateRID=1,changeCameraID=5,restartTimerID=3,playPauseTimerID=6,buttonsSettingsID=4,lightOnOffID=2;
+    qDebug()<<"\n in gui , button is "<<button;
+//    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
 
     if (button==buttons[playPauseTimerID-piButtonsInUse])
         emit pause_play();
@@ -87,7 +87,7 @@ void gui::changeInGUI(QString button)
     else if(button==buttons[buttonsSettingsID-piButtonsInUse])
         //play or pause
     {
-//        butConfig->show_hide();
+        emit show_hideButConfig();
     }
     else if(button==buttons[restartTimerID-piButtonsInUse])
         //restart timer

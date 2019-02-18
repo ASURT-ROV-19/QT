@@ -121,7 +121,7 @@ void Joystick::buttonDown(int button)
 
 void Joystick::buttonUp(int button)
 {
-    qDebug()<<"button up is button "<<button;
+    qDebug()<<"button released up is button "<<button;
     if(button==buttons[1])
         {
             activateR=0;
@@ -134,6 +134,16 @@ void Joystick::changeInButtonsConfiguration(QString newConfig)
     QStringList buttonID=newConfig.split(" ");
     int buttonIndex=buttonID[0].toInt();
     buttons[buttonIndex]=buttonID[1].toInt();
+}
+
+int Joystick::getNumOfPiButtons()
+{
+    return piButtonsInUse;
+}
+
+int Joystick::getButtonNumber(int buttonIndex)
+{
+    return buttons[buttonIndex];
 }
 
 void Joystick::change_prev()

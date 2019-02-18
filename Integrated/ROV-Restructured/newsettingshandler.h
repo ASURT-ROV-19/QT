@@ -16,6 +16,7 @@ public:
 
 public slots:
     void newSettingsSelected(QString newConfig);
+    void show_hideButConfig();
 
 signals:
     void piSettings(QString newSettings);

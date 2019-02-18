@@ -56,6 +56,11 @@ void newSettingsHandler::newSettingsSelected(QString newConfig)
 
 }
 
+void newSettingsHandler::show_hideButConfig()
+{
+    butConfig->show_hide();
+}
+
 
 
 //if you change any button and gave it the function of another ,this shall detect this and switch them , giving the unchanged

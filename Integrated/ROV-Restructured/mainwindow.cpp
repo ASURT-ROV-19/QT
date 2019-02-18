@@ -47,7 +47,7 @@ void MainWindow::createSettingsHandler()
     settingsHandler=new newSettingsHandler();
     connect(settingsHandler,SIGNAL(guiSettings(QString)),GUI,SLOT(changeInButtonsConfiguration(QString)));
     connect(settingsHandler,SIGNAL(piSettings(QString)),handler,SLOT(changeInButtonsConfiguration(QString)));
-
+    connect(GUI,SIGNAL(show_hideButConfig()),settingsHandler,SLOT(show_hideButConfig()));
 
     //    void piSettings(QString newSettings);
 //    void guiSettings(QString newSettings);

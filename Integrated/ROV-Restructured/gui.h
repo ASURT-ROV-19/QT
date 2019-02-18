@@ -39,6 +39,7 @@ signals:
     void pause_play();
     void restartTimer();
     void buttonsConfig(QString Configuration);
+    void show_hideButConfig();
 private:
 
     void createWindows();

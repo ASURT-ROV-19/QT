@@ -30,7 +30,8 @@ public:
     void buttonDown(int button);
     void buttonUp(int button);
     void changeInButtonsConfiguration(QString newConfig);
-
+    int getNumOfPiButtons();
+    int getButtonNumber(int buttonIndex);
 
 private:
     QTimer *timer;
@@ -50,7 +51,7 @@ public slots:
     void action();
 signals:
     void sendMsg(QString);
-
+    void newButtons();
 };
 
 

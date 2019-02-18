@@ -18,18 +18,20 @@ public:
 
 public slots:
     void changeInButtonsConfiguration(QString newConfig);
+    void getButtons();
 
-private:
-    QString msg;
-    int mapZ();
-    Joystick * joyS;
 private slots:
     void messageReceive(QString message);
     void newButtonsConfig(QString newConfig);
 signals:
     void sendToPi(QString);
     void sendToGUI(QString);
-
+private:
+    QString msg;
+    int mapZ();
+    Joystick * joyS;
+    int numOfPiButtons;
+    int * buttons;
 };
 
 #endif // JOYSTICK_HANDLER_H
