@@ -4,22 +4,22 @@ joystickButton::joystickButton()
 {
     name="";
     number="";
-    item=new QTableWidgetItem;
 }
 
-joystickButton::joystickButton(QString name, QString buttonNumber)
+joystickButton::joystickButton(QString name, QString buttonNumber, QString id)
+{
+    this->name=name;
+    this->number=buttonNumber;
+    this->ID=id;
+}
+
+void joystickButton::setInfo(QString name, QString buttonNumber, QString id)
 {
     this->name=name;
     this->number=number;
-}
-
-void joystickButton::setInfo(QString name, QString buttonNumber)
-{
-    this->name=name;
-    this->number=number;
-    item->setText(name);
     this->setText(name);
     this->number=buttonNumber;
+    this->ID=id;
 }
 
 void joystickButton::initialDisplay()
@@ -37,14 +37,14 @@ QString joystickButton::getNumber()
     return number;
 }
 
+QString joystickButton::getID()
+{
+    return ID;
+}
+
 void joystickButton::updateNumber(QString newNumber)
 {
     this->number=newNumber;
-}
-
-QTableWidgetItem *joystickButton::getItem()
-{
-    return item;
 }
 
 

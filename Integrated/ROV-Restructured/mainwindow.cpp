@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     GUI=new gui(centralWidget);
     connect(handler,SIGNAL(sendToGUI(QString)),GUI,SLOT(changeInGUI(QString)));
     connect(server,SIGNAL(receivedmsg(QString)),GUI,SLOT(updateSensorLabel(QString)));
-
+    createSettingsHandler();
 }
 QGridLayout *MainWindow::getLayout()
 {
@@ -41,12 +41,19 @@ MainWindow::~MainWindow()
     //    delete ui;
 }
 
-void MainWindow::createButtonsConfigurationWindow()
+void MainWindow::createSettingsHandler()
 {
-    butConfig=new buttonsConfiguration;
 
-    connect(butConfig,SIGNAL(newSettings(QString)),GUI,SLOT(changeButtonsConfiguration(QString)));
+    settingsHandler=new newSettingsHandler();
+    connect(settingsHandler,SIGNAL(guiSettings(QString)),GUI,SLOT(changeInButtonsConfiguration(QString)));
+    connect(settingsHandler,SIGNAL(piSettings(QString)),handler,SLOT(changeInButtonsConfiguration(QString)));
+
+
+    //    void piSettings(QString newSettings);
+//    void guiSettings(QString newSettings);
+
 }
+
 
 
 

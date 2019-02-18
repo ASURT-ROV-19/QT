@@ -19,12 +19,14 @@ public:
     void initialDisplay();
     void handleClicking();
     QString getButtonName(int index);
+    QString getButtonID(int index);
     void updateJSButtonNumber (int indexOfButton , QString newNumber);
     void updateJSButtonNumber (QString oldNumber , QString newNumber);
     void updateJSButtonNumber (QString oldNumber1 , QString newNumber1,QString oldNumber2 , QString newNumber2);
 
 signals:
     void newSettings(QString config);
+    void sendButtonIDAndNewNumber(QString message);
 public slots:
     void show_hide();
     void getCurrentButtons(QString currentConf);
@@ -41,11 +43,12 @@ private:
     QPushButton * cancel,*save;
     QRadioButton *JSBttn;
     QString buttonAndRole="";
+    QString ID_newValue="";
     QLabel *textLabel;
     QSpacerItem * spacer;
     QTableWidget *tableWidget;
-    joystickButton ** adminButtons,         //visible buttons describing a job
-    **jsButtons;            //physical buttons in joystick
+    joystickButton ** adminButtons,         //save , cancel
+    **jsButtons;                            // buttons describing a job
     QRadioButton ** selectionButtons;       // visible radio buttons on which pilot mouse clicks to select a button number
 
 //    So pilot presses a jsButton with their hand , selection window appears on screen , pilot clicks on an adminButton

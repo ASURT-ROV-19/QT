@@ -8,6 +8,7 @@
 #include "string.h"
 #include <QApplication>
 #include "buttonsconfiguration.h"
+#include "newsettingshandler.h"
 
 #undef main
 
@@ -25,7 +26,7 @@ public:
     void getCam(gstream * camera, uint8_t cameraNum);
     void getCam(gstreamer * camera, uint8_t cameraNum);
     ~MainWindow();
-    void createButtonsConfigurationWindow();
+    void createSettingsHandler();
 
 private:
     Ui::MainWindow *ui;
@@ -35,6 +36,7 @@ private:
 	Joystick_Handler *handler;
     gui * GUI;
     buttonsConfiguration * butConfig;
+    newSettingsHandler * settingsHandler;
 };
 
 #endif // MAINWINDOW_H

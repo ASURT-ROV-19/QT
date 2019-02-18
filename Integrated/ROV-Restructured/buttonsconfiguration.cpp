@@ -75,15 +75,16 @@ void buttonsConfiguration::createButtons()
         selectionButtons[i]->setText("Button "+QString::number(i));
     }
 
-    jsButtons[0]->setInfo("Z axis direction","0");
-    jsButtons[1]->setInfo("R active","1");
-    jsButtons[2]->setInfo("Restart Timer","2");
-    jsButtons[3]->setInfo("Play/Pause Timer","3");
-    jsButtons[4]->setInfo("Buttons Settings","4");
-    jsButtons[5]->setInfo("Change Camera","5");
-    jsButtons[6]->setInfo("light on/off","6");
-    adminButtons[1]->setInfo("Cancel","");
-    adminButtons[0]->setInfo("Save","");
+    //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
+    jsButtons[0]->setInfo("Z axis direction","0","0");
+    jsButtons[1]->setInfo("R active","1","1");
+    jsButtons[2]->setInfo("light on/off","2","2");
+    jsButtons[3]->setInfo("Restart Timer","3","3");
+    jsButtons[4]->setInfo("Buttons Settings","4","4");
+    jsButtons[5]->setInfo("Change Camera","5","5");
+    jsButtons[6]->setInfo("Play/Pause Timer","6","6");
+    adminButtons[1]->setInfo("Cancel","","1");
+    adminButtons[0]->setInfo("Save","","0");
 
     QString text="";
     for (int i=0;i<functionBttns;i++){
@@ -151,6 +152,11 @@ QString buttonsConfiguration::getButtonName(int index)
     return jsButtons[index]->getName();
 }
 
+QString buttonsConfiguration::getButtonID(int index)
+{
+    return jsButtons[index]->getID();
+}
+
 void buttonsConfiguration::updateJSButtonNumber(int indexOfButton, QString newNumber)
 {
     jsButtons[indexOfButton]->updateNumber(newNumber);
@@ -199,6 +205,8 @@ void buttonsConfiguration::handleClicking(joystickButton * clickedButton)
     }
     clickedButton->show();
     buttonAndRole=clickedButton->getName()+"=";
+    ID_newValue=clickedButton->getID()+" ";
+
 }
 
 
@@ -207,14 +215,16 @@ void buttonsConfiguration::adminButtonClicked(joystickButton * clickedButton)
     if (clickedButton==adminButtons[0]){
         for (int i=0;i<joyBttns;i++){
             if(selectionButtons[i]->isChecked()){
-                buttonAndRole+=QString::number(i);
-                emit newSettings(buttonAndRole);
+//                buttonAndRole+=QString::number(i);
+                ID_newValue+=QString::number(i);
+                emit sendButtonIDAndNewNumber(ID_newValue);
+//                emit newSettings(buttonAndRole);
                 break;
             }
         }
     }
-
-    buttonAndRole="";
+    ID_newValue="";
+//    buttonAndRole="";
     initialDisplay();
 }
 

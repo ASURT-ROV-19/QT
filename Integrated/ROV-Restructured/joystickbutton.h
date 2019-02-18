@@ -14,13 +14,14 @@ class joystickButton:public QPushButton
     Q_OBJECT
 public:
     joystickButton();
-    joystickButton(QString name,QString buttonNumber);
-    void setInfo(QString name,QString buttonNumber);
+    joystickButton(QString name,QString buttonNumber,QString id);
+    void setInfo(QString name,QString buttonNumber,QString id);
     void initialDisplay();
     QString getName();
     QString getNumber();
+    QString getID();
     void updateNumber(QString newNumber);
-    QTableWidgetItem *getItem();
+
 signals:
     void thisClicked(joystickButton * buttons);
     void initialDisplaySign();
@@ -29,7 +30,7 @@ public slots:
 private:
     QString name;
     QString number;
-    QTableWidgetItem *item;
+    QString ID;
 };
 
 #endif // JOYSTICKBUTTON_H

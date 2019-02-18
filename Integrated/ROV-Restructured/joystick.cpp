@@ -1,4 +1,5 @@
 #include "joystick.h"
+#define piButtonsInUse 3
 
 #define xAxis 0
 #define yAxis 1
@@ -27,6 +28,10 @@ Joystick::Joystick()
     timer->start();
 //    handler = new Joystick_Handler();
     connect(timer,SIGNAL(timeout()),this,SLOT(action()));
+    buttons=new int[piButtonsInUse];
+    buttons[0]=0;       //upZButton
+    buttons[1]=1;       //activateRButton
+    buttons[2]=2;       //lightOnOffButton
 }
 
 int Joystick::get_x()
@@ -87,18 +92,18 @@ void Joystick::buttonDown(int button)
     msg=QString::number(button);
     qDebug()<<button;
 //the next if case decides whether we are sending to server or making a change in GUI or a joystick change
-    if(button==upZButton){
+    if(button==buttons[0]){
         qDebug()<<"will we reverse Z direction ???????\n";
         if (abs(mapZ())<=2){
             (upZ==1)? (upZ=-1) : (upZ=1);
             qDebug()<<"shall reverse Z direction\n";
         }
     }
-    else if(button==lightButton){
+    else if(button==buttons[2]){
         light==1 ? light=0 : light=1;
         move();
     }
-    else if(button==activateRButton)
+    else if(button==buttons[1])
     {
         activateR=1;
     }
@@ -117,10 +122,18 @@ void Joystick::buttonDown(int button)
 void Joystick::buttonUp(int button)
 {
     qDebug()<<"button up is button "<<button;
-    if(button==activateRButton)
+    if(button==buttons[1])
         {
             activateR=0;
-        }
+    }
+}
+
+void Joystick::changeInButtonsConfiguration(QString newConfig)
+{
+//    QString buttonID=newConfig.mid(0,newConfig.indexOf(" ")+1);
+    QStringList buttonID=newConfig.split(" ");
+    int buttonIndex=buttonID[0].toInt();
+    buttons[buttonIndex]=buttonID[1].toInt();
 }
 
 void Joystick::change_prev()
@@ -202,12 +215,6 @@ void Joystick::action()
     }
 }
 
-// to be done to handle changes in buttons associated with pi
-void Joystick::newButtonsConfig(QString newConfig)
-{
-
-}
-
 
 void Joystick::move()
 {
@@ -233,7 +240,6 @@ void Joystick::move()
     msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : "0" )+"," ;
     msg+="cam="+QString::number(cam)+",";
     msg+="light="+QString::number(light)+",";
-
 }
 
 

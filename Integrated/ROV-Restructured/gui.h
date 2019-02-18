@@ -11,7 +11,7 @@
 #include <QApplication>
 #include <QString>
 #include <string.h>
-#include "buttonsconfiguration.h"
+//#include "buttonsconfiguration.h"
 #include "gstream.h"
 #include "gstreamer.h"
 #include <QTimer>
@@ -27,10 +27,10 @@ public:
     void getCam(gstream *Camera, uint8_t cameraNum);
     void getCam(gstreamer *Camera, uint8_t cameraNum);
     void positionItems(QGst::Ui::VideoWidget * parent);
-
+    QString getButtonsConfiguratuinWindow(int index);
 public slots:
     void changeInGUI(QString button);
-    void changeButtonsConfiguration(QString newConfig);
+    void changeInButtonsConfiguration(QString newConfig);
     void prepButtonsConfig();
 //    void changeCamerasSizes();
     void toggleCamera();
@@ -53,7 +53,7 @@ private:
     QTimer * tmr,*tmr2;
     QPushButton * button , * play_pause_button, * endButton;
     CountDown * timer;
-    buttonsConfiguration * butConfig;
+//    buttonsConfiguration * butConfig;
     QGridLayout * gridLay;
     uint8_t windowSelector=0;
     gstream ** camera;
@@ -65,13 +65,9 @@ private:
     QGridLayout * layTimer;
     QGst::Ui::VideoWidget ** videoDisplayer;
 
-
-    QString cameraButton="2",timerButton="11",configurationButton="0",restart_timer="3",upZButton="4",rActive="5",light="6";
-    QString _cameraButton="2",_timerButton="11",_configurationButton="0",_restart_timer="3",_upZButton="4",_rActive="5",_light="6";
-
-    QString ** buttons;
-    QString ** _buttons;
-
+    const int upZButtonID=0,activateRID=1,lightOnOffID=2,restartTimerID=3,buttonsSettingsID=4,changeCameraID=5,playPauseTimerID=6;
+//    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
+    QString * buttons;
 };
 
 #endif // GUI_H

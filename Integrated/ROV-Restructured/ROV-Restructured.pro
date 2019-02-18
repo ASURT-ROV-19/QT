@@ -40,7 +40,8 @@ SOURCES += \
     buttonsconfiguration.cpp \
     joystickbutton.cpp \
     tablemodel.cpp \
-    sensorlabel.cpp
+    sensorlabel.cpp \
+    newsettingshandler.cpp
 
 
 HEADERS += \
@@ -55,7 +56,8 @@ HEADERS += \
     buttonsconfiguration.h \
     joystickbutton.h \
     tablemodel.h \
-    sensorlabel.h
+    sensorlabel.h \
+    newsettingshandler.h
 
 FORMS += \
         mainwindow.ui

@@ -16,6 +16,9 @@ public:
     Joystick_Handler();
 //    void getMessage(QString message, int serverOrGui);
 
+public slots:
+    void changeInButtonsConfiguration(QString newConfig);
+
 private:
     QString msg;
     int mapZ();
