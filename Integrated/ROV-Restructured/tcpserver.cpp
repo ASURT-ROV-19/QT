@@ -60,6 +60,7 @@ void TCPServer::read()
 {
     string s=socket->readAll().toStdString();
     emit receivedmsg(QString::fromStdString(s));
+    qDebug()<<"received from client :::"<<QString::fromStdString(s);
 
 }
 

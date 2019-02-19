@@ -57,11 +57,27 @@ void CountDown::restartTimer(int minutes,int seconds){
     timer->start();
 }
 
+CountDown::~CountDown()
+{
+//    QTime * TIME;
+//    QLabel * timerLabel;
+//    QTimer * timer;
+//    int mins=0,sec=0;
+//    QString time;
+//    QElapsedTimer * elapsed;
+
+    delete TIME;
+    delete timerLabel;
+    delete timer;
+    delete elapsed;
+}
+
 
 
 void CountDown::pause_Play()
 {
     if(timer->isActive()){
+        delay=0;
         delay=elapsed->elapsed();
         pause();
     }

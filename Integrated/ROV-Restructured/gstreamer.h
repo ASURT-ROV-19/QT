@@ -40,6 +40,7 @@ public:
     QGraphicsView * getView();
 public slots:
     void play_pause();
+    void screenShot();
 
 private:
 

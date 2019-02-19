@@ -49,7 +49,6 @@ buttonsConfiguration::buttonsConfiguration()
     deployButtons();
     initialDisplay();
     handleClicking();
-//    spacer=new QSpacerItem(1,1,QSizePolicy::Expanding,QSizePolicy::Expanding);
 
 }
 
@@ -182,6 +181,18 @@ void buttonsConfiguration::updateJSButtonNumber(QString oldNumber1, QString newN
                 jsButtons[i]->updateNumber(newNumber2);
         }
     }
+}
+
+buttonsConfiguration::~buttonsConfiguration()
+{
+
+    delete textLabel;
+    delete []adminButtons;
+    delete []jsButtons;
+    delete [] selectionButtons;
+    delete gridLay;
+    delete  confWidget;
+
 }
 
 

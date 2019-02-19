@@ -1,6 +1,6 @@
 #include "joystick.h"
 #define piButtonsInUse 3
-
+#define buttonsInUse 7
 #define xAxis 0
 #define yAxis 1
 #define zAxis 3
@@ -77,14 +77,14 @@ void Joystick::remove()
 
 bool Joystick::checkIfGuiButton(int button)
 {
+    //True sends to GUI , while false sends to server
 
-    //True sends to GUI , while false sendes to server
-    if (button==0 ||button==1||button==2||button==3||button==4){
-        return true;
-        }
+    for (int i=0;i<piButtonsInUse;i++){
+        if (buttons[i]==button)
+            return false;
+    }
+    return true;
 
-    else
-        return false;
 }
 
 void Joystick::buttonDown(int button)
@@ -107,14 +107,10 @@ void Joystick::buttonDown(int button)
     {
         activateR=1;
     }
-    else if(this->checkIfGuiButton(button))
+    else /*if(this->checkIfGuiButton(button))*/
     {
         emit sendMsg(msg);
-    }
-
-    else
-    {
-        emit sendMsg(msg);
+        qDebug()<<"message of line 113->>"<<msg;
     }
 
 }
@@ -199,6 +195,7 @@ void Joystick::action()
 //            qDebug()<<"yeah , greater than SGNFCNT";
             move();
             emit sendMsg(msg);
+            qDebug()<<"message of line 198->>"<<msg;
         }
         break;
     case SDL_JOYDEVICEADDED:
@@ -217,6 +214,7 @@ void Joystick::action()
 
         move();
         emit sendMsg(msg);
+        qDebug()<<"message of line 216->>"<<msg;
         break;
     default:
         break;

@@ -1,12 +1,9 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <QProcess>
 int main(int argc, char *argv[])
 {
 
     QApplication * a =new QApplication(argc, argv);
-    QProcess process;
-    process.start("gedit",QStringList()<<"/home/abdelrahman/UDP.txt");
     MainWindow w;
     gstreamer camera22(5022);
     w.getCam(&camera22,1);

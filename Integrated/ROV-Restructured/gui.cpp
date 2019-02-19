@@ -22,7 +22,7 @@ gui::gui(QWidget *parent)
     dummyWidget->setWindowTitle("DUMMY WIDGET");
     dummyWidget->setAttribute(Qt::WA_TranslucentBackground);
     dummyWidget->setGeometry(0,0,150,140);
-
+    process=new QProcess(this);
 }
 
 
@@ -31,17 +31,17 @@ QGridLayout *gui::getLayout()
     return gridLay;
 }
 
-
-void gui::getCam(gstream * Camera, uint8_t cameraNum)
-{
-    camera[cameraNum-1]=Camera;
-    videoWindow[cameraNum-1]=camera[cameraNum-1]->getRenderingVideoWindow();
-    videoWindow[cameraNum-1]->show();
-    videoWindow[cameraNum-1]->setWindowTitle("Gstream Video window");
-    if (cameraNum==1){
-//        positionItems();
-    }
-}
+/*******                                        GSTREAM CLASS                           *******/
+//void gui::getCam(gstream * Camera, uint8_t cameraNum)
+//{
+//    camera[cameraNum-1]=Camera;
+//    videoWindow[cameraNum-1]=camera[cameraNum-1]->getRenderingVideoWindow();
+//    videoWindow[cameraNum-1]->show();
+//    videoWindow[cameraNum-1]->setWindowTitle("Gstream Video window");
+//    if (cameraNum==1){
+////        positionItems();
+//    }
+//}
 
 void gui::getCam(gstreamer * Camera, uint8_t cameraNum)
 {
@@ -61,11 +61,6 @@ void gui::positionItems(QGst::Ui::VideoWidget *parent)
 {
     dummyWidget->setParent(nullptr);
     dummyWidget->setParent(parent);
-}
-
-QString gui::getButtonsConfiguratuinWindow(int index)
-{
-//    return butConfig->getButtonName(index);
 }
 
 
@@ -109,13 +104,13 @@ void gui::changeInButtonsConfiguration(QString newConfig)
 
 void gui::createWindows()
 {
-    camera=new gstream *[3];
-    videoWindow=new QVideoWidget *[3];
+//    camera=new gstream *[3];
+//    videoWindow=new QVideoWidget *[3];
     videoDisplayer=new QGst::Ui::VideoWidget *[3];
 
     for (int i=0; i<3;i++){
-       camera[i]=nullptr;
-       videoWindow[i]=nullptr;
+//       camera[i]=nullptr;
+//       videoWindow[i]=nullptr;
     }
 }
 
@@ -168,6 +163,11 @@ void gui::toggleCamera()
 void gui::updateSensorLabel(QString depth)
 {
     sensor_label->setText("depth="+depth);
+}
+
+void gui::startLengthMeasuring()
+{
+    process->start("python",QStringList()<<"/home/abdelrahman/");
 }
 
 

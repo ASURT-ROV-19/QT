@@ -93,12 +93,22 @@ void gstreamer::play_pause()
     }
 }
 
+void gstreamer::screenShot()
+{
+
+}
+
 
 gstreamer::~gstreamer()
 {
-
-    gst_object_unref(pipeline);
     gst_object_unref(sink2);
+    gst_object_unref(source);
+    delete [] videowindow;
+    delete [] window;
+    delete GUILayOut;
+    gst_object_unref(videowindow);
+    gst_object_unref(pipeline);
+
 }
 
 void gstreamer::autoSetPipeline()

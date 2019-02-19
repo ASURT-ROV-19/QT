@@ -24,6 +24,7 @@ public:
     void updateJSButtonNumber (QString oldNumber , QString newNumber);
     void updateJSButtonNumber (QString oldNumber1 , QString newNumber1,QString oldNumber2 , QString newNumber2);
 
+    ~buttonsConfiguration();
 signals:
     void newSettings(QString config);
     void sendButtonIDAndNewNumber(QString message);
@@ -39,14 +40,9 @@ private slots:
 private:
     QWidget * confWidget;
     QGridLayout * gridLay;
-    QPushButton * timerPause_Play,*changeCamersSize,*configWindowDisp,*restart_timer;
-    QPushButton * cancel,*save;
-    QRadioButton *JSBttn;
     QString buttonAndRole="";
     QString ID_newValue="";
     QLabel *textLabel;
-    QSpacerItem * spacer;
-    QTableWidget *tableWidget;
     joystickButton ** adminButtons,         //save , cancel
     **jsButtons;                            // buttons describing a job
     QRadioButton ** selectionButtons;       // visible radio buttons on which pilot mouse clicks to select a button number

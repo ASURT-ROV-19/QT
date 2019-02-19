@@ -26,6 +26,8 @@ public:
     void restart();
     void setBackgroundColor();
     void restartTimer(int minutes,int seconds);
+
+    ~CountDown();
 public slots:
     void pause_Play();
     void changeTime();
