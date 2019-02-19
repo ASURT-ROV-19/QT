@@ -130,7 +130,7 @@ void buttonsConfiguration::initialDisplay()
         selectionButtons[i]->hide();
     }
 
-    confWidget->show();
+//    confWidget->show();
 
 }
 

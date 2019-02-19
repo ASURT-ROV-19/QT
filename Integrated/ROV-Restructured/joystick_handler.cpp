@@ -33,8 +33,9 @@ void Joystick_Handler::messageReceive(QString message)
 /*************                                     ATTENTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!             *****************/
     //needs to be variable instead of hard coded numbers to cope with the flexibility of configuring buttons
     bool piOrGui=false;
+
     for (int i=0;i<joyS->getNumOfPiButtons();i++){
-        if (message==QString::number(buttons[i])){
+        if (message.length()>=2){
             piOrGui=true;
             break;
         }
@@ -44,7 +45,9 @@ void Joystick_Handler::messageReceive(QString message)
     else
         emit sendToGUI(message);
 
-/*
+
+
+    /*
     if (message=="0"||message=="1"||message=="2"||message=="3"||message=="4"){
         emit sendToGUI(message);
     }
