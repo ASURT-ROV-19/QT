@@ -36,7 +36,7 @@ public:
 private:
     QTimer *timer;
     SDL_Event  event;
-    int prev_x,prev_y,prev_z,prev_r,upZ=1,light=0,axisChangeFlag=0,activateR=0;
+    int prev_x,prev_y,prev_z,prev_r,upZ=0,light=0,axisChangeFlag=0,activateR=0;
     int x,y,z,r;
 //    int upZButton=0,activateRButton=1,lightButton=6;
     int * buttons;
@@ -45,6 +45,8 @@ private:
     void move();
     int mapZ();
     int map(int x);
+    void buttonDownMessage();
+    void buttonUpMessage();
     SDL_Joystick *js;
 
 public slots:

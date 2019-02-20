@@ -16,6 +16,7 @@
 #include "gstreamer.h"
 #include <QTimer>
 #include "sensorlabel.h"
+#include <QProcess>
 
 class gui : public QObject
 {
@@ -41,6 +42,7 @@ signals:
     void show_hideButConfig();
 private:
 
+    void startLengthMeasuring();
     void createWindows();
     void createButtons();
     void assignButtons();
@@ -64,8 +66,9 @@ private:
     QWidget * dummyWidget,*realDummyDumb;
     QGridLayout * layTimer;
     QGst::Ui::VideoWidget ** videoDisplayer;
+    QProcess * process;
 
-    const int upZButtonID=0,activateRID=1,lightOnOffID=2,restartTimerID=3,buttonsSettingsID=4,changeCameraID=5,playPauseTimerID=6;
+    const int upZButtonID=0,activateRID=1,lightOnOffID=2,restartTimerID=3,buttonsSettingsID=4,changeCameraID=5,playPauseTimerID=6,startLenMeasureID=7;
 //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
     QString * buttons;
 };

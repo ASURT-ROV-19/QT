@@ -22,14 +22,14 @@ void newSettingsHandler::assignButtons()
         button[1]="1";                  //activateR;
         button[2]="2";                  //lightOnOff;
         button[3]="3";                  //restartTimer;
-        button[4]="4";                  //buttonsSettings;
+        button[4]="10";                  //buttonsSettings;
         button[5]="5";                  //changeCamera;
         button[6]="6";                  //playPauseTimer;
         _button[0]="0";                  //upZButton;
         _button[1]="1";                  //activateR;
         _button[2]="2";                  //lightOnOff;
         _button[3]="3";                  //restartTimer;
-        _button[4]="4";                  //buttonsSettings;
+        _button[4]="10";                  //buttonsSettings;
         _button[5]="5";                  //changeCamera;
         _button[6]="6";                  //playPauseTimer;
         }

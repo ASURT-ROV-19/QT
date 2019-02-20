@@ -79,7 +79,7 @@ void buttonsConfiguration::createButtons()
     jsButtons[1]->setInfo("R active","1","1");
     jsButtons[2]->setInfo("light on/off","2","2");
     jsButtons[3]->setInfo("Restart Timer","3","3");
-    jsButtons[4]->setInfo("Buttons Settings","4","4");
+    jsButtons[4]->setInfo("Buttons Settings","4","10");
     jsButtons[5]->setInfo("Change Camera","5","5");
     jsButtons[6]->setInfo("Play/Pause Timer","6","6");
     adminButtons[1]->setInfo("Cancel","","1");

@@ -92,13 +92,23 @@ void Joystick::buttonDown(int button)
     msg=QString::number(button);
     qDebug()<<button;
 //the next if case decides whether we are sending to server or making a change in GUI or a joystick change
-    if(button==buttons[0]){
-        qDebug()<<"will we reverse Z direction ???????\n";
-        if (abs(mapZ())<=2){
-            (upZ==1)? (upZ=-1) : (upZ=1);
-            qDebug()<<"shall reverse Z direction\n";
-        }
+//    if(button==buttons[0]){
+//        qDebug()<<"will we reverse Z direction ???????\n";
+//        if (abs(mapZ())<=2){
+//            (upZ==1)? (upZ=-1) : (upZ=1);
+//            qDebug()<<"shall reverse Z direction\n";
+//        }
+//    }
+    if (button==4){
+        upZ=-1;
+        buttonDownMessage();
     }
+    else if(button==2)
+    {
+        upZ=1;
+        buttonDownMessage();
+    }
+
     else if(button==buttons[2]){
         light==1 ? light=0 : light=1;
         move();
@@ -117,6 +127,17 @@ void Joystick::buttonDown(int button)
 
 void Joystick::buttonUp(int button)
 {
+    if (button==4){
+        upZ=0;
+        buttonDownMessage();
+    }
+    else if(button==2)
+    {
+        upZ=0;
+        buttonDownMessage();
+    }
+
+
     qDebug()<<"button released up is button "<<button;
     if(button==buttons[1])
         {
@@ -260,5 +281,32 @@ int Joystick::mapZ()
 int Joystick::map(int x)
 {
     return  x*100/32768 ;
+}
+
+void Joystick::buttonDownMessage()
+{
+    msg="";
+    msg+="x="+QString::number(map(X))+"," ;
+    msg+="y="+QString::number(map(Y))+"," ;
+    msg+="z="+QString::number(mapZ())+",";
+    msg+="r="+QString::number(map(R))+"," ;
+    msg+="cam="+QString::number(cam)+",";
+    msg+="light="+QString::number(light)+",";
+    qDebug()<<msg;
+    emit sendMsg(msg);
+}
+
+void Joystick::buttonUpMessage()
+{
+    msg="";
+    msg+="x="+QString::number(map(X))+"," ;
+    msg+="y="+QString::number(map(Y))+"," ;
+    msg+="z=0,";
+    msg+="r="+QString::number(map(R))+"," ;
+    msg+="cam="+QString::number(cam)+",";
+    msg+="light="+QString::number(light)+",";
+    qDebug()<<msg;
+    emit sendMsg(msg);
+
 }
 

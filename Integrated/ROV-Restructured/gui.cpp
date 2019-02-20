@@ -71,6 +71,11 @@ void gui::changeInGUI(QString button)
     qDebug()<<"\n in gui , button is "<<button;
 //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
 
+    if(button=="11")
+    {
+        qDebug()<<"will enter startMeasuring Function";
+        startLengthMeasuring();
+    }
     if (button==buttons[playPauseTimerID-piButtonsInUse])
         emit pause_play();
 //
@@ -167,7 +172,9 @@ void gui::updateSensorLabel(QString depth)
 
 void gui::startLengthMeasuring()
 {
-    process->start("python",QStringList()<<"/home/abdelrahman/");
+    qDebug()<<"shall start measuring script";
+    process->start("python",QStringList()<<"/home/abdelrahman/.PyCharmEdu2018.3/config/scratches/lengthMeasureStarter.py");
+    qDebug()<<"measuring script should have started";
 }
 
 
@@ -203,7 +210,7 @@ void gui::assignButtons()
 
 
     buttons[restartTimerID-piButtonsInUse]="3";
-    buttons[buttonsSettingsID-piButtonsInUse]="4";
+    buttons[buttonsSettingsID-piButtonsInUse]="10";
     buttons[changeCameraID-piButtonsInUse]="5";
     buttons[playPauseTimerID-piButtonsInUse]="6";
 
