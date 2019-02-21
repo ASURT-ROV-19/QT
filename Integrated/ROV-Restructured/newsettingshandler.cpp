@@ -1,6 +1,6 @@
 #include "newsettingshandler.h"
-#define buttonsInUse 7
-#define piButtonsInUse 3
+#define buttonsInUse 9
+#define piButtonsInUse 4
 
 newSettingsHandler::newSettingsHandler()
 {
@@ -18,21 +18,27 @@ newSettingsHandler::newSettingsHandler()
 void newSettingsHandler::assignButtons()
 //    QString upZButton="0",activateR="1",changeCamera="5",restartTimer="2",playPauseTimer="3",buttonsSettings="4",lightOnOff="6";
 {
-        button[0]="0";                  //upZButton;
-        button[1]="1";                  //activateR;
-        button[2]="2";                  //lightOnOff;
-        button[3]="3";                  //restartTimer;
-        button[4]="10";                  //buttonsSettings;
-        button[5]="5";                  //changeCamera;
-        button[6]="6";                  //playPauseTimer;
-        _button[0]="0";                  //upZButton;
-        _button[1]="1";                  //activateR;
-        _button[2]="2";                  //lightOnOff;
-        _button[3]="3";                  //restartTimer;
-        _button[4]="10";                  //buttonsSettings;
-        _button[5]="5";                  //changeCamera;
-        _button[6]="6";                  //playPauseTimer;
-        }
+
+        button[0]="4";                  //upZButton;
+        button[1]="2";                  //downZButton;
+        button[2]="8";                  //lightOnOff;
+        button[3]="0";                  //activateR;
+        button[4]="3";                  //restartTimer;
+        button[5]="11";                  //startMeasuringLength;
+        button[6]="10";                  //ButtonsSettings;
+        button[7]="1";                  //changeCamera;
+        button[8]="5";                  //playPauseTimer;
+        _button[0]="4";                  //upZButton;
+        _button[1]="2";                  //downZButton;
+        _button[2]="8";                  //lightOnOff;
+        _button[3]="0";                  //activateR;
+        _button[4]="3";                  //restartTimer;
+        _button[5]="11";                  //startMeasuringLength;
+        _button[6]="10";                  //ButtonsSettings;
+        _button[7]="1";                  //changeCamera;
+        _button[8]="5";                  //playPauseTimer;
+
+}
 
 
 void newSettingsHandler::newSettingsSelected(QString newConfig)

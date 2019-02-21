@@ -1,11 +1,15 @@
 #include "joystick.h"
-#define piButtonsInUse 3
-#define buttonsInUse 7
+#define piButtonsInUse 4
+#define buttonsInUse 9
 #define xAxis 0
 #define yAxis 1
 #define zAxis 3
 #define rAxis 2
 #define hat 0
+#define Z_up 3
+#define Z_down 1
+#define light_On_Off 2
+#define r_active 0
 
 
 #define X this->get_x()
@@ -29,9 +33,10 @@ Joystick::Joystick()
 //    handler = new Joystick_Handler();
     connect(timer,SIGNAL(timeout()),this,SLOT(action()));
     buttons=new int[piButtonsInUse];
-    buttons[0]=0;       //upZButton
-    buttons[1]=1;       //activateRButton
-    buttons[2]=2;       //lightOnOffButton
+    buttons[activateR]=0;       //activateR
+    buttons[Z_down]=2;       //ZDown
+    buttons[light_On_Off]=8;       //lightOnOffButton
+    buttons[Z_up]=4;       //ZUp
 }
 
 int Joystick::get_x()
@@ -99,21 +104,21 @@ void Joystick::buttonDown(int button)
 //            qDebug()<<"shall reverse Z direction\n";
 //        }
 //    }
-    if (button==4){
+    if (button==buttons[Z_up]){
         upZ=-1;
         buttonDownMessage();
     }
-    else if(button==2)
+    else if(button==buttons[Z_down])
     {
         upZ=1;
         buttonDownMessage();
     }
 
-    else if(button==buttons[2]){
+    else if(button==buttons[light_On_Off]){
         light==1 ? light=0 : light=1;
         move();
     }
-    else if(button==buttons[1])
+    else if(button==buttons[r_active])
     {
         activateR=1;
     }
@@ -127,11 +132,11 @@ void Joystick::buttonDown(int button)
 
 void Joystick::buttonUp(int button)
 {
-    if (button==4){
+    if (button==buttons[Z_down]){
         upZ=0;
         buttonDownMessage();
     }
-    else if(button==2)
+    else if(button==buttons[Z_up])
     {
         upZ=0;
         buttonDownMessage();
@@ -139,7 +144,7 @@ void Joystick::buttonUp(int button)
 
 
     qDebug()<<"button released up is button "<<button;
-    if(button==buttons[1])
+    if(button==buttons[r_active])
         {
             activateR=0;
     }

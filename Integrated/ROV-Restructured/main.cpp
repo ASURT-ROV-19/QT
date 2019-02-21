@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 
     QApplication * a =new QApplication(argc, argv);
     MainWindow w;
-    gstreamer camera22(5000);
+    gstreamer camera22(5022);
     w.getCam(&camera22,1);
     gstreamer camera21(10000);
     w.getCam(&camera21,2);

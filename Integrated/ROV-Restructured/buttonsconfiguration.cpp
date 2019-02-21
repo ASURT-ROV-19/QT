@@ -73,15 +73,17 @@ void buttonsConfiguration::createButtons()
         selectionButtons[i]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         selectionButtons[i]->setText("Button "+QString::number(i));
     }
-
+    //tarteeb el IDs : must : pi buttons then gui buttons
     //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
-    jsButtons[0]->setInfo("Z axis direction","0","0");
-    jsButtons[1]->setInfo("R active","1","1");
-    jsButtons[2]->setInfo("light on/off","2","2");
-    jsButtons[3]->setInfo("Restart Timer","3","3");
-    jsButtons[4]->setInfo("Buttons Settings","4","10");
-    jsButtons[5]->setInfo("Change Camera","5","5");
-    jsButtons[6]->setInfo("Play/Pause Timer","6","6");
+    jsButtons[0]->setInfo("Z axis Up                ","4","0");
+    jsButtons[1]->setInfo("Z axis Down              ","2","1");
+    jsButtons[2]->setInfo("light on/off             ","8","2");
+    jsButtons[3]->setInfo("activate R               ","0","3");
+    jsButtons[4]->setInfo("Restart Timer            ","3","4");
+    jsButtons[5]->setInfo("Start Measuring Length   ","11","5");
+    jsButtons[6]->setInfo("Buttons Settings         ","10","6");
+    jsButtons[7]->setInfo("Change Camera            ","1","7");
+    jsButtons[8]->setInfo("Play/Pause Timer         ","5","8");
     adminButtons[1]->setInfo("Cancel","","1");
     adminButtons[0]->setInfo("Save","","0");
 

@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->setupUi(this);
     connect(handler,SIGNAL(sendToPi(QString)),server,SLOT(sendMessage(QString)));
     centralWidget=new QWidget();
-    centralWidget->setWindowState(Qt::WindowFullScreen);
+//    centralWidget->setWindowState(Qt::WindowFullScreen);
     centralWidget->show();
     centralWidget->setWindowTitle("Stream");
     GUI=new gui(centralWidget);
