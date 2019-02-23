@@ -40,6 +40,7 @@ signals:
     void restartTimer();
     void buttonsConfig(QString Configuration);
     void show_hideButConfig();
+    void setFullScreen();
 private:
 
     void startLengthMeasuring();
@@ -67,18 +68,9 @@ private:
     QGridLayout * layTimer;
     QGst::Ui::VideoWidget ** videoDisplayer;
     QProcess * process;
-/*
-    jsButtons[0]->setInfo("Z axis Up                ","4","0");
-    jsButtons[1]->setInfo("Z axis Down              ","2","1");
-    jsButtons[2]->setInfo("light on/off             ","8","2");
-    jsButtons[3]->setInfo("activate R               ","0","3");
-    jsButtons[4]->setInfo("Restart Timer            ","3","4");
-    jsButtons[5]->setInfo("Start Measuring Length   ","11","5");
-    jsButtons[6]->setInfo("Buttons Settings         ","10","6");
-    jsButtons[7]->setInfo("Change Camera            ","1","7");
-    jsButtons[8]->setInfo("Play/Pause Timer         ","5","8");
-*/
-    const int ZUpID=0,ZDownID=1,lightOnOffID=2,activateRID=3,restartTimerID=4,startLenMeasureID=5,buttonsSettingsID=6,changeCameraID=7,playPauseTimerID=8;
+
+    const int ZUpID=0,ZDownID=1,lightOnOffID=2,activateRID=3,restartTimerID=4,startLenMeasureID=5,buttonsSettingsID=6,changeCameraID=7,playPauseTimerID=8,fullScreenID=9;
+    //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
     QString * buttons;
 };
 

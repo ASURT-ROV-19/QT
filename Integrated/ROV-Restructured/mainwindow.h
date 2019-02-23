@@ -27,6 +27,8 @@ public:
     void getCam(gstreamer * camera, uint8_t cameraNum);
     ~MainWindow();
     void createSettingsHandler();
+private slots:
+    void fullScreen();
 
 private:
     Ui::MainWindow *ui;

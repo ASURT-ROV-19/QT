@@ -1,5 +1,5 @@
 #include "gui.h"
-#define buttonsInUse 9
+#define buttonsInUse 10
 #define piButtonsInUse 4
 gui::gui(QWidget *parent)
 {
@@ -69,32 +69,37 @@ void gui::changeInGUI(QString button)
 
 
     qDebug()<<"\n in gui , button is "<<button;
-//    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
+    //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
 
-    if(button==buttons[startLenMeasureID-piButtonsInUse])
-    {
-        qDebug()<<"will enter startMeasuring Function";
-        startLengthMeasuring();
-    }
-    if (button==buttons[playPauseTimerID-piButtonsInUse])
-        emit pause_play();
-//
-    else if(button==buttons[changeCameraID-piButtonsInUse])
-        //do change in two windows sizes
-    {
-        toggleCamera();
-    }
-    else if(button==buttons[buttonsSettingsID-piButtonsInUse])
-        //play or pause
-    {
-        emit show_hideButConfig();
-    }
-    else if(button==buttons[restartTimerID-piButtonsInUse])
+        if(button==buttons[startLenMeasureID-piButtonsInUse])
+        {
+            qDebug()<<"will enter startMeasuring Function";
+            startLengthMeasuring();
+        }
+        if (button==buttons[playPauseTimerID-piButtonsInUse])
+            emit pause_play();
+    //
+        else if(button==buttons[changeCameraID-piButtonsInUse])
+            //do change in two windows sizes
+        {
+            toggleCamera();
+        }
+        else if(button==buttons[buttonsSettingsID-piButtonsInUse])
+            //play or pause
+        {
+            emit show_hideButConfig();
+        }
+        else if(button==buttons[restartTimerID-piButtonsInUse])
+            //restart timer
+        {
+            timer->restartTimer(15,0);
+        }
+    else if(button==buttons[fullScreenID-piButtonsInUse])
         //restart timer
     {
-        timer->restartTimer(15,0);
+            qDebug()<<"shall start full screen";
+        emit setFullScreen();
     }
-
 }
 //  slot to receive a QString::"<buttonID> newButtonNumber" to change local buttons value , <buttonID-piButtonsInUse> is the index if the button in the local buttons
 void gui::changeInButtonsConfiguration(QString newConfig)
@@ -207,25 +212,13 @@ void gui::createButtons()
 
 void gui::assignButtons()
 {
-    /*
-        jsButtons[0]->setInfo("Z axis Up                ","4","0");
-        jsButtons[1]->setInfo("Z axis Down              ","2","1");
-        jsButtons[2]->setInfo("light on/off             ","8","2");
-        jsButtons[3]->setInfo("activate R               ","0","3");
-        jsButtons[4]->setInfo("Restart Timer            ","3","4");
-        jsButtons[5]->setInfo("Start Measuring Length   ","11","5");
-        jsButtons[6]->setInfo("Buttons Settings         ","10","6");
-        jsButtons[7]->setInfo("Change Camera            ","1","7");
-        jsButtons[8]->setInfo("Play/Pause Timer         ","5","8");
-    */
-
 
     buttons[restartTimerID-piButtonsInUse]="3";
     buttons[buttonsSettingsID-piButtonsInUse]="10";
     buttons[changeCameraID-piButtonsInUse]="1";
     buttons[playPauseTimerID-piButtonsInUse]="5";
     buttons[startLenMeasureID-piButtonsInUse]="11";
-
+    buttons[fullScreenID-piButtonsInUse]="6";
 
 }
 

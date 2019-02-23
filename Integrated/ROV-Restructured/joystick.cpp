@@ -1,6 +1,6 @@
 #include "joystick.h"
 #define piButtonsInUse 4
-#define buttonsInUse 9
+#define buttonsInUse 10
 #define xAxis 0
 #define yAxis 1
 #define zAxis 3

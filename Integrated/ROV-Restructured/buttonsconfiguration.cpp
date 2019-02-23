@@ -73,6 +73,8 @@ void buttonsConfiguration::createButtons()
         selectionButtons[i]->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
         selectionButtons[i]->setText("Button "+QString::number(i));
     }
+
+    //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
     //tarteeb el IDs : must : pi buttons then gui buttons
     //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
     jsButtons[0]->setInfo("Z axis Up                ","4","0");
@@ -84,6 +86,7 @@ void buttonsConfiguration::createButtons()
     jsButtons[6]->setInfo("Buttons Settings         ","10","6");
     jsButtons[7]->setInfo("Change Camera            ","1","7");
     jsButtons[8]->setInfo("Play/Pause Timer         ","5","8");
+    jsButtons[9]->setInfo("Full Screen              ","6","9");
     adminButtons[1]->setInfo("Cancel","","1");
     adminButtons[0]->setInfo("Save","","0");
 

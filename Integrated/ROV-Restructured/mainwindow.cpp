@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     server=new TCPServer("1.1.1.1",9005);
+
 //    server=new TCPServer("127.0.0.1",9005);
     handler = new Joystick_Handler();
     //ui->setupUi(this);
@@ -48,9 +49,15 @@ void MainWindow::createSettingsHandler()
     connect(settingsHandler,SIGNAL(guiSettings(QString)),GUI,SLOT(changeInButtonsConfiguration(QString)));
     connect(settingsHandler,SIGNAL(piSettings(QString)),handler,SLOT(changeInButtonsConfiguration(QString)));
     connect(GUI,SIGNAL(show_hideButConfig()),settingsHandler,SLOT(show_hideButConfig()));
-
+    connect(GUI,SIGNAL(setFullScreen()),this,SLOT(fullScreen()));
     //    void piSettings(QString newSettings);
 //    void guiSettings(QString newSettings);
+
+}
+
+void MainWindow::fullScreen()
+{
+    centralWidget->isFullScreen() ? centralWidget->showNormal() : centralWidget->setWindowState(Qt::WindowFullScreen);
 
 }
 
