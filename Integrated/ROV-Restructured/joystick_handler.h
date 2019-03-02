@@ -14,6 +14,7 @@ class Joystick_Handler: public QObject
 
 public:
     Joystick_Handler();
+    ~Joystick_Handler();
 //    void getMessage(QString message, int serverOrGui);
 
 public slots:
@@ -22,7 +23,6 @@ public slots:
 
 private slots:
     void messageReceive(QString message);
-    void newButtonsConfig(QString newConfig);
 signals:
     void sendToPi(QString);
     void sendToGUI(QString);

@@ -2,17 +2,14 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QMainWindow(parent)
 {
     server=new TCPServer("1.1.1.1",9005);
 
-//    server=new TCPServer("127.0.0.1",9005);
+//    server=new TCPServer("127.0.0.1",9000);
     handler = new Joystick_Handler();
-    //ui->setupUi(this);
     connect(handler,SIGNAL(sendToPi(QString)),server,SLOT(sendMessage(QString)));
     centralWidget=new QWidget();
-//    centralWidget->setWindowState(Qt::WindowFullScreen);
     centralWidget->show();
     centralWidget->setWindowTitle("Stream");
     GUI=new gui(centralWidget);
@@ -31,15 +28,24 @@ QGridLayout *MainWindow::getLayout()
 //}
 
 
-void MainWindow::getCam(gstreamer *camera,uint8_t cameraNum)
+void MainWindow::setCam(gstreamer *camera,uint8_t cameraNum)
 {
-    GUI->getCam(camera,cameraNum);
+    GUI->setCam(camera,cameraNum);
 }
 
 
 MainWindow::~MainWindow()
 {
-    //    delete ui;
+
+    qDebug()<<"destroying mainwindow instance";
+    delete server;
+    delete centralWidget;
+    delete handler;
+    delete GUI;
+    delete butConfig;
+    delete settingsHandler;
+
+
 }
 
 void MainWindow::createSettingsHandler()
@@ -49,16 +55,13 @@ void MainWindow::createSettingsHandler()
     connect(settingsHandler,SIGNAL(guiSettings(QString)),GUI,SLOT(changeInButtonsConfiguration(QString)));
     connect(settingsHandler,SIGNAL(piSettings(QString)),handler,SLOT(changeInButtonsConfiguration(QString)));
     connect(GUI,SIGNAL(show_hideButConfig()),settingsHandler,SLOT(show_hideButConfig()));
-    connect(GUI,SIGNAL(setFullScreen()),this,SLOT(fullScreen()));
-    //    void piSettings(QString newSettings);
-//    void guiSettings(QString newSettings);
+    connect(GUI,SIGNAL(setFullScreen()),this,SLOT(toggleFullScreen()));
 
 }
 
-void MainWindow::fullScreen()
+void MainWindow::toggleFullScreen()
 {
     centralWidget->isFullScreen() ? centralWidget->showNormal() : centralWidget->setWindowState(Qt::WindowFullScreen);
-
 }
 
 

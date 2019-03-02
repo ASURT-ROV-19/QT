@@ -25,6 +25,30 @@ gui::gui(QWidget *parent)
     process=new QProcess(this);
 }
 
+gui::~gui()
+{
+
+    qDebug()<<"destroying gui instance";
+    delete process;
+    delete [] buttons;
+    delete timer;
+    delete sensor_label;
+    delete layTimer;
+    for (int i=0;i<3;i++){
+        delete [] videoDisplayer[i];
+    }
+    delete dummyWidget;
+    delete gridLay;
+    delete GUIwindow;
+
+
+
+
+
+
+
+}
+
 
 QGridLayout *gui::getLayout()
 {
@@ -43,7 +67,7 @@ QGridLayout *gui::getLayout()
 //    }
 //}
 
-void gui::getCam(gstreamer * Camera, uint8_t cameraNum)
+void gui::setCam(gstreamer * Camera, uint8_t cameraNum)
 {
     cameraZ=new gstreamer *[3];
     cameraZ[cameraNum-1]=Camera;
@@ -193,18 +217,13 @@ void gui::prepButtonsConfig()
 
 void gui::createButtons()
 {
-    tmr2=new QTimer(this);
-    tmr2->setInterval(2000);
-    tmr2->start();
-//    butConfig =new buttonsConfiguration;
-    button=new QPushButton("Stop/Start Timer");
+
     timer=new CountDown();
     timer->setTimer(15,0);
     layTimer->addWidget(timer->getTimerLabel());
     sensor_label=new sensorLabel();
     layTimer->addWidget(sensor_label);
     //    timer->getTimerLabel()->setParent(window[0]);
-    play_pause_button=new QPushButton("Play/Pause");
     assignButtons();
 
 
@@ -225,22 +244,7 @@ void gui::assignButtons()
 
 void gui::handleSignals()
 {
-//    connect(tmr,SIGNAL(timeout()),this,SLOT(print()));
 
-
-    //THESE ARE TO SHOW OR HIDE CONF WINDOW USING MOUTH & BUTTONS OR USING JS
-//    connect(this,SIGNAL(pause_play()),butConfig,SLOT(show_hide()));
-//    connect(button,SIGNAL(clicked()),butConfig,SLOT(show_hide()));
-
-//    connect(tmr2,SIGNAL(timeout()),this,SLOT(toggleCamera()));
-
-    //THIS MEANS A NEW CONFIGURATION
-//    connect(butConfig,SIGNAL(newSettings(QString)),this,SLOT(changeButtonsConfiguration(QString)));
     //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
     connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
-//    connect(play_pause_button,SIGNAL(clicked()),timer,SLOT(pause_Play()));
-
-//    connect(play_pause_button,SIGNAL(clicked()),this,SLOT(toggleCamera()));
-//    connect(tmr2,SIGNAL(timeout()),this,SLOT(toggleCamera()));
-//    connect(this,SIGNAL(buttonsConfig(QString)),butConfig,SLOT(getCurrentButtons(QString)));
 }

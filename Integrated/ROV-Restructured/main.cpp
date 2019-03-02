@@ -7,9 +7,9 @@ int main(int argc, char *argv[])
     QApplication * a =new QApplication(argc, argv);
     MainWindow w;
     gstreamer camera22(5022);
-    w.getCam(&camera22,1);
+    w.setCam(&camera22,1);
     gstreamer camera21(10000);
-    w.getCam(&camera21,2);
+    w.setCam(&camera21,2);
     camera22.autoSetPipeline();
     camera21.autoSetPipeline();
     camera22.play_pause();

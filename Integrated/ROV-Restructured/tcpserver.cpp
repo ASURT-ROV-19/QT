@@ -116,4 +116,3 @@ void TCPServer::socketDisconnected()
         qDebug()<<"TCP exception at line 116 , socket disconnected throw an exception "<<e.what();
     }
 }
-
