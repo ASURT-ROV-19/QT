@@ -59,13 +59,7 @@ void CountDown::restartTimer(int minutes,int seconds){
 
 CountDown::~CountDown()
 {
-//    QTime * TIME;
-//    QLabel * timerLabel;
-//    QTimer * timer;
-//    int mins=0,sec=0;
-//    QString time;
-//    QElapsedTimer * elapsed;
-
+    qDebug()<<"destroying countDown instance";
     delete TIME;
     delete timerLabel;
     delete timer;

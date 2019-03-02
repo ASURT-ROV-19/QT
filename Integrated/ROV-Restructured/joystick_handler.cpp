@@ -12,6 +12,13 @@ Joystick_Handler::Joystick_Handler()
     }
 }
 
+Joystick_Handler::~Joystick_Handler()
+{
+    qDebug()<<"destroying joystick_handler instance";
+    delete [] buttons;
+    delete joyS;
+}
+
 void Joystick_Handler::changeInButtonsConfiguration(QString newConfig)
 {
     joyS->changeInButtonsConfiguration(newConfig);

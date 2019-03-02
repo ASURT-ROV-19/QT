@@ -191,6 +191,7 @@ void buttonsConfiguration::updateJSButtonNumber(QString oldNumber1, QString newN
 buttonsConfiguration::~buttonsConfiguration()
 {
 
+    qDebug()<<"destroying buttonsConfiguration instance";
     delete textLabel;
     delete []adminButtons;
     delete []jsButtons;

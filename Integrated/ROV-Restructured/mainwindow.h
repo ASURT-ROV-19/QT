@@ -24,16 +24,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     QGridLayout * getLayout();
 //    void getCam(gstream * camera, uint8_t cameraNum);
-    void getCam(gstreamer * camera, uint8_t cameraNum);
+    void setCam(gstreamer * camera, uint8_t cameraNum);
     ~MainWindow();
     void createSettingsHandler();
 private slots:
-    void fullScreen();
+    void toggleFullScreen();
 
 private:
     Ui::MainWindow *ui;
     TCPServer *server;
-    Joystick_Handler *joyS;
     QWidget * centralWidget;
 	Joystick_Handler *handler;
     gui * GUI;

@@ -16,6 +16,7 @@ class Joystick:public QObject
     Q_OBJECT
 public:
     Joystick();
+    ~Joystick();
     void JoyStickInitialization();
 
     int get_x();
@@ -33,6 +34,12 @@ public:
     int getNumOfPiButtons();
     int getButtonNumber(int buttonIndex);
 
+public slots:
+    void action();
+signals:
+    void sendMsg(QString);
+    void newButtons();
+
 private:
     QTimer *timer;
     SDL_Event  event;
@@ -49,11 +56,6 @@ private:
     void buttonUpMessage();
     SDL_Joystick *js;
 
-public slots:
-    void action();
-signals:
-    void sendMsg(QString);
-    void newButtons();
 };
 
 

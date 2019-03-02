@@ -23,10 +23,11 @@ class gui : public QObject
     Q_OBJECT
 public:
     gui(QWidget * parent=0);
+    ~gui();
 //    QPushButton * getChangingButton();    //temporary to use the button instead of the joystick as i ddon't have the joystick now;
     QGridLayout * getLayout();
 //    void getCam(gstream *Camera, uint8_t cameraNum);
-    void getCam(gstreamer *Camera, uint8_t cameraNum);
+    void setCam(gstreamer *Camera, uint8_t cameraNum);
     void positionItems(QGst::Ui::VideoWidget * parent);
 public slots:
     void changeInGUI(QString button);
@@ -53,10 +54,7 @@ private:
 
     sensorLabel * sensor_label;
     QString configuration;
-    QTimer * tmr,*tmr2;
-    QPushButton * button , * play_pause_button, * endButton;
     CountDown * timer;
-//    buttonsConfiguration * butConfig;
     QGridLayout * gridLay;
     uint8_t windowSelector=0;
 //    gstream ** camera;
@@ -64,7 +62,7 @@ private:
 //    QWidget ** window;
     QVideoWidget ** videoWindow;
     QWidget * GUIwindow;
-    QWidget * dummyWidget,*realDummyDumb;
+    QWidget * dummyWidget;
     QGridLayout * layTimer;
     QGst::Ui::VideoWidget ** videoDisplayer;
     QProcess * process;

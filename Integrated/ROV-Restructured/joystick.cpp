@@ -28,15 +28,23 @@ Joystick::Joystick()
     JoyStickInitialization();
     prev_x=prev_r=prev_y=prev_z=0;
     timer =new QTimer;
-    timer->setInterval(10);
+    timer->setInterval(30);
     timer->start();
-//    handler = new Joystick_Handler();
     connect(timer,SIGNAL(timeout()),this,SLOT(action()));
     buttons=new int[piButtonsInUse];
     buttons[activateR]=0;       //activateR
     buttons[Z_down]=2;       //ZDown
     buttons[light_On_Off]=8;       //lightOnOffButton
     buttons[Z_up]=4;       //ZUp
+}
+
+Joystick::~Joystick()
+{
+    qDebug()<<"destroying joystick instance";
+    SDL_JoystickClose(js);
+    delete timer;
+    delete buttons;
+
 }
 
 int Joystick::get_x()
@@ -190,17 +198,14 @@ void Joystick::JoyStickInitialization()
 
     SDL_Init(SDL_INIT_JOYSTICK);
     SDL_Init(SDL_INIT_EVERYTHING);
-
+    SDL_Init(SDL_INIT_EVENTS);
      if (SDL_INIT_JOYSTICK<0)
          qDebug()<<"failed to init";
-     SDL_JoystickEventState(SDL_ENABLE);
 
 /*_____________________________________________________________________________*/
 
-
      js = SDL_JoystickOpen(0);
      SDL_JoystickEventState(SDL_ENABLE);
-
 
 /*_____________________________________________________________________________*/
 
@@ -215,36 +220,36 @@ void Joystick::JoyStickInitialization()
 void Joystick::action()
 {
     while (SDL_PollEvent(&event)){
-    switch (event.type){
-    case SDL_JOYAXISMOTION:
-        if (abs(X-prev_x)>SGNFCNT || abs(Y-prev_y)>SGNFCNT || abs(Z-prev_z)>SGNFCNT || abs(R-prev_r)>SGNFCNT){
-//            qDebug()<<"yeah , greater than SGNFCNT";
+        switch (event.type){
+        case SDL_JOYAXISMOTION:
+            if (abs(X-prev_x)>SGNFCNT || abs(Y-prev_y)>SGNFCNT || abs(Z-prev_z)>SGNFCNT || abs(R-prev_r)>SGNFCNT){
+    //            qDebug()<<"yeah , greater than SGNFCNT";
+                move();
+                emit sendMsg(msg);
+                qDebug()<<"message of line 198->>"<<msg;
+            }
+            break;
+        case SDL_JOYDEVICEADDED:
+            this->activate();
+            break;
+        case SDL_JOYDEVICEREMOVED:
+            this->remove();
+            break;
+        case SDL_JOYBUTTONDOWN:
+            buttonDown(event.jbutton.button);
+            break;
+        case SDL_JOYBUTTONUP:
+            buttonUp(event.jbutton.button);
+            break;
+        case SDL_JOYHATMOTION:
+
             move();
             emit sendMsg(msg);
-            qDebug()<<"message of line 198->>"<<msg;
+            qDebug()<<"message of line 216->>"<<msg;
+            break;
+        default:
+            break;
         }
-        break;
-    case SDL_JOYDEVICEADDED:
-        this->activate();
-        break;
-    case SDL_JOYDEVICEREMOVED:
-        this->remove();
-        break;
-    case SDL_JOYBUTTONDOWN:
-        buttonDown(event.jbutton.button);
-        break;
-    case SDL_JOYBUTTONUP:
-        buttonUp(event.jbutton.button);
-        break;
-    case SDL_JOYHATMOTION:
-
-        move();
-        emit sendMsg(msg);
-        qDebug()<<"message of line 216->>"<<msg;
-        break;
-    default:
-        break;
-    }
 
     }
 }
