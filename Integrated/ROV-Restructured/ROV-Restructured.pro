@@ -34,14 +34,14 @@ SOURCES += \
     gui.cpp \
     joystick.cpp \
     joystick_handler.cpp \
-    tcpserver.cpp \
-    gstream.cpp \
+#    gstream.cpp \
     gstreamer.cpp \
-    buttonsconfiguration.cpp \
-    joystickbutton.cpp \
-    tablemodel.cpp \
+#    buttonsconfiguration.cpp \
+#    joystickbutton.cpp \
+#    tablemodel.cpp \
     sensorlabel.cpp \
-    newsettingshandler.cpp
+#    newsettingshandler.cpp \
+    TCPConnection.cpp
 
 
 HEADERS += \
@@ -50,14 +50,14 @@ HEADERS += \
     gui.h \
     joystick.h \
     joystick_handler.h \
-    tcpserver.h \
-    gstream.h \
+#    gstream.h \
     gstreamer.h \
-    buttonsconfiguration.h \
-    joystickbutton.h \
-    tablemodel.h \
+#    buttonsconfiguration.h \
+#    joystickbutton.h \
+#    tablemodel.h \
     sensorlabel.h \
-    newsettingshandler.h
+#    newsettingshandler.h \
+    TCPConnection.h
 
 FORMS += \
         mainwindow.ui

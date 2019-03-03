@@ -3,12 +3,10 @@
 
 #include <QMainWindow>
 #include<joystick_handler.h>
-#include <tcpserver.h>
+#include <TCPConnection.h>
 #include "gui.h"
 #include "string.h"
 #include <QApplication>
-#include "buttonsconfiguration.h"
-#include "newsettingshandler.h"
 
 #undef main
 
@@ -22,22 +20,17 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    QGridLayout * getLayout();
-//    void getCam(gstream * camera, uint8_t cameraNum);
-    void setCam(gstreamer * camera, uint8_t cameraNum);
+    void setDisplayWindow(QGst::Ui::VideoWidget * displayWindow, uint8_t cameraNum);
     ~MainWindow();
-    void createSettingsHandler();
 private slots:
     void toggleFullScreen();
 
 private:
     Ui::MainWindow *ui;
-    TCPServer *server;
+    TCPConnection *TCPconnection;
     QWidget * centralWidget;
-	Joystick_Handler *handler;
+    Joystick_Handler *JSHandler;
     gui * GUI;
-    buttonsConfiguration * butConfig;
-    newSettingsHandler * settingsHandler;
 };
 
 #endif // MAINWINDOW_H

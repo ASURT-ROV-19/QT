@@ -21,7 +21,6 @@ gstreamer::gstreamer(int port)
 
 void gstreamer::setRenderingWindows()
 {
-
     QApplication::sync();
     sink2=QGst::ElementFactory::make("qwidget5videosink");
     sink2->setProperty("name","sink");
@@ -41,11 +40,6 @@ void gstreamer::setRenderingWindows()
 QGst::Ui::VideoWidget * gstreamer::getRenderingVideoWindow()
 {
     return videowindow;
-}
-
-QGraphicsView *gstreamer::getView()
-{
-    return view;
 }
 
 
@@ -74,17 +68,13 @@ gstreamer::~gstreamer()
     qDebug()<<"destroying countDown instance";
     gst_object_unref(sink2);
     gst_object_unref(source);
-    delete [] videowindow;
     delete [] window;
-    delete GUILayOut;
     gst_object_unref(videowindow);
-    gst_object_unref(pipeline);
 
 }
 
 void gstreamer::autoSetPipeline()
 {
-
 // JPEG compressing pipeline (JPEG is frame by frame , requiring larger bandwidth but less delay )
 
         pipeline_description="udpsrc port="+QString::number(PORT).toStdString()+" ! application/x-rtp,media=video,clock-rate=90000,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! vaapijpegdec ! vaapipostproc";

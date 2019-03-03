@@ -3,26 +3,22 @@
 #define piButtonsInUse 4
 gui::gui(QWidget *parent)
 {
-//    view=new QGraphicsView();
-//    view->show();
-    buttons = new QString [buttonsInUse-piButtonsInUse];       // 15 is the number of buttons that are to have a specific use
-//    _buttons = new QString * [15];       // 15 is the number of buttons that are to have a specific use
-
-    GUIwindow=parent;
-    gridLay=new QGridLayout(parent);
-    parent->setLayout(gridLay);
-    dummyWidget=new QWidget();
-    layTimer=new QGridLayout();
-    dummyWidget->setLayout(layTimer);
-    dummyWidget->show();
-    parent->setStyleSheet("background-color: white");
-    createButtons();
+    buttons = new QString [buttonsInUse-piButtonsInUse];
+    videoDisplayer=new QGst::Ui::VideoWidget *[2];
+    guiLayout=new QGridLayout(parent);          // gui layout , holding both streaming cameras
+    guiItemsLayout=new QGridLayout();           //items of gui like timer , sensor label are layed out in this
+    parent->setLayout(guiLayout);
+    guiItemsCarryingWidget=new QWidget();       //carries gui items like timer , sensor label , and whatever , transparent and displayed over the streaming windows
+    guiItemsCarryingWidget->setLayout(guiItemsLayout);
+    guiItemsCarryingWidget->show();
+    parent->setStyleSheet("background-color: black");
+    createItems();
+    assignButtons();
     handleSignals();
-    createWindows();
-    dummyWidget->setWindowTitle("DUMMY WIDGET");
-    dummyWidget->setAttribute(Qt::WA_TranslucentBackground);
-    dummyWidget->setGeometry(0,0,150,140);
-    process=new QProcess(this);
+    guiItemsCarryingWidget->setWindowTitle("GUI Items Carrying Widget");
+    guiItemsCarryingWidget->setAttribute(Qt::WA_TranslucentBackground);
+    guiItemsCarryingWidget->setGeometry(0,0,150,140);
+    process=new QProcess(this); 
 }
 
 gui::~gui()
@@ -33,47 +29,21 @@ gui::~gui()
     delete [] buttons;
     delete timer;
     delete sensor_label;
-    delete layTimer;
+    delete guiItemsLayout;
     for (int i=0;i<3;i++){
         delete [] videoDisplayer[i];
     }
-    delete dummyWidget;
-    delete gridLay;
-    delete GUIwindow;
-
-
-
-
-
-
-
+    delete guiItemsCarryingWidget;
+    delete guiLayout;
 }
 
 
-QGridLayout *gui::getLayout()
+void gui::setDisplayWindow(QGst::Ui::VideoWidget * displayWindow, uint8_t cameraNum)
 {
-    return gridLay;
-}
 
-/*******                                        GSTREAM CLASS                           *******/
-//void gui::getCam(gstream * Camera, uint8_t cameraNum)
-//{
-//    camera[cameraNum-1]=Camera;
-//    videoWindow[cameraNum-1]=camera[cameraNum-1]->getRenderingVideoWindow();
-//    videoWindow[cameraNum-1]->show();
-//    videoWindow[cameraNum-1]->setWindowTitle("Gstream Video window");
-//    if (cameraNum==1){
-////        positionItems();
-//    }
-//}
-
-void gui::setCam(gstreamer * Camera, uint8_t cameraNum)
-{
-    cameraZ=new gstreamer *[3];
-    cameraZ[cameraNum-1]=Camera;
-//    Camera->show();
-    videoDisplayer[cameraNum-1]=cameraZ[cameraNum-1]->getRenderingVideoWindow();
-    gridLay->addWidget(videoDisplayer[cameraNum-1],0,cameraNum-1,1,1);
+// here we get the display windows and make local pointers to them to manipulate them later as we like , like changing their sizes in the GUI
+    videoDisplayer[cameraNum-1]=displayWindow;
+    guiLayout->addWidget(videoDisplayer[cameraNum-1],0,cameraNum-1,1,1);
 
     if (cameraNum==1){
         positionItems(videoDisplayer[0]);
@@ -83,17 +53,13 @@ void gui::setCam(gstreamer * Camera, uint8_t cameraNum)
 
 void gui::positionItems(QGst::Ui::VideoWidget *parent)
 {
-    dummyWidget->setParent(nullptr);
-    dummyWidget->setParent(parent);
+    guiItemsCarryingWidget->setParent(parent);      //initially , items are displayed over the left hand camera , which is the camera initialized first
 }
 
 
 void gui::changeInGUI(QString button)
 {
-
-
-    qDebug()<<"\n in gui , button is "<<button;
-    //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
+   //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
 
         if(button==buttons[startLenMeasureID-piButtonsInUse])
         {
@@ -119,77 +85,47 @@ void gui::changeInGUI(QString button)
             timer->restartTimer(15,0);
         }
     else if(button==buttons[fullScreenID-piButtonsInUse])
-        //restart timer
+        //toggle screen between full and normal
     {
-            qDebug()<<"shall start full screen";
-        emit setFullScreen();
+        emit guiSizeChange();
     }
 }
 //  slot to receive a QString::"<buttonID> newButtonNumber" to change local buttons value , <buttonID-piButtonsInUse> is the index if the button in the local buttons
 void gui::changeInButtonsConfiguration(QString newConfig)
 {
-//    QString buttonID=newConfig.mid(0,newConfig.indexOf(" ")+1);
-
-    QStringList buttonID=newConfig.split(" ");
-    int buttonIndex=buttonID[0].toInt()-piButtonsInUse;
-    buttons[buttonIndex]=buttonID[1];
+    //buttonInfo is : <"buttonID buttonNumber">
+    QStringList buttonInfo=newConfig.split(" ");
+    int buttonIndex=buttonInfo[0].toInt()-piButtonsInUse;
+    buttons[buttonIndex]=buttonInfo[1];
 }
-
-
-void gui::createWindows()
-{
-//    camera=new gstream *[3];
-//    videoWindow=new QVideoWidget *[3];
-    videoDisplayer=new QGst::Ui::VideoWidget *[3];
-
-    for (int i=0; i<3;i++){
-//       camera[i]=nullptr;
-//       videoWindow[i]=nullptr;
-    }
-}
-
 
 
 void gui::toggleCamera()
 {
     // EQUAL SIZES
         if (windowSelector==0){
-            videoDisplayer[0]->setParent(nullptr);
-            videoDisplayer[1]->setParent(nullptr);
-            positionItems(videoDisplayer[0]);
-            gridLay->removeWidget(videoDisplayer[0]);
-            gridLay->removeWidget(videoDisplayer[1]);
-            gridLay->addWidget(videoDisplayer[0],0,0,1,1);
-            gridLay->addWidget(videoDisplayer[1],0,1,1,1);
+            positionItems(videoDisplayer[0]);       //sets display of items to be on the left hand camera
+//            videoDisplayer[0]->setParent(nullptr);
+//            videoDisplayer[1]->setParent(nullptr);
+            guiLayout->addWidget(videoDisplayer[0],0,0,1,1);
+            guiLayout->addWidget(videoDisplayer[1],0,1,1,1);
             windowSelector++;
         }
     //  CAMERA 1 IS MAIN
         else if (windowSelector==1){
             videoDisplayer[0]->setParent(nullptr);
-            videoDisplayer[1]->setParent(nullptr);
             videoDisplayer[1]->setParent(videoDisplayer[0]);
-            gridLay->removeWidget(videoDisplayer[0]);
-            gridLay->removeWidget(videoDisplayer[1]);
-            videoDisplayer[1]->setWindowFlags(Qt::WindowStaysOnTopHint);
-            videoDisplayer[0]->setWindowFlags(Qt::WindowStaysOnBottomHint);
-            gridLay->addWidget(videoDisplayer[0],0,0,4,8);
-            gridLay->addWidget(videoDisplayer[1],0,6,1,2);
+            guiLayout->addWidget(videoDisplayer[0],0,0,4,8);
+            guiLayout->addWidget(videoDisplayer[1],0,6,1,2);
             windowSelector++;
         }
     //  CAMERA 2 IS MAIN
         else if (windowSelector==2){
-            videoDisplayer[0]->setParent(nullptr);
+            positionItems(videoDisplayer[1]);
             videoDisplayer[1]->setParent(nullptr);
             videoDisplayer[0]->setParent(videoDisplayer[1]);
-            positionItems(videoDisplayer[1]);
-            gridLay->removeWidget(videoDisplayer[1]);
-            gridLay->removeWidget(videoDisplayer[0]);
-//            videoDisplayer[0]->setWindowFlags(nullptr);
-//            videoDisplayer[0]->setWindowFlags(nullptr);
-            videoDisplayer[0]->setWindowFlags(Qt::WindowStaysOnTopHint| Qt::X11BypassWindowManagerHint | Qt::FramelessWindowHint);
-            videoDisplayer[1]->setWindowFlags(Qt::WindowStaysOnBottomHint | Qt::X11BypassWindowManagerHint | Qt::FramelessWindowHint);
-            gridLay->addWidget(videoDisplayer[1],0,0,4,8);
-            gridLay->addWidget(videoDisplayer[0],0,6,1,2);
+            guiLayout->addWidget(videoDisplayer[1],0,0,4,8);
+            guiLayout->addWidget(videoDisplayer[0],0,6,1,2);
             windowSelector-=2;
         }
 }
@@ -201,37 +137,27 @@ void gui::updateSensorLabel(QString depth)
 
 void gui::startLengthMeasuring()
 {
-    qDebug()<<"shall start measuring script";
     process->start("python",QStringList()<<"/home/abdelrahman/.PyCharmEdu2018.3/config/scratches/lengthMeasureStarter.py");
-    qDebug()<<"measuring script should have started";
-}
-
-
-void gui::prepButtonsConfig()
-{
-    emit buttonsConfig(configuration);
 }
 
 
 
 
-void gui::createButtons()
+void gui::createItems()
 {
 
     timer=new CountDown();
     timer->setTimer(15,0);
-    layTimer->addWidget(timer->getTimerLabel());
+    guiItemsLayout->addWidget(timer->getTimerLabel());
     sensor_label=new sensorLabel();
-    layTimer->addWidget(sensor_label);
+    guiItemsLayout->addWidget(sensor_label);
     //    timer->getTimerLabel()->setParent(window[0]);
-    assignButtons();
-
 
 }
 
 void gui::assignButtons()
 {
-
+    //buttons initializations
     buttons[restartTimerID-piButtonsInUse]="3";
     buttons[buttonsSettingsID-piButtonsInUse]="10";
     buttons[changeCameraID-piButtonsInUse]="1";
@@ -244,7 +170,6 @@ void gui::assignButtons()
 
 void gui::handleSignals()
 {
-
     //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
     connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
 }

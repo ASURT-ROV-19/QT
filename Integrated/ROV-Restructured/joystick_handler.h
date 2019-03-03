@@ -19,16 +19,25 @@ public:
 
 public slots:
     void changeInButtonsConfiguration(QString newConfig);
-    void getButtons();
-
+    void joyAxisMotion();
 private slots:
-    void messageReceive(QString message);
+    void messageReady(QString message);
+    void buttonDown(int button);
+    void buttonUp(int button);
 signals:
     void sendToPi(QString);
-    void sendToGUI(QString);
+    void guiChange(QString);
 private:
-    QString msg;
+    void buttonDownMessage();
+    void buttonUpMessage();
     int mapZ();
+    int map(int axisValue);
+    void move();
+    void signalsHandler();
+    void change_prev();
+
+    QString msg;
+    int prev_x,prev_y,prev_z,prev_r,upZ=0,light=0,axisChangeFlag=0,activateR=0;
     Joystick * joyS;
     int numOfPiButtons;
     int * buttons;

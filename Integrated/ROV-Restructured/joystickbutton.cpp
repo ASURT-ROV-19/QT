@@ -52,3 +52,4 @@ void joystickButton::buttonClicked()
 {
     emit thisClicked(this);
 }
+

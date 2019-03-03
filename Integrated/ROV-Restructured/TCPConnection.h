@@ -11,11 +11,11 @@
 #include <exception>
 
 using namespace std;
-class TCPServer:public QObject
+class TCPConnection:public QObject
 {
     Q_OBJECT
 public:
-    TCPServer(string Host,int Port);
+    TCPConnection(string Host,int Port);
     bool isConnected();
     bool sendToServer(QString message);
     bool connectToServer();
@@ -25,15 +25,13 @@ private slots:
     void socketDisconnected();
 private:
     QTcpSocket *socket;
-    QTimer *reConTimer;
     int connectionFlag,port;
     string host;
 signals:
     void receivedmsg(QString);
  public slots:
-    void reconnect();
 //    void connected();
-    void read();
+//    void read();  // not yet used feature
 
 };
 

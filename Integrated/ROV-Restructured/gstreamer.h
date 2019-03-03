@@ -44,7 +44,6 @@ public slots:
 
 private:
 
-    QGraphicsView * view;
 //    QGst::Pipeline pipe;
     QGst::ElementPtr sink2,source;
     QGst::PipelinePtr pipe2;
@@ -54,8 +53,6 @@ private:
 //    QVideoWidget * videowindow;
     QGst::Ui::VideoWidget * videowindow;
     uint8_t state=0;
-    uint8_t windowSelector=0;
-    QGridLayout * GUILayOut;
     int PORT;
     std::string pipeline_description;
     QString desc;

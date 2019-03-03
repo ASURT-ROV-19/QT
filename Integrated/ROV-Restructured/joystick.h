@@ -23,38 +23,21 @@ public:
     int get_y();
     int get_z();
     int get_r();
-    int getMapped_z();
     int get_hat();
     void activate();
     void remove();
-    bool checkIfGuiButton(int button);
-    void buttonDown(int button);
-    void buttonUp(int button);
-    void changeInButtonsConfiguration(QString newConfig);
-    int getNumOfPiButtons();
-    int getButtonNumber(int buttonIndex);
 
 public slots:
     void action();
 signals:
-    void sendMsg(QString);
-    void newButtons();
+    void axisMotion();
+    void buttonPressed(int buttonNumber);
+    void buttonReleased(int buttonNumber);
 
 private:
-    QTimer *timer;
-    SDL_Event  event;
-    int prev_x,prev_y,prev_z,prev_r,upZ=0,light=0,axisChangeFlag=0,activateR=0;
-    int x,y,z,r;
-//    int upZButton=0,activateRButton=1,lightButton=6;
-    int * buttons;
-    QString msg;
-    void change_prev();
-    void move();
-    int mapZ();
-    int map(int x);
-    void buttonDownMessage();
-    void buttonUpMessage();
     SDL_Joystick *js;
+    QTimer *timer;
+    SDL_Event * event;
 
 };
 
