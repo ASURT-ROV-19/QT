@@ -22,9 +22,11 @@ Joystick_Handler::Joystick_Handler()
     prev_x=0;prev_y=0;prev_z=0;prev_r=0;upZ=0;light=0;axisChangeFlag=0;activateR=0;
     joyS=new Joystick();
     buttons=new int[piButtonsInUse];
-    for (int i=0;i<piButtonsInUse;i++){
-        buttons[i]=i;
-    }
+    buttons[r_active]=0;
+    buttons[Z_down]=2;
+    buttons[light_On_Off]=8;
+    buttons[Z_up]=4;
+
     signalsHandler();
 }
 
@@ -35,12 +37,12 @@ Joystick_Handler::~Joystick_Handler()
     delete joyS;
 }
 
-void Joystick_Handler::changeInButtonsConfiguration(QString newConfig)
-{
-    QStringList buttonID=newConfig.split(" ");
-    int buttonIndex=buttonID[0].toInt();
-    buttons[buttonIndex]=buttonID[1].toInt();
-}
+//void Joystick_Handler::changeInButtonsConfiguration(QString newConfig)
+//{
+//    QStringList buttonID=newConfig.split(" ");
+//    int buttonIndex=buttonID[0].toInt();
+//    buttons[buttonIndex]=buttonID[1].toInt();
+//}
 
 void Joystick_Handler::joyAxisMotion()
 {
@@ -67,54 +69,45 @@ void Joystick_Handler::buttonDown(int button)
 {
     msg=QString::number(button);
     qDebug()<<button;
-    if (button==buttons[Z_up]){
-        upZ=-1;
-        buttonDownMessage();
+    if(button==buttons[r_active])
+    {
+        activateR=1;
+        return;
+    }
+    else if (button==buttons[Z_up]){
+        upZ==-1 ? upZ=0 : upZ=1;
+        move();
     }
     else if(button==buttons[Z_down])
     {
-        upZ=1;
-        buttonDownMessage();
+        upZ==1 ? upZ=0 : upZ=-1;
+        move();
     }
     else if(button==buttons[light_On_Off]){
         light==1 ? light=0 : light=1;
         move();
     }
-    else if(button==buttons[r_active])
-    {
-        activateR=1;
-    }
-    else
-    {
-        messageReady(msg);
-        qDebug()<<"message of line 113->>"<<msg;
-    }
+    messageReady(msg);
 
 
 }
 
 void Joystick_Handler::buttonUp(int button)
 {
-    msg=QString::number(button);
-    qDebug()<<button;
-    if (button==buttons[Z_up]){
-        upZ=0;
-        buttonDownMessage();
-    }
-    else if(button==buttons[Z_down])
-    {
-        upZ=0;
-        buttonDownMessage();
-    }
-    else if(button==buttons[r_active])
+     if(button==buttons[r_active])
     {
         activateR=0;
     }
-    else
-    {
-        messageReady(msg);
-    }
-
+     else if (button==buttons[Z_up]){
+         upZ=0;
+         move();
+     }
+     else if(button==buttons[Z_down])
+     {
+         upZ=0;
+         move();
+     }
+     messageReady(msg);
 
 }
 
@@ -147,7 +140,7 @@ void Joystick_Handler::buttonUpMessage()
 
 int Joystick_Handler::mapZ()
 {
-  return upZ * (Z*100/(axisMax*2)+50);
+  return /*upZ **/ (Z*100/(axisMax*2)+49);
 }
 
 int Joystick_Handler::map(int axisValue)
@@ -161,12 +154,28 @@ void Joystick_Handler::move()
     msg="";
     change_prev();
 
-    msg+="x="+((abs(X)>DEADZONE)? QString::number(map(X)) : "0" )+"," ;
-    msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : "0" )+"," ;
-    msg+="z="+QString::number(mapZ())+",";
-    msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : "0" )+"," ;
-    msg+="cam="+QString::number(cam)+",";
-    msg+="light="+QString::number(light)+",";
+    msg += " x " + QString("%1").arg(((abs(X)>DEADZONE)? map(X) : 0 ) ,3 , 10, QChar('0'));
+    msg += "; y " + QString("%1").arg(((abs(Y)>DEADZONE)? map(Y) : 0 ) ,3 , 10, QChar('0'));
+    msg += "; r " + QString("%1").arg(((abs(R)>DEADZONE)? map(R) : 0 ) ,3 , 10, QChar('0'));
+    msg += "; z " + QString("%1").arg(((abs(Z)>DEADZONE)? mapZ() : 0 ) ,3 , 10, QChar('0')) + "; ";
+    msg += "up "+ QString("%1").arg(upZ==1 ? upZ : 0 ,1,10, QChar('0')) + "; ";
+    msg += "down "+ QString("%1").arg(upZ==-1 ? -upZ : 0 ,1,10, QChar('0')) + " ;";
+    msg += " L " + QString("%1").arg( 0,1,10, QChar('0')) + "; ";
+    msg += "cam_up " + QString("%1").arg(0,1,10, QChar('0')) + "; ";
+    msg += "cam_down " + QString("%1").arg( 0,1,10, QChar('0')) + "; ";
+    msg += "mode 0;";
+    msg += " bag " + QString("%1").arg( 0,1,10, QChar('0')) + "; ";
+
+
+
+
+
+//    msg+="x="+((abs(X)>DEADZONE)? QString::number(map(X)) : "0" )+"," ;
+//    msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : "0" )+"," ;
+//    msg+="z="+QString::number(mapZ())+",";
+//    msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : "0" )+"," ;
+//    msg+="cam="+QString::number(cam)+",";
+//    msg+="light="+QString::number(light)+",";
 
 }
 

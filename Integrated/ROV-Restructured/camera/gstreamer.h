@@ -11,15 +11,15 @@
 #include <QDebug>
 #include <QVideoWidget>
 #include <Qt5GStreamer/QGst/VideoOverlay>
-#include <QGst/Ui/VideoWidget>
+#include <Qt5GStreamer/QGst/Ui/VideoWidget>
 #include <QGraphicsView>
-#include <QGst/Element>
-#include <QGst/ElementFactory>
-#include <QGst/Pipeline>
-#include <QGst/Parse>
-#include <QGst/Init>
-#include <QGst/Bin>
-#include <QGst/VideoOverlay>
+#include <Qt5GStreamer/QGst/Element>
+#include <Qt5GStreamer/QGst/ElementFactory>
+#include <Qt5GStreamer/QGst/Pipeline>
+#include <Qt5GStreamer/QGst/Parse>
+#include <Qt5GStreamer/QGst/Init>
+#include <Qt5GStreamer/QGst/Bin>
+#include <Qt5GStreamer/QGst/VideoOverlay>
 #include <gst/video/video-overlay-composition.h>
 
 //#include <QGst/Pipeline>

@@ -5,8 +5,29 @@ TCPConnection::TCPConnection(string Host,int Port)
 {
     this->host=Host;
     this->port=Port;
-    socket=new QTcpSocket;
+    socket=new QTcpSocket();
     connectToServer();
+    int enableKeepAlive = 1;
+    int fd = socket->socketDescriptor();
+    setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &enableKeepAlive,
+                sizeof(enableKeepAlive));
+
+    int maxIdle = 1; /* seconds */
+    setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &maxIdle, sizeof(maxIdle));
+
+    int count =2; // send up to 3 keepalive packets out, then disconnect if no response
+    setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT, &count, sizeof(count));
+
+    int interval = 1; // send a keepalive packet out every 2 seconds (after the
+                      // 5 second idle period)
+    setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(interval));
+
+
+//    socket->setSocketOption(QAbstractSocket::SocketOption::KeepAliveOption,true);
+//    socket->setSocketOption(QAbstractSocket::SocketOption::,true);
+//    socket->setSocketOption(QAbstractSocket::SocketOption::LowDelayOption,true);
+//    socket->setSocketOption(QAbstractSocket::SocketOption::KeepAliveOption,5);
+//    socket->setSocketOption(QAbstractSocket::SocketOption::KeepAliveOption,5);
 //    connect(socket,SIGNAL(disconnected()),this,SLOT(socketDisconnected()));
 //    connect(socket,SIGNAL(connected()),this,SLOT(connected()));
 //    connect(socket,SIGNAL(readyRead()),this,SLOT(read()));
@@ -72,6 +93,10 @@ void TCPConnection::sendMessage(QString message)
         else if(connectToServer()){
             qDebug() <<"reconnected"<<  message;
             this->sendToServer(message);
+        }
+        else {
+            qDebug()<<"couldn't send message";
+
         }
 }
 

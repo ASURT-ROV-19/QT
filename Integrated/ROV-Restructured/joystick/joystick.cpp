@@ -22,10 +22,10 @@
 Joystick::Joystick()
 {
 
-    event=new SDL_Event;
+    event=new SDL_Event();
     qDebug()<<"JOYSTICK CREATED";
     JoyStickInitialization();
-    timer =new QTimer;
+    timer =new QTimer();
     timer->setInterval(50);
     timer->start();
     connect(timer,SIGNAL(timeout()),this,SLOT(action()));
@@ -80,8 +80,8 @@ void Joystick::remove()
 void Joystick::JoyStickInitialization()
 {
 
-//    SDL_Init(SDL_INIT_JOYSTICK);
-    SDL_Init(SDL_INIT_EVERYTHING);
+    SDL_Init(SDL_INIT_JOYSTICK);
+//    SDL_Init(SDL_INIT_EVERYTHING);
 //    SDL_Init(SDL_INIT_EVENTS);
      if (SDL_INIT_JOYSTICK<0){
          qDebug()<<"failed to init";
@@ -89,7 +89,7 @@ void Joystick::JoyStickInitialization()
      }
 
      js = SDL_JoystickOpen(0);
-     SDL_JoystickEventState(SDL_ENABLE);
+//     SDL_JoystickEventState(SDL_ENABLE);
 
      if (SDL_JoystickGetAttached(js)){
          qDebug() <<"attached";

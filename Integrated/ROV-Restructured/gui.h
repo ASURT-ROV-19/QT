@@ -2,7 +2,7 @@
 #define GUI_H
 #include <QObject>
 #include <QPushButton>
-#include "countdown.h"
+#include "guiItems/countdown.h"
 #include <QTimer>
 #include <QDebug>
 #include <QWidget>
@@ -11,9 +11,9 @@
 #include <QApplication>
 #include <QString>
 #include <string.h>
-#include "gstreamer.h"
+#include "camera/gstreamer.h"
 #include <QTimer>
-#include "sensorlabel.h"
+#include "guiItems/sensorlabel.h"
 #include <QProcess>
 
 class gui : public QObject

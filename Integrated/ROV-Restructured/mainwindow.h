@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include<joystick_handler.h>
-#include <TCPConnection.h>
+#include<joystick/joystick_handler.h>
+#include <network/TCPConnection.h>
 #include "gui.h"
 #include "string.h"
 #include <QApplication>

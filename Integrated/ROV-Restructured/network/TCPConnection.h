@@ -9,6 +9,9 @@
 #include <QString>
 #include <QHostAddress>
 #include <exception>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 
 using namespace std;
 class TCPConnection:public QObject
@@ -19,6 +22,7 @@ public:
     bool isConnected();
     bool sendToServer(QString message);
     bool connectToServer();
+
 public slots:
     void sendMessage(QString message); //Use this one
 private slots:

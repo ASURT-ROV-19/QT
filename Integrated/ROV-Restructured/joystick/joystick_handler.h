@@ -4,7 +4,7 @@
 #include <string.h>
 #include <QString>
 #include <QDebug>
-#include <joystick.h>
+#include <joystick/joystick.h>
 
 using namespace std;
 
@@ -18,7 +18,7 @@ public:
 //    void getMessage(QString message, int serverOrGui);
 
 public slots:
-    void changeInButtonsConfiguration(QString newConfig);
+//    void changeInButtonsConfiguration(QString newConfig);
     void joyAxisMotion();
 private slots:
     void messageReady(QString message);

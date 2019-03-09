@@ -19,6 +19,7 @@ gui::gui(QWidget *parent)
     guiItemsCarryingWidget->setAttribute(Qt::WA_TranslucentBackground);
     guiItemsCarryingWidget->setGeometry(0,0,150,140);
     process=new QProcess(this); 
+    startLengthMeasuring();
 }
 
 gui::~gui()
@@ -27,7 +28,7 @@ gui::~gui()
     qDebug()<<"destroying gui instance";
     delete process;
     delete [] buttons;
-    delete timer;
+//    delete timer;
     delete sensor_label;
     delete guiItemsLayout;
     for (int i=0;i<3;i++){
@@ -82,7 +83,7 @@ void gui::changeInGUI(QString button)
         else if(button==buttons[restartTimerID-piButtonsInUse])
             //restart timer
         {
-            timer->restartTimer(15,0);
+//            timer->restartTimer(15,0);
         }
     else if(button==buttons[fullScreenID-piButtonsInUse])
         //toggle screen between full and normal
@@ -102,6 +103,8 @@ void gui::changeInButtonsConfiguration(QString newConfig)
 
 void gui::toggleCamera()
 {
+
+    qDebug()<<"toggling camera";
     // EQUAL SIZES
         if (windowSelector==0){
             positionItems(videoDisplayer[0]);       //sets display of items to be on the left hand camera
@@ -137,7 +140,7 @@ void gui::updateSensorLabel(QString depth)
 
 void gui::startLengthMeasuring()
 {
-    process->start("python",QStringList()<<"/home/abdelrahman/.PyCharmEdu2018.3/config/scratches/lengthMeasureStarter.py");
+    process->start("python",QStringList()<<"/home/abdelrahman/ASURT/ImageProcessing/ROV19/length\ measuring/lengthMeasureStarter.py");
 }
 
 
@@ -146,9 +149,9 @@ void gui::startLengthMeasuring()
 void gui::createItems()
 {
 
-    timer=new CountDown();
-    timer->setTimer(15,0);
-    guiItemsLayout->addWidget(timer->getTimerLabel());
+//    timer=new CountDown();
+//    timer->setTimer(15,0);
+//    guiItemsLayout->addWidget(timer->getTimerLabel());
     sensor_label=new sensorLabel();
     guiItemsLayout->addWidget(sensor_label);
     //    timer->getTimerLabel()->setParent(window[0]);
@@ -171,5 +174,5 @@ void gui::assignButtons()
 void gui::handleSignals()
 {
     //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
-    connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
+//    connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
 }

@@ -30,34 +30,34 @@ PKGCONFIG += Qt5GStreamerUi-1.0 Qt5GStreamerUtils-1.0
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    countdown.cpp \
+    guiItems/countdown.cpp \
     gui.cpp \
-    joystick.cpp \
-    joystick_handler.cpp \
-#    gstream.cpp \
-    gstreamer.cpp \
+    joystick/joystick.cpp \
+    joystick/joystick_handler.cpp \
+#    camera/gstream.cpp \
+    camera/gstreamer.cpp \
 #    buttonsconfiguration.cpp \
 #    joystickbutton.cpp \
 #    tablemodel.cpp \
-    sensorlabel.cpp \
+    guiItems/sensorlabel.cpp \
 #    newsettingshandler.cpp \
-    TCPConnection.cpp
+    network/TCPConnection.cpp
 
 
 HEADERS += \
         mainwindow.h \
-    countdown.h \
+    guiItems/countdown.h \
     gui.h \
-    joystick.h \
-    joystick_handler.h \
-#    gstream.h \
-    gstreamer.h \
+    joystick/joystick.h \
+    joystick/joystick_handler.h \
+#    camera/gstream.h \
+    camera/gstreamer.h \
 #    buttonsconfiguration.h \
 #    joystickbutton.h \
 #    tablemodel.h \
-    sensorlabel.h \
+    guiItems/sensorlabel.h \
 #    newsettingshandler.h \
-    TCPConnection.h
+    network/TCPConnection.h
 
 FORMS += \
         mainwindow.ui
