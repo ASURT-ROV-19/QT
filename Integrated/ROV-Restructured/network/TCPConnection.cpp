@@ -95,7 +95,7 @@ void TCPConnection::sendMessage(QString message)
             this->sendToServer(message);
         }
         else {
-            qDebug()<<"couldn't send message";
+//            qDebug()<<"couldn't send message";
 
         }
 }

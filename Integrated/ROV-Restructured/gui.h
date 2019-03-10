@@ -8,12 +8,13 @@
 #include <QWidget>
 #include <QFont>
 #include <QGridLayout>
+#include <QSpacerItem>
 #include <QApplication>
 #include <QString>
 #include <string.h>
 #include "camera/gstreamer.h"
 #include <QTimer>
-#include "guiItems/sensorlabel.h"
+#include "guiItems/transparentlabel.h"
 #include <QProcess>
 
 class gui : public QObject
@@ -25,7 +26,7 @@ public:
 //    QPushButton * getChangingButton();    //temporary to use the button instead of the joystick as i ddon't have the joystick now;
 //    void getCam(gstream *Camera, uint8_t cameraNum);
     void setDisplayWindow(QGst::Ui::VideoWidget *displayWindow, uint8_t cameraNum);
-    void positionItems(QGst::Ui::VideoWidget * parent);
+    void positionItems(QGridLayout * parent);
 public slots:
     void changeInGUI(QString button);
     void changeInButtonsConfiguration(QString newConfig);
@@ -37,7 +38,8 @@ signals:
     void show_hideButConfig();
     void guiSizeChange();
 private:
-
+    void createLayouts();
+    void setCameraWindowLayout(int cameraIndex);
     void startLengthMeasuring();
     void createItems();
     void assignButtons();
@@ -45,16 +47,19 @@ private:
     void checkForButtonsSwitch(int buttonIndex,QString newNumber);
     bool switchButtons(QString * button1,QString * old_button1,QString * button2,QString * old_button2);
 
-    sensorLabel * sensor_label;
+    transparentLabel * sensor_label;
+    transparentLabel * cameraLabel;
     CountDown * timer;
     QGridLayout * guiLayout;
+    QGridLayout ** camsLayout;
+    QGridLayout * guiItemsLayout;
+    QSpacerItem * verticalSpacer;
     uint8_t windowSelector=0;
 //    gstream ** camera;
 //    QWidget ** window;
     QVideoWidget ** videoWindow;
     QWidget * GUIwindow;
     QWidget * guiItemsCarryingWidget;
-    QGridLayout * guiItemsLayout;
     QGst::Ui::VideoWidget ** videoDisplayer;
     QProcess * process;
 

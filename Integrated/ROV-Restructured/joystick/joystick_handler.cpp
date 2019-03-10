@@ -97,17 +97,18 @@ void Joystick_Handler::buttonUp(int button)
      if(button==buttons[r_active])
     {
         activateR=0;
+        messageReady(msg);
     }
-     else if (button==buttons[Z_up]){
-         upZ=0;
-         move();
-     }
-     else if(button==buttons[Z_down])
-     {
-         upZ=0;
-         move();
-     }
-     messageReady(msg);
+    //activate if using ROV18 Pi
+     //     else if (button==buttons[Z_up]){
+//         upZ=0;
+//         move();
+//     }
+//     else if(button==buttons[Z_down])
+//     {
+//         upZ=0;
+//         move();
+//     }
 
 }
 
@@ -140,7 +141,7 @@ void Joystick_Handler::buttonUpMessage()
 
 int Joystick_Handler::mapZ()
 {
-  return /*upZ **/ (Z*100/(axisMax*2)+49);
+  return upZ*(Z*100/(axisMax*2)+49);
 }
 
 int Joystick_Handler::map(int axisValue)
@@ -153,29 +154,29 @@ void Joystick_Handler::move()
 
     msg="";
     change_prev();
-
-    msg += " x " + QString("%1").arg(((abs(X)>DEADZONE)? map(X) : 0 ) ,3 , 10, QChar('0'));
-    msg += "; y " + QString("%1").arg(((abs(Y)>DEADZONE)? map(Y) : 0 ) ,3 , 10, QChar('0'));
-    msg += "; r " + QString("%1").arg(((abs(R)>DEADZONE)? map(R) : 0 ) ,3 , 10, QChar('0'));
-    msg += "; z " + QString("%1").arg(((abs(Z)>DEADZONE)? mapZ() : 0 ) ,3 , 10, QChar('0')) + "; ";
-    msg += "up "+ QString("%1").arg(upZ==1 ? upZ : 0 ,1,10, QChar('0')) + "; ";
-    msg += "down "+ QString("%1").arg(upZ==-1 ? -upZ : 0 ,1,10, QChar('0')) + " ;";
-    msg += " L " + QString("%1").arg( 0,1,10, QChar('0')) + "; ";
-    msg += "cam_up " + QString("%1").arg(0,1,10, QChar('0')) + "; ";
-    msg += "cam_down " + QString("%1").arg( 0,1,10, QChar('0')) + "; ";
-    msg += "mode 0;";
-    msg += " bag " + QString("%1").arg( 0,1,10, QChar('0')) + "; ";
+        //message for ROV19 Pi
+    msg+="x="+((abs(X)>DEADZONE)? QString::number(map(X)) : "0" )+"," ;
+    msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : "0" )+"," ;
+    msg+="z="+QString::number(mapZ())+",";
+    msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : "0" )+"," ;
+    msg+="cam="+QString::number(cam)+",";
+    msg+="light="+QString::number(light)+"&";
 
 
 
 
-
-//    msg+="x="+((abs(X)>DEADZONE)? QString::number(map(X)) : "0" )+"," ;
-//    msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : "0" )+"," ;
-//    msg+="z="+QString::number(mapZ())+",";
-//    msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : "0" )+"," ;
-//    msg+="cam="+QString::number(cam)+",";
-//    msg+="light="+QString::number(light)+",";
+    //message for ROV18 Pi
+//    msg += " x " + QString("%1").arg(((abs(X)>DEADZONE)? map(X) : 0 ) ,3 , 10, QChar('0'));
+//    msg += "; y " + QString("%1").arg(((abs(Y)>DEADZONE)? map(Y) : 0 ) ,3 , 10, QChar('0'));
+//    msg += "; r " + QString("%1").arg(((abs(R)>DEADZONE)? map(R) : 0 ) ,3 , 10, QChar('0'));
+//    msg += "; z " + QString("%1").arg(((abs(Z)>DEADZONE)? mapZ() : 0 ) ,3 , 10, QChar('0')) + "; ";
+//    msg += "up "+ QString("%1").arg(upZ==1 ? upZ : 0 ,1,10, QChar('0')) + "; ";
+//    msg += "down "+ QString("%1").arg(upZ==-1 ? -upZ : 0 ,1,10, QChar('0')) + " ;";
+//    msg += " L " + QString("%1").arg( 0,1,10, QChar('0')) + "; ";
+//    msg += "cam_up " + QString("%1").arg(0,1,10, QChar('0')) + "; ";
+//    msg += "cam_down " + QString("%1").arg( 0,1,10, QChar('0')) + "; ";
+//    msg += "mode 0;";
+//    msg += " bag " + QString("%1").arg( 0,1,10, QChar('0')) + "; ";
 
 }
 

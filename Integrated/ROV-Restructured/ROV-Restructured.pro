@@ -39,9 +39,9 @@ SOURCES += \
 #    buttonsconfiguration.cpp \
 #    joystickbutton.cpp \
 #    tablemodel.cpp \
-    guiItems/sensorlabel.cpp \
 #    newsettingshandler.cpp \
-    network/TCPConnection.cpp
+    network/TCPConnection.cpp \
+    guiItems/transparentlabel.cpp
 
 
 HEADERS += \
@@ -55,9 +55,9 @@ HEADERS += \
 #    buttonsconfiguration.h \
 #    joystickbutton.h \
 #    tablemodel.h \
-    guiItems/sensorlabel.h \
 #    newsettingshandler.h \
-    network/TCPConnection.h
+    network/TCPConnection.h \
+    guiItems/transparentlabel.h
 
 FORMS += \
         mainwindow.ui

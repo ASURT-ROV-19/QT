@@ -2,10 +2,10 @@
 #define SENSORLABEL_H
 #include <QLabel>
 
-class sensorLabel : public QLabel
+class transparentLabel : public QLabel
 {
 public:
-    sensorLabel();
+    transparentLabel();
 };
 
 #endif // SENSORLABEL_H

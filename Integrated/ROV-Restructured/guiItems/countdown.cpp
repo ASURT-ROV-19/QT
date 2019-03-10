@@ -36,17 +36,17 @@ void CountDown::resume()
 void CountDown::setBackgroundColor()
 {
     if (mins < 2){
-        timerLabel->setStyleSheet("QLabel{color: red ;  font-size: 40px; }");
+        timerLabel->setStyleSheet("QLabel{color: red ;  font-size: 33px; }");
     }
     else if (mins < 5){
-        timerLabel->setStyleSheet("QLabel{color: orange ;  font-size: 40px; }");
+        timerLabel->setStyleSheet("QLabel{color: orange ;  font-size: 33px; }");
 
     }
     else if (mins < 14){
-        timerLabel->setStyleSheet("QLabel{color: yellow ;  font-size: 40px; }");
+        timerLabel->setStyleSheet("QLabel{color: yellow ;  font-size: 33px; }");
     }
     else {
-        timerLabel->setStyleSheet("QLabel{color: green ;  font-size: 40px; }");
+        timerLabel->setStyleSheet("QLabel{color: green ;  font-size: 33px; }");
     }
 }
 
@@ -145,7 +145,7 @@ void CountDown::setTimerFont()
     QFont font1=timerLabel->font();
     font1.setPointSize(26);
     timerLabel->setFont(font1);
-     timerLabel->setStyleSheet("QLabel{color: orange ;  font-size: 40px; }");
+     timerLabel->setStyleSheet("QLabel{color: orange ;  font-size: 33px; }");
 
 }
 
