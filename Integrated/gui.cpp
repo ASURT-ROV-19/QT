@@ -171,11 +171,12 @@ void gui::createItems()
     sensor_label=new transparentLabel();
     sensor_label->setStyleSheet("QLabel{color: red ;  font-size: 25px; }");
     guiItemsLayout->addWidget(sensor_label,1,0,1,1);
+    guiItemsLayout->addItem(verticalSpacer,2,0,1,1);
     cameraLabel=new transparentLabel[2];
     cameraLabel[0].setText("cam1");
     cameraLabel[1].setText("cam2");
-    camsLayout[0]->addWidget(&cameraLabel[0],1,0,1,1);
-    camsLayout[1]->addWidget(&cameraLabel[1],1,0,1,1);
+//    camsLayout[0]->addWidget(&cameraLabel[0],1,0,1,1);
+//    camsLayout[1]->addWidget(&cameraLabel[1],1,0,1,1);
 //    camsLayout[0]->addItem(verticalSpacer,2,0,1,1);
 //    camsLayout[1]->addItem(verticalSpacer,2,0,1,1);
 //    guiLayout->addItem(verticalSpacer,3,0,1,10);

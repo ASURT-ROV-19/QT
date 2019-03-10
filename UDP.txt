@@ -1,0 +1,49 @@
+#UDP Receiver
+computerrrrrrrrrrrrrrrrrr:
+
+gst-launch-1.0 udpsrc port=5022 ! application/x-rtp,encoding-name=H264 ! rtpjitterbuffer latency=0 ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink
+
+
+
+#UDP Transmitter:
+3shan t5leeh mn el external cam , 5aly el transmitter :
+
+da lel piiiiiiiiiiii:
+
+gst-launch-1.0 v4l2src device="/dev/video0" ! video/x-raw,width=640,height=480 ! videoconvert ! x264enc tune=zerolatency ! rtph264pay ! udpsink host='bta3 el computer' port=5022
+
+
+
+
+
+gst-launch-1.0 v4l2src ! video/x-raw,width=640,height=480 ! videoconvert ! x264enc tune=zerolatency ! rtph264pay ! udpsink port=5022
+
+
+
+A branching receiver:
+udpsrc port=5022 ! application/x-rtp,encoding-name=H264 ! tee name=t ! queue ! udpsink port=10000 t. ! queue ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink name=sink
+
+
+
+gst-launch -v videotestsrc ! video/x-raw-yuv, framerate=25/1, width=640, height=360 ! timeoverlay halign=left valign=bottom text="Stream time:" shaded-background=true ! xvimagesink
+
+
+
+
+
+
+gst-launch-1.0 udpsrc port=5022 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! videoconvert ! ximagesink
+
+
+
+
+
+JPEG transmitter:
+gst-launch-1.0 v4l2src ! video/x-raw,width=640,height=480 ! jpegenc ! rtpjpegpay ! udpsink host=127.0.0.1 port=5022
+
+JPEG receiver:
+gst-launch-1.0 udpsrc port=5022 ! application/x-rtp,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! xvimagesink name=sink  force-aspect-ratio=false
+
+branching JPEG receiver:
+udpsrc port=5022 ! application/x-rtp,encoding-name=JPEG,payload=26 ! tee name=t ! queue ! udpsink port=10000 t. ! queue ! rtpjpegdepay ! jpegdec ! videoconvert ! ximagesink name=sink
+
