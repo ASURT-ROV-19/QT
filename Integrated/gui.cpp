@@ -16,8 +16,7 @@ gui::gui(QWidget *parent)
     guiItemsCarryingWidget->setWindowTitle("GUI Items Carrying Widget");
     guiItemsCarryingWidget->setAttribute(Qt::WA_TranslucentBackground);
     guiItemsCarryingWidget->setGeometry(0,0,120,150);
-    process=new QProcess(this); 
-    startLengthMeasuring();
+    process=new QProcess(this);
 }
 
 gui::~gui()
@@ -107,8 +106,6 @@ void gui::toggleCamera()
     // EQUAL SIZES
         if (windowSelector==0){
             positionItems(camsLayout[0]);       //sets display of items to be on the left hand camera
-//            videoDisplayer[0]->setParent(nullptr);
-//            videoDisplayer[1]->setParent(nullptr);
             guiLayout->addWidget(videoDisplayer[0],0,0,1,1);
             guiLayout->addWidget(videoDisplayer[1],0,1,1,1);
             windowSelector++;
@@ -145,7 +142,7 @@ void gui::createLayouts()
     camsLayout=new QGridLayout * [2];
     camsLayout[0]=new QGridLayout();
     camsLayout[1]=new QGridLayout();
-    verticalSpacer=new QSpacerItem(1,1,QSizePolicy::Preferred,QSizePolicy::Expanding);
+    verticalSpacer=new QSpacerItem(1,1,QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
 
 }
 
@@ -175,8 +172,8 @@ void gui::createItems()
     cameraLabel=new transparentLabel[2];
     cameraLabel[0].setText("cam1");
     cameraLabel[1].setText("cam2");
-//    camsLayout[0]->addWidget(&cameraLabel[0],1,0,1,1);
-//    camsLayout[1]->addWidget(&cameraLabel[1],1,0,1,1);
+    camsLayout[0]->addWidget(&cameraLabel[0],1,0,1,1);
+    camsLayout[1]->addWidget(&cameraLabel[1],1,0,1,1);
 //    camsLayout[0]->addItem(verticalSpacer,2,0,1,1);
 //    camsLayout[1]->addItem(verticalSpacer,2,0,1,1);
 //    guiLayout->addItem(verticalSpacer,3,0,1,10);

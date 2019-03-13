@@ -4,9 +4,9 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    TCPconnection=new TCPConnection("10.1.1.15",9005);
+//    TCPconnection=new TCPConnection("10.1.1.15",9005);
 
-//    TCPconnection=new TCPConnection("127.0.0.1",9000);
+    TCPconnection=new TCPConnection("127.0.0.1",9005);
     JSHandler = new Joystick_Handler();
     connect(JSHandler,SIGNAL(sendToPi(QString)),TCPconnection,SLOT(sendMessage(QString)));
     centralWidget=new QWidget();
@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     centralWidget->setWindowTitle("Stream");
     GUI=new gui(centralWidget);
     connect(JSHandler,SIGNAL(guiChange(QString)),GUI,SLOT(changeInGUI(QString)));
-//    connect(TCPconnection,SIGNAL(receivedmsg(QString)),GUI,SLOT(updateSensorLabel(QString)));
+    connect(TCPconnection,SIGNAL(receivedmsg(QString)),GUI,SLOT(updateSensorLabel(QString)));
     connect(GUI,SIGNAL(guiSizeChange()),this,SLOT(toggleFullScreen()));
 }
 
