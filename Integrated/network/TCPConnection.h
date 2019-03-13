@@ -35,7 +35,7 @@ signals:
     void receivedmsg(QString);
  public slots:
 //    void connected();
-//    void read();  // not yet used feature
+    void read();  // not yet used feature
 
 };
 
