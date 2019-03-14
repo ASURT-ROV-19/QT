@@ -27,6 +27,7 @@ public slots:
     void sendMessage(QString message); //Use this one
 private slots:
     void socketDisconnected();
+    void socketErrorRaised(QAbstractSocket::SocketError error);
 private:
     QTcpSocket *socket;
     int connectionFlag,port;

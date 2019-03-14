@@ -198,10 +198,10 @@ void gui::createItems()
 void gui::assignButtons()
 {
     //buttons initializations
-    buttons[restartTimerID-piButtonsInUse]="2";
+    buttons[restartTimerID-piButtonsInUse]="8";
     buttons[buttonsSettingsID-piButtonsInUse]="10";
     buttons[changeCameraID-piButtonsInUse]="1";
-    buttons[playPauseTimerID-piButtonsInUse]="4";
+    buttons[playPauseTimerID-piButtonsInUse]="9";
     buttons[startLenMeasureID-piButtonsInUse]="11";
     buttons[fullScreenID-piButtonsInUse]="6";
 

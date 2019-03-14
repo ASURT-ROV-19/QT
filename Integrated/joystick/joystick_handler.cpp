@@ -1,13 +1,12 @@
 #include "joystick_handler.h"
-#define buttonsInUse 10
-#define piButtonsInUse 5
+#define buttonsInUse 13
+#define piButtonsInUse 7
 //this class shall hold a string buttons array of all buttons and index is each button's id , receive messages from configHandler , telling it of which ID now has which value
 #define axisMax 32768
 #define X joyS->get_x()
 #define Y joyS->get_y()
 #define Z joyS->get_z()
 #define R joyS->get_r()*activateR
-#define cam joyS->get_hat()
 #define DEADZONE 4000
 #define SGNFCNT 400
 #define Z_up 3
@@ -15,7 +14,9 @@
 #define light_On_Off 2
 #define r_active 0
 #define z_mode 4
-
+#define cam_up 5
+#define cam_down 6
+// 4 down , 1 up
 
 Joystick_Handler::Joystick_Handler()
 {
@@ -23,10 +24,13 @@ Joystick_Handler::Joystick_Handler()
     joyS=new Joystick();
     buttons=new int[piButtonsInUse];
     buttons[r_active]=0;
-    buttons[Z_down]=3;
+    buttons[Z_up]=3;
     buttons[light_On_Off]=8;
-    buttons[Z_up]=5;
+    buttons[Z_down]=5;
     buttons[z_mode]=7;
+    buttons[cam_up]=4;
+    buttons[cam_down]=2;
+    zMode=0;
 
 
     signalsHandler();
@@ -103,8 +107,19 @@ void Joystick_Handler::buttonDown(int button)
         light==1 ? light=0 : light=1;
         move();
     }
-    messageReady(msg);
+    else if (button==buttons[cam_up]){
+        cam=4;
+        move();
+    }
+    else if (button==buttons[cam_down]){
+        cam=1;
+        move();
+    }
 
+
+
+    messageReady(msg);
+    qDebug()<<"mode is "<<zMode<<"\n upZ is "<<upZ;
 
 }
 
@@ -116,23 +131,38 @@ void Joystick_Handler::buttonUp(int button)
         move();
         messageReady(msg);
     }
-    else if (button==buttons[z_mode]){
-        zMode =!zMode;
-    }
+     else if (button==buttons[z_mode]){
+         zMode =!zMode;
+         upZ=0;
+         emit sendZDirection("-");
+         move();
+     }
+     else if (button==buttons[cam_up]){
+         cam=0;
+         move();
+     }
+     else if (button==buttons[cam_down]){
+         cam=0;
+         move();
+     }
+
+
 
     if (zMode==1){
        if (button==buttons[Z_up]){
            upZ=0;
+           emit sendZDirection("-");
            move();
        }
        else if(button==buttons[Z_down])
        {
            upZ=0;
+           emit sendZDirection("-");
            move();
        }
     }
     //activate if using ROV18 Pi
-
+    qDebug()<<"button up :: mode is "<<zMode<<"\n upZ is "<<upZ;
 }
 
 void Joystick_Handler::buttonDownMessage()

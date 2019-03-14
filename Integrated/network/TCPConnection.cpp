@@ -8,12 +8,9 @@ TCPConnection::TCPConnection(string Host,int Port)
     socket=new QTcpSocket();
     connectToServer();
 
-
     connect(socket,SIGNAL(disconnected()),this,SLOT(socketDisconnected()));
-//    connect(socket,SIGNAL(connected()),this,SLOT(connected()));
     connect(socket,SIGNAL(readyRead()),this,SLOT(read()));
-
-
+    connect(socket,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(socketErrorRaised(QAbstractSocket::SocketError)));
 }
 
 bool TCPConnection::connectToServer()
@@ -105,5 +102,14 @@ void TCPConnection::socketDisconnected()
     qDebug()<<"disconnection detected";
     socket->close();
     qDebug()<<"state is : "<<socket->state();
+}
+
+void TCPConnection::socketErrorRaised(QAbstractSocket::SocketError error)
+{
+    qDebug()<<"\n\n\n\n error occured , error is "<<error<<"\n\n\n\n\n";
+    if (error==QAbstractSocket::SocketTimeoutError || error==QAbstractSocket::UnknownSocketError || error==QAbstractSocket::ProxyConnectionTimeoutError || error==QAbstractSocket::NetworkError ){
+        socket->disconnect();
+        socket->waitForDisconnected(100);
+    }
 }
 
