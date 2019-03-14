@@ -32,6 +32,7 @@ public slots:
     void changeInButtonsConfiguration(QString newConfig);
     void toggleCamera();
     void updateSensorLabel(QString depth);
+    void updateZdirection(QString direction);
 signals:
     void pause_play();
     void restartTimer();
@@ -44,17 +45,16 @@ private:
     void createItems();
     void assignButtons();
     void handleSignals();
-    void checkForButtonsSwitch(int buttonIndex,QString newNumber);
-    bool switchButtons(QString * button1,QString * old_button1,QString * button2,QString * old_button2);
 
     transparentLabel * sensor_label;
     transparentLabel * cameraLabel;
+    transparentLabel * zDirection;
     CountDown * timer;
     QGridLayout * guiLayout;
     QGridLayout ** camsLayout;
     QGridLayout * guiItemsLayout;
     QSpacerItem * verticalSpacer;
-    uint8_t windowSelector=0;
+    uint8_t windowSelector;
 //    gstream ** camera;
 //    QWidget ** window;
     QVideoWidget ** videoWindow;

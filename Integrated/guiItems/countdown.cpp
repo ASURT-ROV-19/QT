@@ -7,19 +7,18 @@ CountDown::CountDown()
     timer->setInterval(1000);
     setTimerLabel();
     QObject::connect(timer,SIGNAL(timeout()),this,SLOT(changeTime()));
-
 }
 
 
 
 void CountDown::setTimer(int minutes,int seconds){
-    timer->start();
     mins =abs(minutes);
     sec=abs(seconds);
     if (sec>=60){
         mins+=floor(sec/60);
         sec=sec%60;
     }
+    changeTime();
 
 }
 
@@ -87,6 +86,7 @@ QString CountDown::getTimeRemaining(){
 
 void CountDown::changeTime()
 {
+
     sec-=1;
     elapsed->start();
     delay=0;
@@ -101,19 +101,7 @@ void CountDown::changeTime()
             return;
         }
     }
-    if (mins<10){
-        time="0"+QString::number(mins)+":";
-    }
-    else{
-        time=QString::number(mins)+":";
-    }
-    if  (sec<10){
-        time+="0"+QString::number(sec);
-    }
-    else{
-        time+=QString::number(sec);
-    }
-//    time=QString::number(mins,'g',2)+":"+QString::number(sec,'g',2);
+    time=QString("%1").arg( mins, 2 , 10, QChar('0'))+ ":" +QString("%1").arg( sec, 2 , 10, QChar('0'));
     setBackgroundColor();
     updateText();
 }

@@ -3,10 +3,7 @@
 
 gstreamer::gstreamer(int port)
 {
-//    view=new QGraphicsView();
-//    view->show();
-
-
+    this->portToStreamTo=0;
 //creating elements
     videowindow=new QGst::Ui::VideoWidget();
     videowindow->setStyleSheet("background-color:green;");
@@ -15,7 +12,18 @@ gstreamer::gstreamer(int port)
     PORT=port;
     QGst::init(0,0);
     pipeline = gst_pipeline_new ("xvoverlay");
+}
 
+gstreamer::gstreamer(int port, int portToStreamTo)
+{
+    videowindow=new QGst::Ui::VideoWidget();
+    videowindow->setStyleSheet("background-color:green;");
+    videowindow->show();
+    videowindow->setWindowTitle("Gstreamer videowindow");
+    PORT=port;
+    this->portToStreamTo=portToStreamTo;
+    QGst::init(0,0);
+    pipeline = gst_pipeline_new ("xvoverlay");
 }
 
 
@@ -76,13 +84,16 @@ gstreamer::~gstreamer()
 void gstreamer::autoSetPipeline()
 {
 // JPEG compressing pipeline (JPEG is frame by frame , requiring larger bandwidth but less delay )
-//                                                               udpsrc port=5022 ! application/x-rtp,media=video,clock-rate=90000,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! vaapipostproc
+    if(portToStreamTo!=0)
+        //  branching JPEG pipeline , sends to port 5000 too
+        pipeline_description="udpsrc port=" + QString::number(PORT).toStdString()+" ! application/x-rtp,encoding-name=JPEG,payload=26 ! tee name=t ! queue ! udpsink port="+ QString::number(portToStreamTo).toStdString()+" t. ! queue ! rtpjpegdepay ! jpegdec ! vaapipostproc";
+
+    else
+        //  non-branching JPEG pipeline
         pipeline_description="udpsrc port="+QString::number(PORT).toStdString()+" ! application/x-rtp,media=video,clock-rate=90000,encoding-name=JPEG ! rtpjpegdepay ! jpegdec ! vaapipostproc";
-//        pipeline_description="udpsrc port="+QString::number(PORT).toStdString()+" ! application/x-rtp,media=video,clock-rate=90000,encoding-name=JPEG,payload=26 ! rtpjpegdepay ! vaapijpegdec ! videoconvert";
+
     desc=QString::fromStdString(pipeline_description);
     source=QGst::Bin::fromDescription(desc);
-
-    //    pipeline=gst_parse_launch(pipeline_description.c_str(),NULL);
     setRenderingWindows();
     getRenderingVideoWindow();
 }

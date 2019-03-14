@@ -29,7 +29,7 @@ bool TCPConnection::connectToServer()
     qDebug()<<"keep alive : "<<setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &enableKeepAlive,
                 sizeof(enableKeepAlive));
 
-    int maxIdle = 1; /* seconds */
+    int maxIdle = 1;  //  seconds
     qDebug()<<"keep idle : "<<setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &maxIdle, sizeof(maxIdle));
 
     int count =2; // send up to 3 keepalive packets out, then disconnect if no response
@@ -38,19 +38,22 @@ bool TCPConnection::connectToServer()
     int interval = 1; // send a keepalive packet out every 2 seconds (after the
                       // 5 second idle period)
     qDebug()<<"keep interval : "<<setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(interval));
+    int enable=1;
+    qDebug()<<"set reusable address: "<<setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
+    qDebug()<<"set reusable port: "<<setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(int));
+
+//    int lingerDuration=1;
+//    qDebug()<<"set linger: "<<setsockopt(fd, SOL_SOCKET, SO_LINGER, &lingerDuration, sizeof(SO_LINGER));
+
 
     return socket->waitForConnected(10);
 }
 
-/*             read function , not yet used feature     */
 void TCPConnection::read()
 {
-    qDebug()<<"reading what was sent by server";
     try {
         QString s=socket->readAll();
         emit receivedmsg(s);
-        qDebug()<<"received from client :::"<<s;
-
     } catch (std::exception e) {
         qDebug()<<"TCP exception at line 73 , reading received message grom server throws exception"<<e.what();
     }
@@ -92,7 +95,7 @@ void TCPConnection::sendMessage(QString message)
             this->sendToServer(message);
         }
         else {
-//            qDebug()<<"couldn't send message";
+            qDebug()<<"couldn't send message";
 
         }
 }

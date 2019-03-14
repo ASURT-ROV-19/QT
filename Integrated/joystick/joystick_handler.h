@@ -27,6 +27,7 @@ private slots:
 signals:
     void sendToPi(QString);
     void guiChange(QString);
+    void sendZDirection(QString);
 private:
     void buttonDownMessage();
     void buttonUpMessage();
@@ -37,7 +38,7 @@ private:
     void change_prev();
 
     QString msg;
-    int prev_x,prev_y,prev_z,prev_r,upZ=0,light=0,axisChangeFlag=0,activateR=0;
+    int prev_x,prev_y,prev_z,prev_r,upZ=0,light=0,axisChangeFlag=0,activateR=0,zMode=0;
     Joystick * joyS;
     int numOfPiButtons;
     int * buttons;

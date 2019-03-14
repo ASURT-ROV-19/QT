@@ -30,6 +30,7 @@ class gstreamer /*: public QGst::Ui::VideoWidget*/
 
 public:
     gstreamer(int port);
+    gstreamer(int port,int portToStreamTo);
     ~gstreamer();
     void autoSetPipeline();
     void setRenderingWindows();
@@ -53,7 +54,7 @@ private:
 //    QVideoWidget * videowindow;
     QGst::Ui::VideoWidget * videowindow;
     uint8_t state=0;
-    int PORT;
+    int PORT,portToStreamTo;
     std::string pipeline_description;
     QString desc;
 };

@@ -3,6 +3,8 @@
 #define piButtonsInUse 4
 gui::gui(QWidget *parent)
 {
+    windowSelector=0;
+
     guiItemsCarryingWidget=new QWidget();       //carries gui items like timer , sensor label , and whatever , transparent and displayed over the streaming windows
     createLayouts();
     buttons = new QString [buttonsInUse-piButtonsInUse];
@@ -15,7 +17,7 @@ gui::gui(QWidget *parent)
     handleSignals();
     guiItemsCarryingWidget->setWindowTitle("GUI Items Carrying Widget");
     guiItemsCarryingWidget->setAttribute(Qt::WA_TranslucentBackground);
-    guiItemsCarryingWidget->setGeometry(0,0,120,150);
+    guiItemsCarryingWidget->setGeometry(0,0,200,210);
     process=new QProcess(this);
 }
 
@@ -40,12 +42,14 @@ void gui::setDisplayWindow(QGst::Ui::VideoWidget * displayWindow, uint8_t camera
 {
 
 // here we get the display windows and make local pointers to them to manipulate them later as we like , like changing their sizes in the GUI
-    videoDisplayer[cameraNum-1]=displayWindow;
-    guiLayout->addWidget(videoDisplayer[cameraNum-1],0,cameraNum-1,1,1);
-    setCameraWindowLayout(cameraNum-1);
-    if (cameraNum==1){
-        positionItems(camsLayout[0]);
+    videoDisplayer[cameraNum]=displayWindow;
+    guiLayout->addWidget(videoDisplayer[cameraNum],0,cameraNum,1,1);
+    setCameraWindowLayout(cameraNum);
+    if (cameraNum==0){
+        positionItems(camsLayout[cameraNum]);
     }
+    else
+        toggleCamera();
 }
 
 
@@ -106,6 +110,8 @@ void gui::toggleCamera()
     // EQUAL SIZES
         if (windowSelector==0){
             positionItems(camsLayout[0]);       //sets display of items to be on the left hand camera
+//            videoDisplayer[0]->setParent(nullptr);
+//            videoDisplayer[1]->setParent(nullptr);
             guiLayout->addWidget(videoDisplayer[0],0,0,1,1);
             guiLayout->addWidget(videoDisplayer[1],0,1,1,1);
             windowSelector++;
@@ -134,6 +140,11 @@ void gui::updateSensorLabel(QString depth)
     sensor_label->setText("depth="+depth);
 }
 
+void gui::updateZdirection(QString direction)
+{
+    zDirection->setText("Z "+direction);
+}
+
 void gui::createLayouts()
 {
     guiLayout=new QGridLayout();          // gui layout , holding both streaming cameras
@@ -142,7 +153,7 @@ void gui::createLayouts()
     camsLayout=new QGridLayout * [2];
     camsLayout[0]=new QGridLayout();
     camsLayout[1]=new QGridLayout();
-    verticalSpacer=new QSpacerItem(1,1,QSizePolicy::Minimum,QSizePolicy::MinimumExpanding);
+    verticalSpacer=new QSpacerItem(1,1,QSizePolicy::Preferred,QSizePolicy::Expanding);
 
 }
 
@@ -166,26 +177,31 @@ void gui::createItems()
     timer->setTimer(15,0);
     guiItemsLayout->addWidget(timer->getTimerLabel(),0,0,1,1);
     sensor_label=new transparentLabel();
+    sensor_label->setAlignment(Qt::AlignLeft);
     sensor_label->setStyleSheet("QLabel{color: red ;  font-size: 25px; }");
     guiItemsLayout->addWidget(sensor_label,1,0,1,1);
-    guiItemsLayout->addItem(verticalSpacer,2,0,1,1);
+    zDirection= new transparentLabel();
+    zDirection->setAlignment(Qt::AlignLeft);
+    zDirection->setStyleSheet("QLabel{color: orange ;  font-size: 25px; }");
+    zDirection->setGeometry(0,0,200,60);
+    guiItemsLayout->addWidget(zDirection,2,0,1,1);
+    updateZdirection("-");
+    guiItemsLayout->addItem(verticalSpacer,3,0,1,4);
     cameraLabel=new transparentLabel[2];
     cameraLabel[0].setText("cam1");
     cameraLabel[1].setText("cam2");
-    camsLayout[0]->addWidget(&cameraLabel[0],1,0,1,1);
-    camsLayout[1]->addWidget(&cameraLabel[1],1,0,1,1);
-//    camsLayout[0]->addItem(verticalSpacer,2,0,1,1);
-//    camsLayout[1]->addItem(verticalSpacer,2,0,1,1);
-//    guiLayout->addItem(verticalSpacer,3,0,1,10);
+    camsLayout[0]->addWidget(&cameraLabel[0],3,1,1,1);
+    camsLayout[1]->addWidget(&cameraLabel[1],3,1,1,1);
+
 }
 
 void gui::assignButtons()
 {
     //buttons initializations
-    buttons[restartTimerID-piButtonsInUse]="3";
+    buttons[restartTimerID-piButtonsInUse]="2";
     buttons[buttonsSettingsID-piButtonsInUse]="10";
     buttons[changeCameraID-piButtonsInUse]="1";
-    buttons[playPauseTimerID-piButtonsInUse]="5";
+    buttons[playPauseTimerID-piButtonsInUse]="4";
     buttons[startLenMeasureID-piButtonsInUse]="11";
     buttons[fullScreenID-piButtonsInUse]="6";
 

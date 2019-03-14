@@ -1,7 +1,7 @@
 #include "joystick_handler.h"
 #define buttonsInUse 10
-#define piButtonsInUse 4
-
+#define piButtonsInUse 5
+//this class shall hold a string buttons array of all buttons and index is each button's id , receive messages from configHandler , telling it of which ID now has which value
 #define axisMax 32768
 #define X joyS->get_x()
 #define Y joyS->get_y()
@@ -14,7 +14,7 @@
 #define Z_down 1
 #define light_On_Off 2
 #define r_active 0
-
+#define z_mode 4
 
 
 Joystick_Handler::Joystick_Handler()
@@ -23,9 +23,11 @@ Joystick_Handler::Joystick_Handler()
     joyS=new Joystick();
     buttons=new int[piButtonsInUse];
     buttons[r_active]=0;
-    buttons[Z_down]=2;
+    buttons[Z_down]=3;
     buttons[light_On_Off]=8;
-    buttons[Z_up]=4;
+    buttons[Z_up]=5;
+    buttons[z_mode]=7;
+
 
     signalsHandler();
 }
@@ -75,12 +77,26 @@ void Joystick_Handler::buttonDown(int button)
         return;
     }
     else if (button==buttons[Z_up]){
-        upZ==-1 ? upZ=0 : upZ=1;
+        if (upZ==-1){
+            upZ=0;
+            emit sendZDirection("-");
+        }
+        else {
+            upZ=1;
+            emit sendZDirection("↑");
+        }
         move();
     }
     else if(button==buttons[Z_down])
     {
-        upZ==1 ? upZ=0 : upZ=-1;
+        if (upZ==1){
+            upZ=0;
+            emit sendZDirection("-");
+        }
+        else {
+            upZ=-1;
+            emit sendZDirection("↓");
+        }
         move();
     }
     else if(button==buttons[light_On_Off]){
@@ -97,18 +113,25 @@ void Joystick_Handler::buttonUp(int button)
      if(button==buttons[r_active])
     {
         activateR=0;
+        move();
         messageReady(msg);
     }
+    else if (button==buttons[z_mode]){
+        zMode =!zMode;
+    }
+
+    if (zMode==1){
+       if (button==buttons[Z_up]){
+           upZ=0;
+           move();
+       }
+       else if(button==buttons[Z_down])
+       {
+           upZ=0;
+           move();
+       }
+    }
     //activate if using ROV18 Pi
-     //     else if (button==buttons[Z_up]){
-//         upZ=0;
-//         move();
-//     }
-//     else if(button==buttons[Z_down])
-//     {
-//         upZ=0;
-//         move();
-//     }
 
 }
 
