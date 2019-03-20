@@ -7,7 +7,7 @@
 #include "gui.h"
 #include "string.h"
 #include <QApplication>
-
+#include <QKeyEvent>
 #undef main
 
 namespace Ui {
@@ -21,16 +21,23 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     void setDisplayWindow(QGst::Ui::VideoWidget * displayWindow, uint8_t cameraNum);
+    void setEndoscopeCamera(gstreamer * camera);
     ~MainWindow();
+    void keyPressEvent(QKeyEvent * event);
 private slots:
     void toggleFullScreen();
-
+signals:
+    void showOrHideEndoscopeCamera();
+    void endoToggleFullScreen();
+    void messagePi(QString query);
 private:
+    void signalsHandler();
     Ui::MainWindow *ui;
     TCPConnection *TCPconnection;
     QWidget * centralWidget;
     Joystick_Handler *JSHandler;
     gui * GUI;
+    int pulley,micro;
 };
 
 #endif // MAINWINDOW_H

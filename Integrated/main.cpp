@@ -8,9 +8,12 @@ int main(int argc, char *argv[])
     gstreamer camera22(5022,5000);
     w.setDisplayWindow(camera22.getRenderingVideoWindow(),0);
     gstreamer camera21(10000);
+    gstreamer endoscopeCamera(1234);
     w.setDisplayWindow(camera21.getRenderingVideoWindow(),1);
     camera22.autoSetPipeline();
     camera21.autoSetPipeline();
+    endoscopeCamera.autoSetPipeline();
+    w.setEndoscopeCamera(&endoscopeCamera);
     return a->exec();
 
 }

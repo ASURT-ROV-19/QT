@@ -11,7 +11,7 @@
 #define SGNFCNT 400
 #define Z_up 3
 #define Z_down 1
-#define light_On_Off 2
+#define switchPID 2
 #define r_active 0
 #define z_mode 4
 #define cam_up 5
@@ -20,17 +20,16 @@
 
 Joystick_Handler::Joystick_Handler()
 {
-    prev_x=0;prev_y=0;prev_z=0;prev_r=0;upZ=0;light=0;axisChangeFlag=0;activateR=0;
+    zMode=0;    prev_x=0;   prev_y=0;   prev_z=0;   prev_r=0;   upZ=0;  getTemperature=0;   axisChangeFlag=0;   activateR=0;    cam=0;
     joyS=new Joystick();
     buttons=new int[piButtonsInUse];
     buttons[r_active]=0;
     buttons[Z_up]=3;
-    buttons[light_On_Off]=8;
-    buttons[Z_down]=5;
+    buttons[switchPID]=8;
+    buttons[Z_down]=2;
     buttons[z_mode]=7;
-    buttons[cam_up]=4;
-    buttons[cam_down]=2;
-    zMode=0;
+    buttons[cam_up]=5;
+    buttons[cam_down]=3;
 
 
     signalsHandler();
@@ -80,6 +79,14 @@ void Joystick_Handler::buttonDown(int button)
         activateR=1;
         return;
     }
+    else if (button==buttons[cam_up]){
+        cam=4;
+        move();
+    }
+    else if (button==buttons[cam_down]){
+        cam=1;
+        move();
+    }
     else if (button==buttons[Z_up]){
         if (upZ==-1){
             upZ=0;
@@ -101,18 +108,6 @@ void Joystick_Handler::buttonDown(int button)
             upZ=-1;
             emit sendZDirection("↓");
         }
-        move();
-    }
-    else if(button==buttons[light_On_Off]){
-        light==1 ? light=0 : light=1;
-        move();
-    }
-    else if (button==buttons[cam_up]){
-        cam=4;
-        move();
-    }
-    else if (button==buttons[cam_down]){
-        cam=1;
         move();
     }
 
@@ -145,6 +140,10 @@ void Joystick_Handler::buttonUp(int button)
          cam=0;
          move();
      }
+     else if(button==buttons[switchPID]){
+         msg="PID";
+         emit sendToPi(msg);
+     }
 
 
 
@@ -173,7 +172,7 @@ void Joystick_Handler::buttonDownMessage()
     msg+="z="+QString::number(mapZ())+",";
     msg+="r="+QString::number(map(R))+"," ;
     msg+="cam="+QString::number(cam)+",";
-    msg+="light="+QString::number(light)+",";
+    msg+="light="+QString::number(getTemperature)+",";
     qDebug()<<msg;
     messageReady(msg);
 }
@@ -186,7 +185,7 @@ void Joystick_Handler::buttonUpMessage()
     msg+="z=0,";
     msg+="r="+QString::number(map(R))+"," ;
     msg+="cam="+QString::number(cam)+",";
-    msg+="light="+QString::number(light)+",";
+    msg+="light="+QString::number(getTemperature)+",";
     qDebug()<<msg;
     messageReady(msg);
 
@@ -213,7 +212,7 @@ void Joystick_Handler::move()
     msg+="z="+QString::number(mapZ())+",";
     msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : "0" )+"," ;
     msg+="cam="+QString::number(cam)+",";
-    msg+="light="+QString::number(light)+"&";
+    msg+="light="+QString::number(getTemperature)+"&";
 
 
 

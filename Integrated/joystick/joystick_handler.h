@@ -38,7 +38,7 @@ private:
     void change_prev();
 
     QString msg;
-    int prev_x,prev_y,prev_z,prev_r,upZ=0,light=0,axisChangeFlag=0,activateR=0,zMode,cam;
+    int prev_x,prev_y,prev_z,prev_r,upZ=0,getTemperature=0,axisChangeFlag=0,activateR=0,zMode,cam;
     Joystick * joyS;
     int numOfPiButtons;
     int * buttons;

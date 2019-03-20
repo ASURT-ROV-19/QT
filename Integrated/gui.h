@@ -27,12 +27,17 @@ public:
 //    void getCam(gstream *Camera, uint8_t cameraNum);
     void setDisplayWindow(QGst::Ui::VideoWidget *displayWindow, uint8_t cameraNum);
     void positionItems(QGridLayout * parent);
+    void setEndoscopeCamera(gstreamer * endoscopeCamera);
 public slots:
     void changeInGUI(QString button);
     void changeInButtonsConfiguration(QString newConfig);
     void toggleCamera();
-    void updateSensorLabel(QString depth);
+    void receiveFromPi(QString temp);
     void updateZdirection(QString direction);
+    void showOrHideEndoscopeCamera();
+    void showOrHideTempLabel();
+    void startLengthMeasuring();
+    void toggleEndoFullScreen();
 signals:
     void pause_play();
     void restartTimer();
@@ -41,11 +46,11 @@ signals:
 private:
     void createLayouts();
     void setCameraWindowLayout(int cameraIndex);
-    void startLengthMeasuring();
     void createItems();
     void assignButtons();
     void handleSignals();
 
+    QLabel * temperatureLabel;
     transparentLabel * sensor_label;
     transparentLabel * cameraLabel;
     transparentLabel * zDirection;
@@ -55,6 +60,7 @@ private:
     QGridLayout * guiItemsLayout;
     QSpacerItem * verticalSpacer;
     uint8_t windowSelector;
+    gstreamer * endoscopeCamera;
 //    gstream ** camera;
 //    QWidget ** window;
     QVideoWidget ** videoWindow;
@@ -63,7 +69,6 @@ private:
     QGst::Ui::VideoWidget ** videoDisplayer;
     QProcess * process;
 
-    const int ZUpID=0,ZDownID=1,lightOnOffID=2,activateRID=3,restartTimerID=4,startLenMeasureID=5,buttonsSettingsID=6,changeCameraID=7,playPauseTimerID=8,fullScreenID=9;
     //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
     QString * buttons;
 };

@@ -41,7 +41,7 @@ SOURCES += \
 #    tablemodel.cpp \
 #    newsettingshandler.cpp \
     network/TCPConnection.cpp \
-    guiItems/transparentlabel.cpp
+    guiItems/transparentlabel.cpp \
 
 
 HEADERS += \
@@ -57,7 +57,7 @@ HEADERS += \
 #    tablemodel.h \
 #    newsettingshandler.h \
     network/TCPConnection.h \
-    guiItems/transparentlabel.h
+    guiItems/transparentlabel.h \
 
 FORMS += \
         mainwindow.ui

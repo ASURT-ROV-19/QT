@@ -1,11 +1,18 @@
 #include "gui.h"
-#define buttonsInUse 10
-#define piButtonsInUse 4
+#define buttonsInUse 12
+#define piButtonsInUse 7
+
+#define changeCameraID 7
+#define restartTimerID 8
+#define playPauseTimerID 9
+#define startLenMeasureID 10
+#define fullScreenID 11
+
 gui::gui(QWidget *parent)
 {
     windowSelector=0;
 
-    guiItemsCarryingWidget=new QWidget();       //carries gui items like timer , sensor label , and whatever , transparent and displayed over the streaming windows
+    guiItemsCarryingWidget=new QWidget();       //carries gui items like timer , z label , and whatever , transparent and displayed over the streaming windows
     createLayouts();
     buttons = new QString [buttonsInUse-piButtonsInUse];
     videoDisplayer=new QGst::Ui::VideoWidget *[2];
@@ -28,7 +35,7 @@ gui::~gui()
     delete process;
     delete [] buttons;
     delete timer;
-    delete sensor_label;
+    delete temperatureLabel;
     delete guiItemsLayout;
     for (int i=0;i<3;i++){
         delete [] videoDisplayer[i];
@@ -56,7 +63,13 @@ void gui::setDisplayWindow(QGst::Ui::VideoWidget * displayWindow, uint8_t camera
 void gui::positionItems(QGridLayout *parent)
 {
     parent->addWidget(guiItemsCarryingWidget,0,0,1,1);      //initially , items are displayed over the left hand camera , which is the camera initialized first
-//    parent->addItem(verticalSpacer,1,0,1,4);
+    //    parent->addItem(verticalSpacer,1,0,1,4);
+}
+
+void gui::setEndoscopeCamera(gstreamer *endoscopeCamera)
+{
+    this->endoscopeCamera=endoscopeCamera;
+    endoscopeCamera->getRenderingVideoWindow()->hide();
 }
 
 
@@ -77,11 +90,11 @@ void gui::changeInGUI(QString button)
         {
             toggleCamera();
         }
-        else if(button==buttons[buttonsSettingsID-piButtonsInUse])
-            //play or pause
-        {
-            emit show_hideButConfig();
-        }
+//        else if(button==buttons[buttonsSettingsID-piButtonsInUse])
+//            //play or pause
+//        {
+//            emit show_hideButConfig();
+//        }
         else if(button==buttons[restartTimerID-piButtonsInUse])
             //restart timer
         {
@@ -135,9 +148,9 @@ void gui::toggleCamera()
         }
 }
 
-void gui::updateSensorLabel(QString depth)
+void gui::receiveFromPi(QString temp)
 {
-    sensor_label->setText("depth="+depth);
+    temperatureLabel->setText("Temperature="+temp);
 }
 
 void gui::updateZdirection(QString direction)
@@ -148,7 +161,7 @@ void gui::updateZdirection(QString direction)
 void gui::createLayouts()
 {
     guiLayout=new QGridLayout();          // gui layout , holding both streaming cameras
-    guiItemsLayout=new QGridLayout();           //items of gui like timer , sensor label are layed out in this
+    guiItemsLayout=new QGridLayout();           //items of gui like timer , Zdirection label are layed out in this
     guiItemsCarryingWidget->setLayout(guiItemsLayout);
     camsLayout=new QGridLayout * [2];
     camsLayout[0]=new QGridLayout();
@@ -167,6 +180,12 @@ void gui::startLengthMeasuring()
     process->start("python",QStringList()<<"/home/abdelrahman/ASURT/ImageProcessing/ROV19/length\ measuring/lengthMeasureStarter.py");
 }
 
+void gui::toggleEndoFullScreen()
+{
+    endoscopeCamera->getRenderingVideoWindow()->isFullScreen() ? endoscopeCamera->getRenderingVideoWindow()->showNormal() : endoscopeCamera->getRenderingVideoWindow()->setWindowState(Qt::WindowFullScreen);
+
+}
+
 
 
 
@@ -176,13 +195,12 @@ void gui::createItems()
     timer=new CountDown();
     timer->setTimer(15,0);
     guiItemsLayout->addWidget(timer->getTimerLabel(),0,0,1,1);
-    sensor_label=new transparentLabel();
-    sensor_label->setAlignment(Qt::AlignLeft);
-    sensor_label->setStyleSheet("QLabel{color: red ;  font-size: 25px; }");
-    guiItemsLayout->addWidget(sensor_label,1,0,1,1);
-    zDirection= new transparentLabel();
-    zDirection->setAlignment(Qt::AlignLeft);
-    zDirection->setStyleSheet("QLabel{color: orange ;  font-size: 25px; }");
+    temperatureLabel=new QLabel("temperature");
+    temperatureLabel->hide();
+    temperatureLabel->setGeometry(300,300,300,300);
+    temperatureLabel->setStyleSheet("QLabel{color: red ;  font-size: 30px; background-color= white}");
+    temperatureLabel->setAlignment(Qt::AlignCenter);
+    zDirection=new transparentLabel("orange","25",Qt::AlignmentFlag::AlignTop,Qt::AlignmentFlag::AlignLeft);
     zDirection->setGeometry(0,0,200,60);
     guiItemsLayout->addWidget(zDirection,2,0,1,1);
     updateZdirection("-");
@@ -198,12 +216,13 @@ void gui::createItems()
 void gui::assignButtons()
 {
     //buttons initializations
-    buttons[restartTimerID-piButtonsInUse]="8";
-    buttons[buttonsSettingsID-piButtonsInUse]="10";
+    buttons[restartTimerID-piButtonsInUse]="10";
+//    buttons[buttonsSettingsID-piButtonsInUse]="11111111111";            //can't come true
     buttons[changeCameraID-piButtonsInUse]="1";
     buttons[playPauseTimerID-piButtonsInUse]="9";
     buttons[startLenMeasureID-piButtonsInUse]="11";
     buttons[fullScreenID-piButtonsInUse]="6";
+//0-1-2-3-4-5-6-7-8-9-10-11
 
 }
 
@@ -212,4 +231,24 @@ void gui::handleSignals()
 {
     //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
     connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
+
+}
+
+void gui::showOrHideEndoscopeCamera()
+{
+    if(endoscopeCamera->getRenderingVideoWindow()->isHidden()){
+        endoscopeCamera->getRenderingVideoWindow()->show();
+    }
+    else
+        endoscopeCamera->getRenderingVideoWindow()->hide() ;
+}
+
+void gui::showOrHideTempLabel()
+{
+    if(temperatureLabel->isHidden()){
+        temperatureLabel->show();
+    }
+    else
+        temperatureLabel->hide() ;
+
 }
