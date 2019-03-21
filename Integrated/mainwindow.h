@@ -8,6 +8,8 @@
 #include "string.h"
 #include <QApplication>
 #include <QKeyEvent>
+#include <QTimer>
+
 #undef main
 
 namespace Ui {
@@ -26,6 +28,7 @@ public:
     void keyPressEvent(QKeyEvent * event);
 private slots:
     void toggleFullScreen();
+    void delayMicroCamDisplay();
 signals:
     void showOrHideEndoscopeCamera();
     void endoToggleFullScreen();
@@ -38,6 +41,7 @@ private:
     Joystick_Handler *JSHandler;
     gui * GUI;
     int pulley,micro;
+    QTimer * microDisplayDelayTimer;
 };
 
 #endif // MAINWINDOW_H

@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setCentralWidget(centralWidget);
     GUI=new gui(centralWidget);
     signalsHandler();
+    microDisplayDelayTimer=new QTimer();
+    microDisplayDelayTimer->setInterval(1000);
 }
 
 
@@ -73,12 +75,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         emit endoToggleFullScreen();
 
     }
-    else if(event->key()== Qt::Key_Right){      //rotate micro_rov's servo in a direction
+    else if(event->key()== Qt::Key_Right){      //rotate pulley's servo in a direction
         pulley==-1 ? pulley=0 : pulley =1;
         emit messagePi("Pulley "+QString::number(pulley));
 
     }
-    else if(event->key()== Qt::Key_Left){       //rotate micro_rov's servo in opposite direction
+    else if(event->key()== Qt::Key_Left){       //rotate pulley's servo in opposite direction
         pulley==1 ? pulley=0 : pulley =-1;
         emit messagePi("Pulley "+QString::number(pulley));
 
@@ -90,7 +92,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 void MainWindow::toggleFullScreen()
 {
-    centralWidget->isFullScreen() ? centralWidget->showNormal() : centralWidget->setWindowState(Qt::WindowFullScreen);
+    this->isFullScreen() ? this->showNormal() : this->setWindowState(Qt::WindowFullScreen);
+}
+
+void MainWindow::delayMicroCamDisplay()
+{
+
 }
 
 void MainWindow::signalsHandler()
@@ -100,6 +107,7 @@ void MainWindow::signalsHandler()
     connect(TCPconnection,SIGNAL(receivedmsg(QString)),GUI,SLOT(receiveFromPi(QString)));
     connect(GUI,SIGNAL(guiSizeChange()),this,SLOT(toggleFullScreen()));
     connect(JSHandler,SIGNAL(sendZDirection(QString)),GUI,SLOT(updateZdirection(QString)));
+//    connect(this,SIGNAL(showOrHideEndoscopeCamera()),GUI,SLOT(delayMicroCamDisplay()));
     connect(this,SIGNAL(showOrHideEndoscopeCamera()),GUI,SLOT(showOrHideEndoscopeCamera()));
     connect(this,SIGNAL(messagePi(QString)),TCPconnection,SLOT(sendMessage(QString)));
     connect(this,SIGNAL(endoToggleFullScreen()),GUI,SLOT(toggleEndoFullScreen()));

@@ -20,7 +20,7 @@ bool TCPConnection::connectToServer()
     } catch (std::exception e) {
         qDebug()<<"exception thrown in line 22 , exception is "<<e.what();
     }
-    socket->waitForConnected(1000);
+    socket->waitForConnected(400);
     int enableKeepAlive = 1;
     int fd = socket->socketDescriptor();
     qDebug()<<"keep alive : "<<setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &enableKeepAlive,

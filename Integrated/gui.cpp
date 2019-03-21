@@ -183,7 +183,6 @@ void gui::startLengthMeasuring()
 void gui::toggleEndoFullScreen()
 {
     endoscopeCamera->getRenderingVideoWindow()->isFullScreen() ? endoscopeCamera->getRenderingVideoWindow()->showNormal() : endoscopeCamera->getRenderingVideoWindow()->setWindowState(Qt::WindowFullScreen);
-
 }
 
 
@@ -206,10 +205,12 @@ void gui::createItems()
     updateZdirection("-");
     guiItemsLayout->addItem(verticalSpacer,3,0,1,4);
     cameraLabel=new transparentLabel[2];
+    cameraLabel[1].setAlignment(Qt::AlignmentFlag::AlignTrailing);
+    cameraLabel[0].setAlignment(Qt::AlignmentFlag::AlignTrailing);
     cameraLabel[0].setText("cam1");
     cameraLabel[1].setText("cam2");
-    camsLayout[0]->addWidget(&cameraLabel[0],3,1,1,1);
-    camsLayout[1]->addWidget(&cameraLabel[1],3,1,1,1);
+    camsLayout[0]->addWidget(&cameraLabel[0],3,0,1,1);
+    camsLayout[1]->addWidget(&cameraLabel[1],3,0,1,1);
 
 }
 
@@ -220,7 +221,7 @@ void gui::assignButtons()
 //    buttons[buttonsSettingsID-piButtonsInUse]="11111111111";            //can't come true
     buttons[changeCameraID-piButtonsInUse]="1";
     buttons[playPauseTimerID-piButtonsInUse]="9";
-    buttons[startLenMeasureID-piButtonsInUse]="11";
+    buttons[startLenMeasureID-piButtonsInUse]="5000009";        //dummy ,shall never happen
     buttons[fullScreenID-piButtonsInUse]="6";
 //0-1-2-3-4-5-6-7-8-9-10-11
 

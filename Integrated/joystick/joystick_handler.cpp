@@ -24,10 +24,10 @@ Joystick_Handler::Joystick_Handler()
     joyS=new Joystick();
     buttons=new int[piButtonsInUse];
     buttons[r_active]=0;
-    buttons[Z_up]=3;
+    buttons[Z_up]=4;
     buttons[switchPID]=8;
     buttons[Z_down]=2;
-    buttons[z_mode]=7;
+    buttons[z_mode]=11;
     buttons[cam_up]=5;
     buttons[cam_down]=3;
 
@@ -80,32 +80,32 @@ void Joystick_Handler::buttonDown(int button)
         return;
     }
     else if (button==buttons[cam_up]){
-        cam=4;
-        move();
-    }
-    else if (button==buttons[cam_down]){
         cam=1;
         move();
     }
-    else if (button==buttons[Z_up]){
-        if (upZ==-1){
-            upZ=0;
-            emit sendZDirection("-");
-        }
-        else {
-            upZ=1;
-            emit sendZDirection("↑");
-        }
+    else if (button==buttons[cam_down]){
+        cam=4;
         move();
     }
-    else if(button==buttons[Z_down])
-    {
+    else if (button==buttons[Z_up]){
         if (upZ==1){
             upZ=0;
             emit sendZDirection("-");
         }
         else {
             upZ=-1;
+            emit sendZDirection("↑");
+        }
+        move();
+    }
+    else if(button==buttons[Z_down])
+    {
+        if (upZ==-1){
+            upZ=0;
+            emit sendZDirection("-");
+        }
+        else {
+            upZ=1;
             emit sendZDirection("↓");
         }
         move();
@@ -151,17 +151,18 @@ void Joystick_Handler::buttonUp(int button)
        if (button==buttons[Z_up]){
            upZ=0;
            emit sendZDirection("-");
-           move();
        }
        else if(button==buttons[Z_down])
        {
            upZ=0;
            emit sendZDirection("-");
-           move();
        }
-    }
-    //activate if using ROV18 Pi
+//       qDebug()<<"\n\n\n\n move message \n\n\n\n";
+       move();
+       emit sendToPi(msg);
+   }
     qDebug()<<"button up :: mode is "<<zMode<<"\n upZ is "<<upZ;
+    //activate if using ROV18 Pi
 }
 
 void Joystick_Handler::buttonDownMessage()
