@@ -41,7 +41,7 @@ void gstreamer::setRenderingWindows()
     sink2->setProperty("sync",false);
     if (!pipe2.isNull())
         pipe2->setState(QGst::StatePlaying);
-
+    qDebug()<<pipe2->currentState();
 }
 
 
@@ -95,7 +95,7 @@ void gstreamer::autoSetPipeline()
     desc=QString::fromStdString(pipeline_description);
     source=QGst::Bin::fromDescription(desc);
     setRenderingWindows();
-    getRenderingVideoWindow();
+//    getRenderingVideoWindow();
 }
 
 

@@ -29,3 +29,12 @@ on how to handle new buttons configurations :
         the change is handeled in the joystick handler , and when joystick button 1 is pressed , js handler still emits 0 , it did the mapping form 1 to zero based on the new
         settings , nobody else other than it feels the change .
 */
+
+
+/*
+buttons 7 & 9 in joystick are almost dead
+buttons 10 & 11 to be used for magazine servo
+buttons 6 to be used for fullscreening mainWindow or normal screening it
+button 8 for PID
+button 7 for toggling zMode
+*/

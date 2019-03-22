@@ -1,12 +1,9 @@
 #include "gui.h"
-#define buttonsInUse 12
+#define buttonsInUse 9
 #define piButtonsInUse 7
 
 #define changeCameraID 7
-#define restartTimerID 8
-#define playPauseTimerID 9
-#define startLenMeasureID 10
-#define fullScreenID 11
+#define fullScreenID 8
 
 gui::gui(QWidget *parent)
 {
@@ -77,15 +74,7 @@ void gui::changeInGUI(QString button)
 {
    //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
 
-        if(button==buttons[startLenMeasureID-piButtonsInUse])
-        {
-            qDebug()<<"will enter startMeasuring Function";
-            startLengthMeasuring();
-        }
-        if (button==buttons[playPauseTimerID-piButtonsInUse])
-            emit pause_play();
-    //
-        else if(button==buttons[changeCameraID-piButtonsInUse])
+        if(button==buttons[changeCameraID-piButtonsInUse])
             //do change in two windows sizes
         {
             toggleCamera();
@@ -95,16 +84,11 @@ void gui::changeInGUI(QString button)
 //        {
 //            emit show_hideButConfig();
 //        }
-        else if(button==buttons[restartTimerID-piButtonsInUse])
-            //restart timer
+        else if(button==buttons[fullScreenID-piButtonsInUse])
+            //toggle screen between full and normal
         {
-            timer->restartTimer(15,0);
+            emit guiSizeChange();
         }
-    else if(button==buttons[fullScreenID-piButtonsInUse])
-        //toggle screen between full and normal
-    {
-        emit guiSizeChange();
-    }
 }
 //  slot to receive a QString::"<buttonID> newButtonNumber" to change local buttons value , <buttonID-piButtonsInUse> is the index if the button in the local buttons
 void gui::changeInButtonsConfiguration(QString newConfig)
@@ -185,6 +169,16 @@ void gui::toggleEndoFullScreen()
     endoscopeCamera->getRenderingVideoWindow()->isFullScreen() ? endoscopeCamera->getRenderingVideoWindow()->showNormal() : endoscopeCamera->getRenderingVideoWindow()->setWindowState(Qt::WindowFullScreen);
 }
 
+void gui::pause_play()
+{
+    timer->pause_Play();
+}
+
+void gui::restartTimer()
+{
+    timer->restartTimer(15,0);
+}
+
 
 
 
@@ -217,11 +211,8 @@ void gui::createItems()
 void gui::assignButtons()
 {
     //buttons initializations
-    buttons[restartTimerID-piButtonsInUse]="10";
 //    buttons[buttonsSettingsID-piButtonsInUse]="11111111111";            //can't come true
     buttons[changeCameraID-piButtonsInUse]="1";
-    buttons[playPauseTimerID-piButtonsInUse]="9";
-    buttons[startLenMeasureID-piButtonsInUse]="5000009";        //dummy ,shall never happen
     buttons[fullScreenID-piButtonsInUse]="6";
 //0-1-2-3-4-5-6-7-8-9-10-11
 
@@ -231,7 +222,7 @@ void gui::assignButtons()
 void gui::handleSignals()
 {
     //TO PUASE OR PLAY TIMER USING BOTH JS OR MOUTH AND BUTTON
-    connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
+//    connect(this,SIGNAL(pause_play()),timer,SLOT(pause_Play()));
 
 }
 

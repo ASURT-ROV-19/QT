@@ -1,6 +1,7 @@
 #include "joystick_handler.h"
-#define buttonsInUse 13
-#define piButtonsInUse 7
+#define buttonsInUse 11
+#define piButtonsInUse 9
+//for magazine servo , use buttons 10 and 11
 //this class shall hold a string buttons array of all buttons and index is each button's id , receive messages from configHandler , telling it of which ID now has which value
 #define axisMax 32768
 #define X joyS->get_x()
@@ -16,6 +17,9 @@
 #define z_mode 4
 #define cam_up 5
 #define cam_down 6
+#define magazineForward 7
+#define magazineBackward 8
+#define dummy joyS->get_hat()
 // 4 down , 1 up
 
 Joystick_Handler::Joystick_Handler()
@@ -25,11 +29,13 @@ Joystick_Handler::Joystick_Handler()
     buttons=new int[piButtonsInUse];
     buttons[r_active]=0;
     buttons[Z_up]=4;
-    buttons[switchPID]=8;
     buttons[Z_down]=2;
-    buttons[z_mode]=11;
+    buttons[switchPID]=8;
+    buttons[z_mode]=7;
     buttons[cam_up]=5;
     buttons[cam_down]=3;
+    buttons[magazineForward]=10;
+    buttons[magazineBackward]=11;
 
 
     signalsHandler();
@@ -86,6 +92,16 @@ void Joystick_Handler::buttonDown(int button)
     else if (button==buttons[cam_down]){
         cam=4;
         move();
+    }
+    else if(button==buttons[magazineForward]){
+        cam=2;
+        move();
+        emit sendToPi(msg);
+    }
+    else if(button==buttons[magazineBackward]){
+        cam=8;
+        move();
+        emit sendToPi(msg);
     }
     else if (button==buttons[Z_up]){
         if (upZ==1){
@@ -144,6 +160,16 @@ void Joystick_Handler::buttonUp(int button)
          msg="PID";
          emit sendToPi(msg);
      }
+     else if(button==buttons[magazineForward]){
+         cam=0;
+         move();
+         emit sendToPi(msg);
+     }
+     else if(button==buttons[magazineBackward]){
+         cam=0;
+         move();
+         emit sendToPi(msg);
+     }
 
 
 
@@ -157,40 +183,12 @@ void Joystick_Handler::buttonUp(int button)
            upZ=0;
            emit sendZDirection("-");
        }
-//       qDebug()<<"\n\n\n\n move message \n\n\n\n";
        move();
        emit sendToPi(msg);
    }
     qDebug()<<"button up :: mode is "<<zMode<<"\n upZ is "<<upZ;
-    //activate if using ROV18 Pi
 }
 
-void Joystick_Handler::buttonDownMessage()
-{
-    msg="";
-    msg+="x="+QString::number(map(X))+"," ;
-    msg+="y="+QString::number(map(Y))+"," ;
-    msg+="z="+QString::number(mapZ())+",";
-    msg+="r="+QString::number(map(R))+"," ;
-    msg+="cam="+QString::number(cam)+",";
-    msg+="light="+QString::number(getTemperature)+",";
-    qDebug()<<msg;
-    messageReady(msg);
-}
-
-void Joystick_Handler::buttonUpMessage()
-{
-    msg="";
-    msg+="x="+QString::number(map(X))+"," ;
-    msg+="y="+QString::number(map(Y))+"," ;
-    msg+="z=0,";
-    msg+="r="+QString::number(map(R))+"," ;
-    msg+="cam="+QString::number(cam)+",";
-    msg+="light="+QString::number(getTemperature)+",";
-    qDebug()<<msg;
-    messageReady(msg);
-
-}
 
 int Joystick_Handler::mapZ()
 {

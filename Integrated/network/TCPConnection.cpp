@@ -81,10 +81,9 @@ bool TCPConnection::sendToServer(QString message)
 
 void TCPConnection::sendMessage(QString message)
 {
-    qDebug()<<message;
+    qDebug()<<"sending : "<<message;
 
         if(isConnected()){
-            qDebug() << message;
             sendToServer(message);
         }
         else if(connectToServer()){
@@ -93,7 +92,6 @@ void TCPConnection::sendMessage(QString message)
         }
         else {
             qDebug()<<"couldn't send message";
-
         }
 }
 

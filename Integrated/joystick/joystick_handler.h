@@ -29,8 +29,8 @@ signals:
     void guiChange(QString);
     void sendZDirection(QString);
 private:
-    void buttonDownMessage();
-    void buttonUpMessage();
+//    void buttonDownMessage();
+//    void buttonUpMessage();
     int mapZ();
     int map(int axisValue);
     void move();

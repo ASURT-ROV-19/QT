@@ -9,8 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
     micro=0;
     this->show();
     this->setGeometry(100,100,800,600);
-    TCPconnection=new TCPConnection("10.1.1.15",9005);
-//    TCPconnection=new TCPConnection("127.0.0.1",9005);
+//    TCPconnection=new TCPConnection("10.1.1.15",9005);
+    TCPconnection=new TCPConnection("127.0.0.1",9005);
     JSHandler = new Joystick_Handler();
     centralWidget=new QWidget();
     centralWidget->show();
@@ -73,6 +73,14 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
     else if(event->key()== Qt::Key_F){      //full screen or normal screen for endoscope camera display
         emit endoToggleFullScreen();
+
+    }
+    else if(event->key()== Qt::Key_P){      //full screen or normal screen for endoscope camera display
+        GUI->pause_play();
+
+    }
+    else if(event->key()== Qt::Key_R){      //full screen or normal screen for endoscope camera display
+        GUI->restartTimer();
 
     }
     else if(event->key()== Qt::Key_Right){      //rotate pulley's servo in a direction

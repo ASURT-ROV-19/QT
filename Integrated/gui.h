@@ -38,9 +38,9 @@ public slots:
     void showOrHideTempLabel();
     void startLengthMeasuring();
     void toggleEndoFullScreen();
-signals:
     void pause_play();
     void restartTimer();
+signals:
     void show_hideButConfig();
     void guiSizeChange();
 private:

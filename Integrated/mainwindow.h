@@ -33,6 +33,8 @@ signals:
     void showOrHideEndoscopeCamera();
     void endoToggleFullScreen();
     void messagePi(QString query);
+    void playPauseTimer();
+    void restartTimer();
 private:
     void signalsHandler();
     Ui::MainWindow *ui;
