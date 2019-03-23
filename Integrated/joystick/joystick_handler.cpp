@@ -4,8 +4,8 @@
 //for magazine servo , use buttons 10 and 11
 //this class shall hold a string buttons array of all buttons and index is each button's id , receive messages from configHandler , telling it of which ID now has which value
 #define axisMax 32768
-#define X joyS->get_x()
-#define Y joyS->get_y()
+#define X joyS->get_x()*camOnFocus
+#define Y joyS->get_y()*camOnFocus
 #define Z joyS->get_z()
 #define R joyS->get_r()*activateR
 #define DEADZONE 4000
@@ -62,6 +62,12 @@ void Joystick_Handler::joyAxisMotion()
         messageReady(msg);
     }
 
+}
+
+void Joystick_Handler::updateCamOnFocus(int cam)
+{
+    camOnFocus=cam;
+    qDebug()<<"updated cam on focus";
 }
 
 

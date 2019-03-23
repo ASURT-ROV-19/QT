@@ -119,6 +119,7 @@ void MainWindow::signalsHandler()
     connect(this,SIGNAL(showOrHideEndoscopeCamera()),GUI,SLOT(showOrHideEndoscopeCamera()));
     connect(this,SIGNAL(messagePi(QString)),TCPconnection,SLOT(sendMessage(QString)));
     connect(this,SIGNAL(endoToggleFullScreen()),GUI,SLOT(toggleEndoFullScreen()));
+    connect(GUI,SIGNAL(joystickForwardDirection(int)),JSHandler,SLOT(updateCamOnFocus(int)));
 
 }
 

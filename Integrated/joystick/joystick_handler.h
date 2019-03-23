@@ -20,6 +20,7 @@ public:
 public slots:
 //    void changeInButtonsConfiguration(QString newConfig);
     void joyAxisMotion();
+    void updateCamOnFocus(int cam);
 private slots:
     void messageReady(QString message);
     void buttonDown(int button);
@@ -42,6 +43,7 @@ private:
     Joystick * joyS;
     int numOfPiButtons;
     int * buttons;
+    int camOnFocus=1;
 };
 
 #endif // JOYSTICK_HANDLER_H

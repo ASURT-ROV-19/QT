@@ -43,6 +43,7 @@ public slots:
 signals:
     void show_hideButConfig();
     void guiSizeChange();
+    void joystickForwardDirection(int camNumber);
 private:
     void createLayouts();
     void setCameraWindowLayout(int cameraIndex);

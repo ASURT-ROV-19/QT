@@ -106,6 +106,7 @@ void gui::toggleCamera()
     qDebug()<<"toggling camera";
     // EQUAL SIZES
         if (windowSelector==0){
+            emit joystickForwardDirection(1);             // 1 * joystick readings in X&Y are sent to PI
             positionItems(camsLayout[0]);       //sets display of items to be on the left hand camera
 //            videoDisplayer[0]->setParent(nullptr);
 //            videoDisplayer[1]->setParent(nullptr);
@@ -115,6 +116,7 @@ void gui::toggleCamera()
         }
     //  CAMERA 1 IS MAIN
         else if (windowSelector==1){
+            emit joystickForwardDirection(1);             // 1 * joystick readings in X&Y are sent to PI
             videoDisplayer[0]->setParent(nullptr);
             videoDisplayer[1]->setParent(videoDisplayer[0]);
             guiLayout->addWidget(videoDisplayer[0],0,0,4,8);
@@ -123,6 +125,7 @@ void gui::toggleCamera()
         }
     //  CAMERA 2 IS MAIN
         else if (windowSelector==2){
+            emit joystickForwardDirection(-1);             // -1 * joystick readings in X&Y are sent to PI to flip directions to sui rear cam
             positionItems(camsLayout[1]);
             videoDisplayer[1]->setParent(nullptr);
             videoDisplayer[0]->setParent(videoDisplayer[1]);
