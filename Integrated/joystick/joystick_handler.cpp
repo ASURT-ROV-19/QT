@@ -216,8 +216,7 @@ void Joystick_Handler::move()
     msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : "0" )+"," ;
     msg+="z="+QString::number(mapZ())+",";
     msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : "0" )+"," ;
-    msg+="cam="+QString::number(cam)+",";
-    msg+="light="+QString::number(getTemperature)+"&";
+    msg+="cam="+QString::number(cam)+"&";
 
 
 
