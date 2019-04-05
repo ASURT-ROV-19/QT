@@ -28,6 +28,7 @@ public:
     void setDisplayWindow(QGst::Ui::VideoWidget *displayWindow, uint8_t cameraNum);
     void positionItems(QGridLayout * parent);
     void setEndoscopeCamera(gstreamer * endoscopeCamera);
+    bool isEndoscopeWidgetHidden();
 public slots:
     void changeInGUI(QString button);
     void changeInButtonsConfiguration(QString newConfig);

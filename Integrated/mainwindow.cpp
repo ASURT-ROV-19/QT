@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#define microCameraStartDelay 8000
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -17,9 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
     centralWidget->setWindowTitle("Stream");
     this->setCentralWidget(centralWidget);
     GUI=new gui(centralWidget);
-    signalsHandler();
     microDisplayDelayTimer=new QTimer();
-    microDisplayDelayTimer->setInterval(1000);
+    microDisplayDelayTimer->setInterval(microCameraStartDelay);
+    signalsHandler();
 }
 
 
@@ -48,52 +50,52 @@ MainWindow::~MainWindow()
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
 
-    if(event->key()== Qt::Key_W){
+    if(event->key()== Qt::Key_W){                                       //micro ROV forward
         micro=1;
         emit messagePi("Micro_ROV "+QString::number(micro));
     }
 
-    else if(event->key()== Qt::Key_S){
+    else if(event->key()== Qt::Key_S){                                  //micro ROV backward
         micro=0;
         emit messagePi("Micro_ROV "+QString::number(micro));
     }
 
-    else if(event->key()== Qt::Key_L){      //length measuring of task 3
+    else if(event->key()== Qt::Key_L){                                  //length measuring of task 3
         GUI->startLengthMeasuring();
     }
-    else if(event->key()== Qt::Key_T){      //get water temperature from pi & display it, or hide it if it is already being displayed
+    else if(event->key()== Qt::Key_T){                                  //get temperature from pi & display it, or hide it if it is already being displayed
         emit messagePi("Temp");
         GUI->showOrHideTempLabel();
     }
 
-    else if(event->key()== Qt::Key_Space){      //show or hide endoscope camera
+    else if(event->key()== Qt::Key_Space){                              //show or hide endoscope camera
         qDebug()<<"key space pressed";
         emit showOrHideEndoscopeCamera();
     }
 
-    else if(event->key()== Qt::Key_F){      //full screen or normal screen for endoscope camera display
+    else if(event->key()== Qt::Key_F){                                  //full screen or normal screen for endoscope camera display
         emit endoToggleFullScreen();
 
     }
-    else if(event->key()== Qt::Key_P){      //full screen or normal screen for endoscope camera display
+    else if(event->key()== Qt::Key_P){                                  //full screen or normal screen for endoscope camera display
         GUI->pause_play();
 
     }
-    else if(event->key()== Qt::Key_R){      //full screen or normal screen for endoscope camera display
+    else if(event->key()== Qt::Key_R){                                  //full screen or normal screen for endoscope camera display
         GUI->restartTimer();
 
     }
-    else if(event->key()== Qt::Key_Right){      //rotate pulley's servo in a direction
+    else if(event->key()== Qt::Key_Right){                              //rotate pulley's servo in a direction
         pulley==-1 ? pulley=0 : pulley =1;
+        emit pulleyDirection(pulley);
         emit messagePi("Pulley "+QString::number(pulley));
-
     }
-    else if(event->key()== Qt::Key_Left){       //rotate pulley's servo in opposite direction
+    else if(event->key()== Qt::Key_Left){                               //rotate pulley's servo in opposite direction
         pulley==1 ? pulley=0 : pulley =-1;
+        emit pulleyDirection(pulley);
         emit messagePi("Pulley "+QString::number(pulley));
 
     }
-
     qDebug()<<"Keyboard event detected";
 
 }
@@ -105,22 +107,35 @@ void MainWindow::toggleFullScreen()
 
 void MainWindow::delayMicroCamDisplay()
 {
-
+    if (GUI->isEndoscopeWidgetHidden()){
+        emit messagePi("startMicro");
+        microDisplayDelayTimer->setInterval(microCameraStartDelay);
+        microDisplayDelayTimer->start();
+    }
+    else {
+        emit messagePi("stopMicro");
+        microDisplayDelayTimer->setInterval(10);
+        microDisplayDelayTimer->start();
+    }
 }
 
 void MainWindow::signalsHandler()
 {
     connect(JSHandler,SIGNAL(sendToPi(QString)),TCPconnection,SLOT(sendMessage(QString)));
     connect(JSHandler,SIGNAL(guiChange(QString)),GUI,SLOT(changeInGUI(QString)));
+    connect(JSHandler,SIGNAL(sendZDirection(QString)),GUI,SLOT(updateZdirection(QString)));
     connect(TCPconnection,SIGNAL(receivedmsg(QString)),GUI,SLOT(receiveFromPi(QString)));
     connect(GUI,SIGNAL(guiSizeChange()),this,SLOT(toggleFullScreen()));
-    connect(JSHandler,SIGNAL(sendZDirection(QString)),GUI,SLOT(updateZdirection(QString)));
-//    connect(this,SIGNAL(showOrHideEndoscopeCamera()),GUI,SLOT(delayMicroCamDisplay()));
-    connect(this,SIGNAL(showOrHideEndoscopeCamera()),GUI,SLOT(showOrHideEndoscopeCamera()));
+    connect(GUI,SIGNAL(joystickForwardDirection(int)),JSHandler,SLOT(updateCamOnFocus(int)));
+    connect(this,SIGNAL(showOrHideEndoscopeCamera()),this,SLOT(delayMicroCamDisplay()));
     connect(this,SIGNAL(messagePi(QString)),TCPconnection,SLOT(sendMessage(QString)));
     connect(this,SIGNAL(endoToggleFullScreen()),GUI,SLOT(toggleEndoFullScreen()));
-    connect(GUI,SIGNAL(joystickForwardDirection(int)),JSHandler,SLOT(updateCamOnFocus(int)));
+    connect(this,SIGNAL(pulleyDirection(int)),JSHandler,SLOT(updatePulleyDirection(int)));
+    connect(microDisplayDelayTimer,SIGNAL(timeout()),GUI,SLOT(showOrHideEndoscopeCamera()));
+    connect(microDisplayDelayTimer,SIGNAL(timeout()),microDisplayDelayTimer,SLOT(stop()));
 
+
+//    connect(this,SIGNAL(showOrHideEndoscopeCamera()),GUI,SLOT(showOrHideEndoscopeCamera()));
 }
 
 

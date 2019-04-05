@@ -6,6 +6,8 @@ TCPConnection::TCPConnection(string Host,int Port)
     this->host=Host;
     this->port=Port;
     socket=new QTcpSocket();
+    reconnectTimer=new QTimer();
+    reconnectTimer->setInterval(500);
     connectToServer();
 
     connect(socket,SIGNAL(disconnected()),this,SLOT(socketDisconnected()));
@@ -20,7 +22,12 @@ bool TCPConnection::connectToServer()
     } catch (std::exception e) {
         qDebug()<<"exception thrown in line 22 , exception is "<<e.what();
     }
-    socket->waitForConnected(400);
+//    reconnectTimer->start();
+
+
+
+
+    socket->waitForConnected(100);
     int enableKeepAlive = 1;
     int fd = socket->socketDescriptor();
     qDebug()<<"keep alive : "<<setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &enableKeepAlive,
@@ -39,8 +46,8 @@ bool TCPConnection::connectToServer()
     qDebug()<<"set reusable address: "<<setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
     qDebug()<<"set reusable port: "<<setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(int));
 
-//    int lingerDuration=1;
-//    qDebug()<<"set linger: "<<setsockopt(fd, SOL_SOCKET, SO_LINGER, &lingerDuration, sizeof(SO_LINGER));
+    int lingerDuration=1;
+    qDebug()<<"set linger: "<<setsockopt(fd, SOL_SOCKET, SO_LINGER, &lingerDuration, sizeof(SO_LINGER));
 
 
     return socket->waitForConnected(10);
@@ -105,7 +112,8 @@ void TCPConnection::socketDisconnected()
 void TCPConnection::socketErrorRaised(QAbstractSocket::SocketError error)
 {
     qDebug()<<"\n\n\n\n error occured , error is "<<error<<"\n\n\n\n\n";
-    if (error==QAbstractSocket::SocketTimeoutError || error==QAbstractSocket::UnknownSocketError || error==QAbstractSocket::ProxyConnectionTimeoutError || error==QAbstractSocket::NetworkError ){
+    if (error==QAbstractSocket::SocketTimeoutError || error==QAbstractSocket::UnknownSocketError || error==QAbstractSocket::RemoteHostClosedError
+            || error==QAbstractSocket::SslHandshakeFailedError || error==QAbstractSocket::ProxyConnectionTimeoutError || error==QAbstractSocket::NetworkError ){
         socket->disconnect();
         socket->waitForDisconnected(100);
     }

@@ -36,8 +36,8 @@ Joystick_Handler::Joystick_Handler()
     buttons[cam_down]=3;
     buttons[magazineForward]=10;
     buttons[magazineBackward]=11;
-
-
+    pulleyDirection=0;
+    PID=0;
     signalsHandler();
 }
 
@@ -70,6 +70,17 @@ void Joystick_Handler::updateCamOnFocus(int cam)
     qDebug()<<"updated cam on focus";
 }
 
+void Joystick_Handler::updatePulleyDirection(int pulleyDirection)
+{
+    this->pulleyDirection=pulleyDirection;
+    if (cam==8 || cam==2){
+        cam=0;
+        move();
+        messageReady(msg);
+    }
+    qDebug()<<"pulleyDirection getting updated";
+}
+
 
 
 void Joystick_Handler::messageReady(QString message)
@@ -100,12 +111,14 @@ void Joystick_Handler::buttonDown(int button)
         move();
     }
     else if(button==buttons[magazineForward]){
-        cam=2;
+        if (pulleyDirection==0)
+            cam=2;
         move();
         emit sendToPi(msg);
     }
     else if(button==buttons[magazineBackward]){
-        cam=8;
+        if (pulleyDirection==0)
+            cam=8;
         move();
         emit sendToPi(msg);
     }
@@ -148,13 +161,13 @@ void Joystick_Handler::buttonUp(int button)
         move();
         messageReady(msg);
     }
-     else if (button==buttons[z_mode]){
+/*     else if (button==buttons[z_mode]){
          zMode =!zMode;
          upZ=0;
          emit sendZDirection("-");
          move();
      }
-     else if (button==buttons[cam_up]){
+*/     else if (button==buttons[cam_up]){
          cam=0;
          move();
      }
@@ -163,7 +176,11 @@ void Joystick_Handler::buttonUp(int button)
          move();
      }
      else if(button==buttons[switchPID]){
-         msg="PID";
+         zMode =!zMode;
+         upZ=0;
+         emit sendZDirection("-");
+         PID=!PID;
+         msg="PID="+QString::number(PID);
          emit sendToPi(msg);
      }
      else if(button==buttons[magazineForward]){
@@ -216,8 +233,7 @@ void Joystick_Handler::move()
     msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : "0" )+"," ;
     msg+="z="+QString::number(mapZ())+",";
     msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : "0" )+"," ;
-    msg+="cam="+QString::number(cam)+",";
-    msg+="light="+QString::number(getTemperature)+"&";
+    msg+="cam="+QString::number(cam)+"&";
 
 
 

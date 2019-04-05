@@ -25,18 +25,18 @@ public:
 
 public slots:
     void sendMessage(QString message); //Use this one
+//    void connected();
 private slots:
     void socketDisconnected();
     void socketErrorRaised(QAbstractSocket::SocketError error);
+    void read();
 private:
     QTcpSocket *socket;
     int connectionFlag,port;
     string host;
+    QTimer * reconnectTimer;
 signals:
     void receivedmsg(QString);
- public slots:
-//    void connected();
-    void read();  // not yet used feature
 
 };
 

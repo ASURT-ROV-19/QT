@@ -21,6 +21,7 @@ public slots:
 //    void changeInButtonsConfiguration(QString newConfig);
     void joyAxisMotion();
     void updateCamOnFocus(int cam);
+    void updatePulleyDirection(int pulleyDirection);
 private slots:
     void messageReady(QString message);
     void buttonDown(int button);
@@ -44,6 +45,8 @@ private:
     int numOfPiButtons;
     int * buttons;
     int camOnFocus=1;
+    int pulleyDirection;
+    int PID;
 };
 
 #endif // JOYSTICK_HANDLER_H

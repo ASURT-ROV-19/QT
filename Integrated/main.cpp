@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 
     QApplication * a =new QApplication(argc, argv);
     MainWindow w;
-    gstreamer camera22(5022,5000);
+    gstreamer camera22(5022);
     w.setDisplayWindow(camera22.getRenderingVideoWindow(),0);
     gstreamer camera21(10000);
     gstreamer endoscopeCamera(1234);

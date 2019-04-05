@@ -69,6 +69,11 @@ void gui::setEndoscopeCamera(gstreamer *endoscopeCamera)
     endoscopeCamera->getRenderingVideoWindow()->hide();
 }
 
+bool gui::isEndoscopeWidgetHidden()
+{
+    return  endoscopeCamera->getRenderingVideoWindow()->isHidden();
+}
+
 
 void gui::changeInGUI(QString button)
 {
@@ -169,7 +174,8 @@ void gui::startLengthMeasuring()
 
 void gui::toggleEndoFullScreen()
 {
-    endoscopeCamera->getRenderingVideoWindow()->isFullScreen() ? endoscopeCamera->getRenderingVideoWindow()->showNormal() : endoscopeCamera->getRenderingVideoWindow()->setWindowState(Qt::WindowFullScreen);
+    if ( ! endoscopeCamera->getRenderingVideoWindow()->isHidden())
+        endoscopeCamera->getRenderingVideoWindow()->isFullScreen() ? endoscopeCamera->getRenderingVideoWindow()->showNormal() : endoscopeCamera->getRenderingVideoWindow()->setWindowState(Qt::WindowFullScreen);
 }
 
 void gui::pause_play()
