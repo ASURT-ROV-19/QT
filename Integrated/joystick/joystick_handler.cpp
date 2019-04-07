@@ -15,11 +15,11 @@
 #define switchPID 2
 #define r_active 0
 #define z_mode 4
-#define cam_up 5
-#define cam_down 6
-#define magazineForward 7
-#define magazineBackward 8
-#define dummy joyS->get_hat()
+#define pulleyCW 5
+#define pulleyCCW 6
+#define microMove 7
+#define endoscopeCamWindow 8
+
 // 4 down , 1 up
 
 Joystick_Handler::Joystick_Handler()
@@ -32,12 +32,11 @@ Joystick_Handler::Joystick_Handler()
     buttons[Z_down]=2;
     buttons[switchPID]=8;
     buttons[z_mode]=7;
-    buttons[cam_up]=5;
-    buttons[cam_down]=3;
-    buttons[magazineForward]=10;
-    buttons[magazineBackward]=11;
-    pulleyDirection=0;
-    PID=0;
+    buttons[pulleyCW]=5;
+    buttons[pulleyCCW]=3;
+    buttons[microMove]=11;
+    buttons[endoscopeCamWindow]=10;
+    pulley=0;micro=0;PID=0;hat=0;
     signalsHandler();
 }
 
@@ -61,7 +60,16 @@ void Joystick_Handler::joyAxisMotion()
         move();
         messageReady(msg);
     }
+}
 
+void Joystick_Handler::joyHatMotion()
+{
+    hat =joyS->get_hat();
+    if (hat!=0 && hat!=1 && hat!=4 && hat!=2 && hat!=8)
+        return;
+    checkMagazinePulleyConflict();
+    move();
+    emit sendToPi(msg);
 }
 
 void Joystick_Handler::updateCamOnFocus(int cam)
@@ -70,13 +78,12 @@ void Joystick_Handler::updateCamOnFocus(int cam)
     qDebug()<<"updated cam on focus";
 }
 
-void Joystick_Handler::updatePulleyDirection(int pulleyDirection)
+void Joystick_Handler::checkMagazinePulleyConflict()
 {
-    this->pulleyDirection=pulleyDirection;
-    if (cam==8 || cam==2){
-        cam=0;
-        move();
-        messageReady(msg);
+    if (pulley==0)
+        return ;
+    if (hat==8|| hat==2){
+        hat=0;
     }
     qDebug()<<"pulleyDirection getting updated";
 }
@@ -102,25 +109,12 @@ void Joystick_Handler::buttonDown(int button)
         activateR=1;
         return;
     }
-    else if (button==buttons[cam_up]){
-        cam=1;
-        move();
-    }
-    else if (button==buttons[cam_down]){
-        cam=4;
-        move();
-    }
-    else if(button==buttons[magazineForward]){
-        if (pulleyDirection==0)
-            cam=2;
-        move();
-        emit sendToPi(msg);
-    }
-    else if(button==buttons[magazineBackward]){
-        if (pulleyDirection==0)
-            cam=8;
-        move();
-        emit sendToPi(msg);
+    else if(button==buttons[switchPID]){
+        zMode =!zMode;
+        upZ=0;
+        emit sendZDirection("-");
+        PID=!PID;
+        msg="PID="+QString::number(PID);
     }
     else if (button==buttons[Z_up]){
         if (upZ==1){
@@ -167,33 +161,26 @@ void Joystick_Handler::buttonUp(int button)
          emit sendZDirection("-");
          move();
      }
-*/     else if (button==buttons[cam_up]){
-         cam=0;
-         move();
+*/
+     else if (button==buttons[pulleyCW]){
+         pulley==1 ? pulley=0 : pulley =-1;
+         checkMagazinePulleyConflict();
+         emit sendToPi("Pulley "+QString::number(pulley));
+         return ;
      }
-     else if (button==buttons[cam_down]){
-         cam=0;
-         move();
+     else if (button==buttons[pulleyCCW]){
+         pulley==-1 ? pulley=0 : pulley =1;
+         checkMagazinePulleyConflict();
+         emit sendToPi("Pulley "+QString::number(pulley));
+         return ;
      }
-     else if(button==buttons[switchPID]){
-         zMode =!zMode;
-         upZ=0;
-         emit sendZDirection("-");
-         PID=!PID;
-         msg="PID="+QString::number(PID);
-         emit sendToPi(msg);
+     else if(button==buttons[microMove]){
+         micro=!micro;
+         emit sendToPi("Micro_ROV "+QString::number(micro));
      }
-     else if(button==buttons[magazineForward]){
-         cam=0;
-         move();
-         emit sendToPi(msg);
+     else if(button==buttons[endoscopeCamWindow]){
+         showOrHideEndoscopeCamera();
      }
-     else if(button==buttons[magazineBackward]){
-         cam=0;
-         move();
-         emit sendToPi(msg);
-     }
-
 
 
     if (zMode==1){
@@ -233,7 +220,7 @@ void Joystick_Handler::move()
     msg+="y="+((abs(Y)>DEADZONE)? QString::number(map(Y)) : "0" )+"," ;
     msg+="z="+QString::number(mapZ())+",";
     msg+="r="+((abs(R)>DEADZONE)? QString::number(map(R)) : "0" )+"," ;
-    msg+="cam="+QString::number(cam)+"&";
+    msg+="cam="+QString::number(hat)+"&";
 
 
 
@@ -256,6 +243,7 @@ void Joystick_Handler::move()
 void Joystick_Handler::signalsHandler()
 {
     connect(joyS,SIGNAL(axisMotion()),this,SLOT(joyAxisMotion()));
+    connect(joyS,SIGNAL(hatMotion()),this,SLOT(joyHatMotion()));
     connect(joyS,SIGNAL(buttonPressed(int)),this,SLOT(buttonDown(int)));
     connect(joyS,SIGNAL(buttonReleased(int)),this,SLOT(buttonUp(int)));
 }

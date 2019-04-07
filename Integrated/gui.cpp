@@ -142,7 +142,12 @@ void gui::toggleCamera()
 
 void gui::receiveFromPi(QString temp)
 {
-    temperatureLabel->setText("Temperature="+temp);
+    qDebug()<<"received from pi";
+    QStringList temperature=temp.split("_");
+    if (temperature.size()==2)
+        temperatureLabel->setText("Temperature="+temperature[0]+" "+temperature[1]);
+    else
+        temperatureLabel->setText("Temperature="+temp);
 }
 
 void gui::updateZdirection(QString direction)

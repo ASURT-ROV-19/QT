@@ -31,6 +31,7 @@ public slots:
     void action();
 signals:
     void axisMotion();
+    void hatMotion();
     void buttonPressed(int buttonNumber);
     void buttonReleased(int buttonNumber);
 

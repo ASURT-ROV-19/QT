@@ -20,8 +20,9 @@ public:
 public slots:
 //    void changeInButtonsConfiguration(QString newConfig);
     void joyAxisMotion();
+    void joyHatMotion();
     void updateCamOnFocus(int cam);
-    void updatePulleyDirection(int pulleyDirection);
+    void checkMagazinePulleyConflict();
 private slots:
     void messageReady(QString message);
     void buttonDown(int button);
@@ -30,6 +31,7 @@ signals:
     void sendToPi(QString);
     void guiChange(QString);
     void sendZDirection(QString);
+    void showOrHideEndoscopeCamera();
 private:
 //    void buttonDownMessage();
 //    void buttonUpMessage();
@@ -45,8 +47,9 @@ private:
     int numOfPiButtons;
     int * buttons;
     int camOnFocus=1;
-    int pulleyDirection;
+    int pulley,micro;
     int PID;
+    int hat;
 };
 
 #endif // JOYSTICK_HANDLER_H

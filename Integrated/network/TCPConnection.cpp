@@ -57,6 +57,7 @@ void TCPConnection::read()
 {
     try {
         QString s=socket->readAll();
+        qDebug()<<"received message & in network class";
         emit receivedmsg(s);
     } catch (std::exception e) {
         qDebug()<<"TCP exception at line 73 , reading received message grom server throws exception"<<e.what();

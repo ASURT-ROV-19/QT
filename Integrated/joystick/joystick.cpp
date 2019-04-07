@@ -119,7 +119,7 @@ void Joystick::action()
             emit buttonReleased(event->jbutton.button);
             break;
         case SDL_JOYHATMOTION:
-            emit axisMotion();
+            emit hatMotion();
             break;
         default:
             break;

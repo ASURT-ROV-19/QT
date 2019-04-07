@@ -35,7 +35,6 @@ signals:
     void messagePi(QString query);
     void playPauseTimer();
     void restartTimer();
-    void pulleyDirection(int pulley);
 private:
     void signalsHandler();
     Ui::MainWindow *ui;

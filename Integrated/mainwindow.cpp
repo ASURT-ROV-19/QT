@@ -50,29 +50,15 @@ MainWindow::~MainWindow()
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
 
-    if(event->key()== Qt::Key_W){                                       //micro ROV forward
-        micro=1;
-        emit messagePi("Micro_ROV "+QString::number(micro));
-    }
 
-    else if(event->key()== Qt::Key_S){                                  //micro ROV backward
-        micro=0;
-        emit messagePi("Micro_ROV "+QString::number(micro));
-    }
 
-    else if(event->key()== Qt::Key_L){                                  //length measuring of task 3
+    if(event->key()== Qt::Key_L){                                  //length measuring of task 3
         GUI->startLengthMeasuring();
     }
     else if(event->key()== Qt::Key_T){                                  //get temperature from pi & display it, or hide it if it is already being displayed
         emit messagePi("Temp");
         GUI->showOrHideTempLabel();
     }
-
-    else if(event->key()== Qt::Key_Space){                              //show or hide endoscope camera
-        qDebug()<<"key space pressed";
-        emit showOrHideEndoscopeCamera();
-    }
-
     else if(event->key()== Qt::Key_F){                                  //full screen or normal screen for endoscope camera display
         emit endoToggleFullScreen();
 
@@ -83,17 +69,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
     else if(event->key()== Qt::Key_R){                                  //full screen or normal screen for endoscope camera display
         GUI->restartTimer();
-
-    }
-    else if(event->key()== Qt::Key_Right){                              //rotate pulley's servo in a direction
-        pulley==-1 ? pulley=0 : pulley =1;
-        emit pulleyDirection(pulley);
-        emit messagePi("Pulley "+QString::number(pulley));
-    }
-    else if(event->key()== Qt::Key_Left){                               //rotate pulley's servo in opposite direction
-        pulley==1 ? pulley=0 : pulley =-1;
-        emit pulleyDirection(pulley);
-        emit messagePi("Pulley "+QString::number(pulley));
 
     }
     qDebug()<<"Keyboard event detected";
@@ -127,10 +102,9 @@ void MainWindow::signalsHandler()
     connect(TCPconnection,SIGNAL(receivedmsg(QString)),GUI,SLOT(receiveFromPi(QString)));
     connect(GUI,SIGNAL(guiSizeChange()),this,SLOT(toggleFullScreen()));
     connect(GUI,SIGNAL(joystickForwardDirection(int)),JSHandler,SLOT(updateCamOnFocus(int)));
-    connect(this,SIGNAL(showOrHideEndoscopeCamera()),this,SLOT(delayMicroCamDisplay()));
+    connect(JSHandler,SIGNAL(showOrHideEndoscopeCamera()),this,SLOT(delayMicroCamDisplay()));
     connect(this,SIGNAL(messagePi(QString)),TCPconnection,SLOT(sendMessage(QString)));
     connect(this,SIGNAL(endoToggleFullScreen()),GUI,SLOT(toggleEndoFullScreen()));
-    connect(this,SIGNAL(pulleyDirection(int)),JSHandler,SLOT(updatePulleyDirection(int)));
     connect(microDisplayDelayTimer,SIGNAL(timeout()),GUI,SLOT(showOrHideEndoscopeCamera()));
     connect(microDisplayDelayTimer,SIGNAL(timeout()),microDisplayDelayTimer,SLOT(stop()));
 
