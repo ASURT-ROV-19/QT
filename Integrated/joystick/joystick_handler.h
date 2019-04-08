@@ -23,6 +23,7 @@ public slots:
     void joyHatMotion();
     void updateCamOnFocus(int cam);
     void checkMagazinePulleyConflict();
+    void correctCamerasSwitching();
 private slots:
     void messageReady(QString message);
     void buttonDown(int button);
@@ -50,6 +51,7 @@ private:
     int pulley,micro;
     int PID;
     int hat;
+    int camerasSwitched;
 };
 
 #endif // JOYSTICK_HANDLER_H

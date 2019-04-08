@@ -35,6 +35,7 @@ signals:
     void messagePi(QString query);
     void playPauseTimer();
     void restartTimer();
+    void camerasSwitched();
 private:
     void signalsHandler();
     Ui::MainWindow *ui;

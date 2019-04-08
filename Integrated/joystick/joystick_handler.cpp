@@ -4,8 +4,8 @@
 //for magazine servo , use buttons 10 and 11
 //this class shall hold a string buttons array of all buttons and index is each button's id , receive messages from configHandler , telling it of which ID now has which value
 #define axisMax 32768
-#define X joyS->get_x()*camOnFocus
-#define Y joyS->get_y()*camOnFocus
+#define X joyS->get_x()*camOnFocus*camerasSwitched
+#define Y joyS->get_y()*camOnFocus*camerasSwitched
 #define Z joyS->get_z()
 #define R joyS->get_r()*activateR
 #define DEADZONE 4000
@@ -36,7 +36,7 @@ Joystick_Handler::Joystick_Handler()
     buttons[pulleyCCW]=3;
     buttons[microMove]=11;
     buttons[endoscopeCamWindow]=10;
-    pulley=0;micro=0;PID=0;hat=0;
+    pulley=0;micro=0;PID=0;hat=0;camerasSwitched=1;
     signalsHandler();
 }
 
@@ -86,6 +86,12 @@ void Joystick_Handler::checkMagazinePulleyConflict()
         hat=0;
     }
     qDebug()<<"pulleyDirection getting updated";
+}
+
+void Joystick_Handler::correctCamerasSwitching()
+{
+    qDebug()<<"correcting directions";
+    camerasSwitched*=-1;
 }
 
 

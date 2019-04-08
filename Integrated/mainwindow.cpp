@@ -71,6 +71,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         GUI->restartTimer();
 
     }
+    else if(event->key()== Qt::Key_Minus){                                  //full screen or normal screen for endoscope camera display
+        emit camerasSwitched();
+    }
     qDebug()<<"Keyboard event detected";
 
 }
@@ -105,6 +108,7 @@ void MainWindow::signalsHandler()
     connect(JSHandler,SIGNAL(showOrHideEndoscopeCamera()),this,SLOT(delayMicroCamDisplay()));
     connect(this,SIGNAL(messagePi(QString)),TCPconnection,SLOT(sendMessage(QString)));
     connect(this,SIGNAL(endoToggleFullScreen()),GUI,SLOT(toggleEndoFullScreen()));
+    connect(this,SIGNAL(camerasSwitched()),JSHandler,SLOT(correctCamerasSwitching()));
     connect(microDisplayDelayTimer,SIGNAL(timeout()),GUI,SLOT(showOrHideEndoscopeCamera()));
     connect(microDisplayDelayTimer,SIGNAL(timeout()),microDisplayDelayTimer,SLOT(stop()));
 
