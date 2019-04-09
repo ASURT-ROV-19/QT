@@ -21,7 +21,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr,QString processName="python3" , QString directory="/home/abdelrahman/ASURT/ImageProcessing/ROV19/length\ measuring/lengthMeasureStarter.py");
     void setDisplayWindow(QGst::Ui::VideoWidget * displayWindow, uint8_t cameraNum);
     void setEndoscopeCamera(gstreamer * camera);
     ~MainWindow();

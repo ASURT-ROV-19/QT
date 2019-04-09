@@ -3,7 +3,7 @@
 #define microCameraStartDelay 8000
 
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent,QString processName, QString directory) :
     QMainWindow(parent)
 {
 
@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     centralWidget->show();
     centralWidget->setWindowTitle("Stream");
     this->setCentralWidget(centralWidget);
-    GUI=new gui(centralWidget);
+    GUI=new gui(centralWidget,processName,directory);
     microDisplayDelayTimer=new QTimer();
     microDisplayDelayTimer->setInterval(microCameraStartDelay);
     signalsHandler();

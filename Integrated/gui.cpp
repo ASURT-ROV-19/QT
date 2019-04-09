@@ -5,10 +5,10 @@
 #define changeCameraID 7
 #define fullScreenID 8
 
-gui::gui(QWidget *parent)
+gui::gui(QWidget *parent,QString processName, QString directory)
 {
     windowSelector=0;
-
+    this->processName=processName;processDirectory=directory;
     guiItemsCarryingWidget=new QWidget();       //carries gui items like timer , z label , and whatever , transparent and displayed over the streaming windows
     createLayouts();
     buttons = new QString [buttonsInUse-piButtonsInUse];
@@ -72,6 +72,11 @@ void gui::setEndoscopeCamera(gstreamer *endoscopeCamera)
 bool gui::isEndoscopeWidgetHidden()
 {
     return  endoscopeCamera->getRenderingVideoWindow()->isHidden();
+}
+
+void gui::setProcessAndDirectory(QString processName, QString directory)
+{
+
 }
 
 
@@ -174,7 +179,9 @@ void gui::setCameraWindowLayout(int cameraIndex)
 
 void gui::startLengthMeasuring()
 {
-    process->start("python",QStringList()<<"/home/abdelrahman/ASURT/ImageProcessing/ROV19/length\ measuring/lengthMeasureStarter.py");
+//    process->start("python",QStringList()<<"/home/abdelrahman/ASURT/ImageProcessing/ROV19/length\ measuring/lengthMeasureStarter.py");
+    process->start(processName,QStringList()<<processDirectory);
+    qDebug()<<"shall start length measuring , processName is "<<processName<<"process directory is "<<processDirectory<<endl;
 }
 
 void gui::toggleEndoFullScreen()

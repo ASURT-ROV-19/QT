@@ -21,7 +21,7 @@ class gui : public QObject
 {
     Q_OBJECT
 public:
-    gui(QWidget * parent=0);
+    gui(QWidget * parent=0,QString processName="python3" , QString directory="/home/abdelrahman/ASURT/ImageProcessing/ROV19/length\ measuring/lengthMeasureStarter.py");
     ~gui();
 //    QPushButton * getChangingButton();    //temporary to use the button instead of the joystick as i ddon't have the joystick now;
 //    void getCam(gstream *Camera, uint8_t cameraNum);
@@ -29,6 +29,7 @@ public:
     void positionItems(QGridLayout * parent);
     void setEndoscopeCamera(gstreamer * endoscopeCamera);
     bool isEndoscopeWidgetHidden();
+    void setProcessAndDirectory(QString processName="python3" , QString directory="/home/abdelrahman/ASURT/ImageProcessing/ROV19/length\ measuring/lengthMeasureStarter.py" );
 public slots:
     void changeInGUI(QString button);
     void changeInButtonsConfiguration(QString newConfig);
@@ -70,6 +71,7 @@ private:
     QWidget * guiItemsCarryingWidget;
     QGst::Ui::VideoWidget ** videoDisplayer;
     QProcess * process;
+    QString processName,processDirectory;
 
     //    QString upZButton="0",activateR="1",lightOnOff="2",restartTimer="3",buttonsSettings="4",changeCamera="5",playPauseTimer="6";
     QString * buttons;

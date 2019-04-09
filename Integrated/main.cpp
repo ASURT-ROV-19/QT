@@ -4,17 +4,59 @@ int main(int argc, char *argv[])
 {
 
     QApplication * a =new QApplication(argc, argv);
-    MainWindow w;
-    gstreamer camera22(5022);
-    w.setDisplayWindow(camera22.getRenderingVideoWindow(),0);
-    gstreamer camera21(10000);
+    MainWindow * mainWindow = nullptr;
+    gstreamer * camera22 = nullptr;
+    gstreamer * camera21=nullptr;
+    qDebug()<<"argc is "<<argc;
+    for (int i=0;i<argc;i++)
+        qDebug()<<"argv["<<i<<"]= "<<argv[i]<<endl;
+
+
+    if (argc==3){
+        mainWindow=new MainWindow(nullptr,QString::fromLocal8Bit(argv[1]),QString::fromLocal8Bit(argv[2]));
+        camera22=new gstreamer(5022);
+        camera21=new gstreamer(10000,5022);
+    }
+    else if (argc==2){
+        mainWindow=new MainWindow();
+        if (QString::fromLocal8Bit(argv[1])=="10000"){
+            camera22=new gstreamer(5022);
+            camera21=new gstreamer(10000,5022);
+            qDebug()<<"streaming to port 5022 from port 10000";
+        }
+        else {
+            camera22=new gstreamer(5022,10000);
+            camera21=new gstreamer(10000);
+        }
+    }
+    else if (argc==4){
+        mainWindow=new MainWindow(nullptr,QString::fromLocal8Bit(argv[1]),QString::fromLocal8Bit(argv[2]));
+        if (QString::fromLocal8Bit(argv[3])=="10000"){
+            camera22=new gstreamer(5022);
+            camera21=new gstreamer(10000,5022);
+        }
+        else {
+            camera22=new gstreamer(5022,10000);
+            camera21=new gstreamer(10000);
+        }
+    }
+    else {
+        mainWindow=new MainWindow();
+        camera22=new gstreamer(5022,5000);
+        camera21=new gstreamer(10000);
+    }
+
+    mainWindow->setDisplayWindow(camera22->getRenderingVideoWindow(),0);
     gstreamer endoscopeCamera(1234);
-    w.setDisplayWindow(camera21.getRenderingVideoWindow(),1);
-    camera22.autoSetPipeline();
-    camera21.autoSetPipeline();
+    mainWindow->setDisplayWindow(camera21->getRenderingVideoWindow(),1);
+    camera22->autoSetPipeline();
+    camera21->autoSetPipeline();
     endoscopeCamera.autoSetPipeline();
-    w.setEndoscopeCamera(&endoscopeCamera);
+    mainWindow->setEndoscopeCamera(&endoscopeCamera);
     return a->exec();
+    delete mainWindow;
+    delete camera21;
+    delete camera22;
 
 }
 
