@@ -1,5 +1,24 @@
 #include "mainwindow.h"
 #include <QApplication>
+
+
+
+
+
+/*
+    SWITCH FRONT CAM AND REAR CAM IN THE #define HERE IF PI SWITCHED FRONT AND REAR CAMERAS
+*/
+
+#define frontCamPort 5022
+#define rearCamPort 10000
+#define imageProcessingPort 5000
+#define microROVCameraPort 1234
+
+
+
+
+
+
 int main(int argc, char *argv[])
 {
 
@@ -14,45 +33,48 @@ int main(int argc, char *argv[])
 
     if (argc==3){
         mainWindow=new MainWindow(nullptr,QString::fromLocal8Bit(argv[1]),QString::fromLocal8Bit(argv[2]));
-        camera22=new gstreamer(5022);
-        camera21=new gstreamer(10000,5022);
+        camera22=new gstreamer(frontCamPort,imageProcessingPort);
+        camera21=new gstreamer(rearCamPort);
     }
     else if (argc==2){
         mainWindow=new MainWindow();
-        if (QString::fromLocal8Bit(argv[1])=="10000"){
-            camera22=new gstreamer(5022);
-            camera21=new gstreamer(10000,5022);
-            qDebug()<<"streaming to port 5022 from port 10000";
+        if (QString::fromLocal8Bit(argv[1])==QString::number(rearCamPort)){
+            camera22=new gstreamer(frontCamPort);
+            camera21=new gstreamer(rearCamPort,imageProcessingPort);
+            qDebug()<<"streaming to port "<<frontCamPort<<" from port "<<rearCamPort;
         }
         else {
-            camera22=new gstreamer(5022,10000);
-            camera21=new gstreamer(10000);
+            camera22=new gstreamer(frontCamPort,imageProcessingPort);
+            camera21=new gstreamer(rearCamPort);
         }
     }
     else if (argc==4){
         mainWindow=new MainWindow(nullptr,QString::fromLocal8Bit(argv[1]),QString::fromLocal8Bit(argv[2]));
-        if (QString::fromLocal8Bit(argv[3])=="10000"){
-            camera22=new gstreamer(5022);
-            camera21=new gstreamer(10000,5022);
+        if (QString::fromLocal8Bit(argv[3])==QString::number(rearCamPort)){
+            camera22=new gstreamer(frontCamPort);
+            camera21=new gstreamer(rearCamPort,imageProcessingPort);
         }
         else {
-            camera22=new gstreamer(5022,10000);
-            camera21=new gstreamer(10000);
+            camera22=new gstreamer(frontCamPort,imageProcessingPort);
+            camera21=new gstreamer(rearCamPort);
         }
     }
+
+
     else {
         mainWindow=new MainWindow();
-        camera22=new gstreamer(5022,5000);
-        camera21=new gstreamer(10000);
+        camera22=new gstreamer(frontCamPort,imageProcessingPort);
+        camera21=new gstreamer(rearCamPort);
     }
 
     mainWindow->setDisplayWindow(camera22->getRenderingVideoWindow(),0);
-    gstreamer endoscopeCamera(1234);
     mainWindow->setDisplayWindow(camera21->getRenderingVideoWindow(),1);
+    gstreamer endoscopeCamera (microROVCameraPort);
+    mainWindow->setEndoscopeCamera(&endoscopeCamera);
     camera22->autoSetPipeline();
     camera21->autoSetPipeline();
     endoscopeCamera.autoSetPipeline();
-    mainWindow->setEndoscopeCamera(&endoscopeCamera);
+//    endoscopeCamera.getRenderingVideoWindow()->show();
     return a->exec();
     delete mainWindow;
     delete camera21;

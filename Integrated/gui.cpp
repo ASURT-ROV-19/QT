@@ -249,6 +249,7 @@ void gui::handleSignals()
 
 void gui::showOrHideEndoscopeCamera()
 {
+    qDebug()<<"showing or hiding endo cam";
     if(endoscopeCamera->getRenderingVideoWindow()->isHidden()){
         endoscopeCamera->getRenderingVideoWindow()->show();
     }

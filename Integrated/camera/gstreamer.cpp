@@ -76,8 +76,8 @@ gstreamer::~gstreamer()
     qDebug()<<"destroying countDown instance";
     gst_object_unref(sink2);
     gst_object_unref(source);
-    delete [] window;
-    gst_object_unref(videowindow);
+//    gst_object_unref(videowindow);
+    delete videowindow;
 
 }
 

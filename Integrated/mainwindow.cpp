@@ -11,8 +11,8 @@ MainWindow::MainWindow(QWidget *parent,QString processName, QString directory) :
     micro=0;
     this->show();
     this->setGeometry(100,100,800,600);
-//    TCPconnection=new TCPConnection("10.1.1.15",9005);
-    TCPconnection=new TCPConnection("127.0.0.1",9005);
+    TCPconnection=new TCPConnection("10.1.1.15",9005);
+//    TCPconnection=new TCPConnection("127.0.0.1",9005);
     JSHandler = new Joystick_Handler();
     centralWidget=new QWidget();
     centralWidget->show();
@@ -52,7 +52,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 
 
-    if(event->key()== Qt::Key_L){                                  //length measuring of task 3
+    if(event->key()== Qt::Key_L){                                       //length measuring of task 3
         GUI->startLengthMeasuring();
     }
     else if(event->key()== Qt::Key_T){                                  //get temperature from pi & display it, or hide it if it is already being displayed
@@ -71,6 +71,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         GUI->restartTimer();
 
     }
+//    else if(event->key()== Qt::Key_Space){                              //show or hide endoscope camera
+//        qDebug()<<"key space pressed";
+//        emit showOrHideEndoscopeCamera();
+//    }
     else if(event->key()== Qt::Key_Minus){                                  //full screen or normal screen for endoscope camera display
         emit camerasSwitched();
     }
@@ -85,6 +89,7 @@ void MainWindow::toggleFullScreen()
 
 void MainWindow::delayMicroCamDisplay()
 {
+    qDebug()<<"starting delay of micro cam";
     if (GUI->isEndoscopeWidgetHidden()){
         emit messagePi("startMicro");
         microDisplayDelayTimer->setInterval(microCameraStartDelay);
